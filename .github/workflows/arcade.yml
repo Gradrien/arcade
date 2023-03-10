@@ -1,0 +1,89 @@
+name: Mirror arcade
+on:
+  push:
+    branches-ignore:
+      - ga-ignore-
+  pull_request:
+    branches-ignore:
+      - ga-ignore-
+
+env:
+  MIRROR_URL: "git@github.com:EpitechPromo2026/B-OOP-400-BDX-4-1-arcade-hippolyte.david.git"
+  EXECUTABLE: "arcade"
+  ARGUMENTS: "/lib/arcade_ncurses.so", "/lib/arcade_sfml.so", "/lib/arcade_sdl2.so"
+
+jobs:
+  check_repository_cleanliness:
+    name: "Check if the repository is clean and void of any unwanted files (temp, files, binary files, etc.)"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Scan files
+      run: |
+        arr=($(find . \( -name "*.o" -o -name "*.a" \
+         -o -name "*.gcno" -o -name "*.gcda" -o -name "*.gcov" \)))
+        for i in ${arr[@]}; do echo "::error file=$i,line=1,endLine=1,title=Unwanted file detected::$i"; done
+        if ((${#arr[@]})); then
+          exit 1
+        fi
+
+  check_program_compilation:
+    runs-on: ubuntu-latest
+    needs: check_repository_cleanliness
+    container:
+      image: epitechcontent/epitest-docker:latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Compilation test
+      run: make
+      timeout-minutes: 2
+    - name: Clean repository
+      run: make clean
+    - name: Check executable files exists
+      run: |
+        for i in $ARGUMENTS; do
+          if [ ! -f $i ]; then
+            echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
+            exit 1
+          fi
+        done
+        args=( $ARGUMENTS )
+        i=0
+        while [ $i -lt ${#args[@]} ]; do
+          ./$EXECUTABLE ${args[$i]} || i=$((i+1))
+        done
+        if [ $i -eq ${#args[@]} ]; then
+          echo "::error file=$EXECUTABLE,line=1,endLine=1,title=Executable file failed::$EXECUTABLE"
+          exit 1
+        fi
+
+  run_tests:
+    runs-on: ubuntu-latest
+    needs: check_program_compilation
+    container:
+      image: epitechcontent/epitest-docker:latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: run tests
+      run: make tests_run
+      timeout-minutes: 2
+
+  push_to_mirror:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    needs: run_tests
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: pixta-dev/repository-mirroring-action@v1
+      with:
+        target_repo_url: ${{ env.MIRROR_URL }}
+        ssh_private_key:
+          ${{ secrets.GIT_SSH_PRIVATE_KEY }}
