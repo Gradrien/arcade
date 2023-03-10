@@ -10,11 +10,7 @@ on:
 env:
   MIRROR_URL: "git@github.com:EpitechPromo2026/B-OOP-400-BDX-4-1-arcade-hippolyte.david.git"
   EXECUTABLE: "arcade"
-    ARGUMENTS:
-    - "./lib/arcade_ncurses.so"
-    - "./lib/arcade_sfml.so"
-    - "./lib/arcade_sdl2.so"
-
+    ARGUMENTS: "./lib/arcade_ncurses.so"
 jobs:
   check_repository_cleanliness:
     name: "Check if the repository is clean and void of any unwanted files (temp, files, binary files, etc.)"
@@ -48,21 +44,11 @@ jobs:
       run: make clean
     - name: Check executable files exists
       run: |
-        for i in $ARGUMENTS; do
-          if [ ! -f $i ]; then
-            echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
-            exit 1
-          fi
-        done
-        args=( $ARGUMENTS )
-        i=0
-        while [ $i -lt ${#args[@]} ]; do
-          ./$EXECUTABLE ${args[$i]} || i=$((i+1))
-        done
-        if [ $i -eq ${#args[@]} ]; then
-          echo "::error file=$EXECUTABLE,line=1,endLine=1,title=Executable file failed::$EXECUTABLE"
+        if [ ! -f $i ]; then
+          echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
           exit 1
         fi
+        ./$EXECUTABLE $ARGUMENTS
 
   run_tests:
     runs-on: ubuntu-latest
