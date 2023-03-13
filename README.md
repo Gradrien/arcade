@@ -59,11 +59,11 @@ Arcade is developed in C++. Be sure to be compliant with the EPITECH Coding Styl
 This project involves two groups. Here are the members:
 
 Group 1
-* **Hippolyte David** - [Hippolyte](https://github.com/Gradrien)
-* **Elouan Savy Camaret** - [Elouan](https://github.com/Gradrien)
+* **Hippolyte David** - [HippolyteDavid](https://github.com/HippolyteDavid)
+* **Elouan Savy-Camaret** - [ElouanSavy](https://github.com/ElouanSavy)
 * **Adrien Ricou** - [Gradrien](https://github.com/Gradrien)
 
 Group 2
-* **Nolann Bougrainville** - [NolannB14](https://github.com/Gradrien)
-* **Kevin Demy** - [Sakutaro](https://github.com/Gradrien)
-* **Nils Martin** - [Nils](https://github.com/Gradrien)
+* **Nolann Bougrainville** - [NolannB14](https://github.com/NolannB14)
+* **Kevin Demy** - [Sakutaroo](https://github.com/Sakutaroo)
+* **Nils Martin** - [Nils](https://github.com/nilsmartin33)
