@@ -28,3 +28,8 @@ void SFMLWindow::destroyWindow()
 {
     return;
 }
+
+bool SFMLWindow::isOpenWindow()
+{
+    return this->window.isOpen();
+}

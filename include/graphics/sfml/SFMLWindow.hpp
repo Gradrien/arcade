@@ -18,6 +18,7 @@ class SFMLWindow : public IWindow {
     void displayWindow() override;
     void clearWindow() override;
     void destroyWindow() override;
+    bool isOpenWindow() override;
 
   private:
     sf::RenderWindow window;
