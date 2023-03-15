@@ -30,7 +30,7 @@ TEST_NAME	=	unit_tests
 
 CXXFLAGS	=	-std=c++20 -Wall -Wextra -Werror -fno-gnu-unique
 
-CPPFLAGS = -I ./include
+CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games
 
 all:	core
 .PHONY: all

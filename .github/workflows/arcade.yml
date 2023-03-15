@@ -49,7 +49,7 @@ jobs:
           echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
           exit 1
         fi
-        ./$EXECUTABLE $ARGUMENTS
+        ./$EXECUTABLE
 
   run_tests:
     runs-on: ubuntu-latest
