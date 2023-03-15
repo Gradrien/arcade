@@ -3,7 +3,7 @@
  ** arcade
  ** File description:
  ** IGraphic
- */
+*/
 
 #ifndef IGRAPHIC_HPP_
 #define IGRAPHIC_HPP_
@@ -117,12 +117,16 @@ struct shape {
 
 class IWindow {
   public:
+    virtual ~IWindow() noexcept = default;
     virtual void createWindow(std::string title, int width, int height) = 0;
+    virtual void displayWindow() = 0;
+    virtual void clearWindow() = 0;
     virtual void destroyWindow() = 0;
 };
 
 class IDrawable {
   public:
+    virtual ~IDrawable() noexcept = default;
     virtual void displayText(const text& text) const = 0;
     virtual void displayShape(const shape& shape) const = 0;
     virtual void displaySprite(const sprite& sprite) const = 0;
