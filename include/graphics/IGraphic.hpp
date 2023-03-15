@@ -122,6 +122,7 @@ class IWindow {
     virtual void displayWindow() = 0;
     virtual void clearWindow() = 0;
     virtual void destroyWindow() = 0;
+    virtual bool isOpenWindow() = 0;
 };
 
 class IDrawable {
