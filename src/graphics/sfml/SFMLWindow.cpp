@@ -9,14 +9,13 @@
 
 void SFMLWindow::createWindow(std::string title, int width, int height)
 {
-    (void)title;
-    (void)width;
-    (void)height;
+    this->window.create(sf::VideoMode(width, height), title);
     return;
 }
 
 void SFMLWindow::displayWindow()
 {
+    this->window.display();
     return;
 }
 
