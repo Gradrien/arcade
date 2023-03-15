@@ -1,13 +1,14 @@
 /*
-** EPITECH PROJECT, 2023
-** arcade
-** File description:
-** IGraphic
-*/
+ ** EPITECH PROJECT, 2023
+ ** arcade
+ ** File description:
+ ** IGraphic
+ */
 
 #ifndef IGRAPHIC_HPP_
 #define IGRAPHIC_HPP_
 #include <iostream>
+#include <memory>
 
 enum class eventKey {
     NULL_EVENT,
@@ -62,7 +63,9 @@ enum class eventKey {
     SHIFT
 };
 
-enum class shapeType { RECTANGLE, CIRCLE, TRIANGLE };
+enum class shapeType { RECTANGLE,
+    CIRCLE,
+    TRIANGLE };
 
 struct coord {
     int x;
@@ -90,34 +93,36 @@ struct color {
 struct sprite {
     coord pos;
     elemSize size;
-    texture texture;
+    texture m_texture;
     char replacementChar;
-    color color;
+    color m_color;
 };
 
 struct text {
     coord pos;
     int fontSize;
     std::string fontPath;
-    color color;
+    color m_color;
     std::string text;
 };
 
 struct shape {
     coord pos;
     elemSize size;
-    color color;
+    color m_color;
     char replacementChar;
     std::string text;
     shapeType type;
 };
 
 class IWindow {
+  public:
     virtual void createWindow(std::string title, int width, int height) = 0;
     virtual void destroyWindow() = 0;
 };
 
 class IDrawable {
+  public:
     virtual void displayText(const text& text) const = 0;
     virtual void displayShape(const shape& shape) const = 0;
     virtual void displaySprite(const sprite& sprite) const = 0;
@@ -128,9 +133,9 @@ class IDrawable {
 
 class IGraphic {
   public:
-    virtual ~IGraphic() = 0;
-    virtual IWindow& getWindow() const = 0;
-    virtual IDrawable& getDrawable() const = 0;
+    virtual ~IGraphic() noexcept = default;
+    virtual const std::unique_ptr<IWindow>& getWindow() const = 0;
+    virtual const std::unique_ptr<IDrawable>& getDrawable() const = 0;
     virtual eventKey getEvent() const = 0;
 };
 

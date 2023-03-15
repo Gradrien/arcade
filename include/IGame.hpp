@@ -12,7 +12,7 @@
 
 class IGame {
   public:
-    virtual ~IGame() = 0;
+    virtual ~IGame() noexcept = default;
     virtual std::string getSpritePath() = 0;
     virtual void display(IGraphic& graphLib) = 0;
     virtual int init() = 0;
