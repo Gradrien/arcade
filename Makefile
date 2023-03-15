@@ -11,6 +11,11 @@ SRC_CORE	=	src/core/ArgsHandler.cpp
 
 SRC_MAIN	=	src/Main.cpp
 
+SRC_SFML	=	src/graphics/sfml/SFMLWindow.cpp	\
+				src/graphics/sfml/SFMLDrawable.cpp	\
+				src/graphics/sfml/SFMLGraphic.cpp	\
+				src/graphics/sfml/SFMLGraphicLib.cpp	\
+
 SRC			=	$(SRC_CORE) $(SRC_MAIN)
 
 TESTS_SRC	=	tests/tests_args.c
@@ -30,7 +35,7 @@ TEST_NAME	=	unit_tests
 
 CXXFLAGS	=	-std=c++20 -Wall -Wextra -Werror -fno-gnu-unique
 
-CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games
+CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games -I ./include/graphics/sfml
 
 all:	core
 .PHONY: all
@@ -46,10 +51,12 @@ games:	$(GAME1_NAME) $(GAME_SNAKE)
 	$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 .PHONY: games
 
-graphics:	$(GRAPHIC_SFML) $(GRAPHIC_NCUR) $(GRAPHIC_SDL)
-	$(CC) -o $(GRAPHIC_SFML) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
-	$(CC) -o $(GRAPHIC_NCUR) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
-	$(CC) -o $(GRAPHIC_SDL) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+graphics:
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS)
+	cp $(GRAPHIC_SFML) ./lib/
+#	$(CC) -o $(GRAPHIC_SFML) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+#	$(CC) -o $(GRAPHIC_NCUR) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+#	$(CC) -o $(GRAPHIC_SDL) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 .PHONY: graphics
 
 tests_run:
