@@ -130,7 +130,7 @@ class IDrawable {
     virtual void displayText(const text& text) const = 0;
     virtual void displayShape(const shape& shape) const = 0;
     virtual void displaySprite(const sprite& sprite) const = 0;
-    virtual text& createText() = 0;
+    virtual text& createText() = 0; //Changer proto pour ajouter les infos
     virtual shape& createShape() = 0;
     virtual sprite& createSprite() = 0;
 };
