@@ -16,9 +16,9 @@ class SFMLDrawable : public IDrawable {
     void displayText(const text& text) const override;
     void displayShape(const shape& shape) const override;
     void displaySprite(const sprite& sprite) const override;
-    text& createText() override; //Problème de stack ?
-    shape& createShape() override;
-    sprite& createSprite() override;
+    // text& createText() override; //Problème de stack ?
+    // shape& createShape() override;
+    // sprite& createSprite() override;
 };
 
 #endif /* !SFMLDRAWABLE_HPP_ */
