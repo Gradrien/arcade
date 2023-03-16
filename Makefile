@@ -42,14 +42,16 @@ CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games -I ./inclu
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 
-all:	core
+LDFLAGS	=	-ldl
+
+all:	core graphics
 .PHONY: all
 
 core:	$(CORE_NAME)
 .PHONY: core
 
 $(CORE_NAME):	$(OBJ_CORE)
-	$(CC) -o $(CORE_NAME) $(OBJ_CORE) $(CXXFLAGS) $(CPPFLAGS) $(SFMLFLAGS)
+	$(CC) -o $(CORE_NAME) $(OBJ_CORE) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS)
 
 games:	$(GAME1_NAME) $(GAME_SNAKE)
 	$(CC) -o $(GAME_NIBBLER) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
@@ -58,7 +60,7 @@ games:	$(GAME1_NAME) $(GAME_SNAKE)
 
 graphics:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
-	cp $(GRAPHIC_SFML) ./lib/
+	mv $(GRAPHIC_SFML) ./lib/
 #	$(CC) -o $(GRAPHIC_SFML) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #	$(CC) -o $(GRAPHIC_NCUR) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #	$(CC) -o $(GRAPHIC_SDL) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
@@ -87,9 +89,9 @@ fclean:	clean
 	rm -f $(CORE_NAME)
 	rm -f $(GAME_NIBBLER)
 	rm -f $(GAME_SNAKE)
-	rm -f $(GRAPHIC_SFML)
-	rm -f $(GRAPHIC_NCUR)
-	rm -f $(GRAPHIC_SDL)
+	rm -f ./lib/$(GRAPHIC_SFML)
+	rm -f ./lib/$(GRAPHIC_NCUR)
+	rm -f ./lib/$(GRAPHIC_SDL)
 .PHONY: fclean
 
 re:	fclean all
