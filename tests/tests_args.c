@@ -11,7 +11,8 @@
 
 Test(checkArgs, no_args)
 {
-    char *av[1] = {"./arcade"};
+    const char *av1 = "./arcade";
+    char *av[1] = {const_cast<char*>(av1)};
     int ac = 1;
 
     cr_assert_eq(checkArgs(ac, av), 84);
@@ -27,7 +28,9 @@ Test(checkArgs, no_args2)
 
 Test(checkArgs, bad_args)
 {
-    char *av[2] = {"./arcade", "wrongarg"};
+    const char *av1 = "./arcade";
+    const char *av2 = "wrongarg";
+    char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
     int ac = 2;
 
     cr_assert_eq(checkArgs(ac, av), 84);
@@ -35,7 +38,19 @@ Test(checkArgs, bad_args)
 
 Test(checkArgs, wrong_lib)
 {
-    char *av[2] = {"./arcade", "./lib/lib_caca++.so"};
+    const char *av1 = "./arcade";
+    const char *av2 = "./lib/lib_caca++.so";
+    char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
+    int ac = 2;
+
+    cr_assert_eq(checkArgs(ac, av), 84);
+}
+
+Test(checkArgs, wrong_lib2)
+{
+    const char *av1 = "./arcade";
+    const char *av2 = "./lib/arcade_sfml.html";
+    char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
     int ac = 2;
 
     cr_assert_eq(checkArgs(ac, av), 84);
@@ -43,7 +58,9 @@ Test(checkArgs, wrong_lib)
 
 Test(checkArgs, one_arg)
 {
-    char *av[2] = {"./arcade", "./lib/arcade_sfml.so"};
+    const char *av1 = "./arcade";
+    const char *av2 = "./lib/arcade_sfml.so";
+    char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
     int ac = 2;
 
     cr_assert_eq(checkArgs(ac, av), 0);
@@ -51,14 +68,19 @@ Test(checkArgs, one_arg)
 
 Test(checkArgs, two_args)
 {
-    char *av[3] = {"./arcade", "./lib/arcade_sfml.so", "./lib/arcade_ncurses.so"};
+    const char *av1 = "./arcade";
+    const char *av2 = "./lib/arcade_sfml.so";
+    const char *av3 = "./lib/arcade_ncurses.so";
+    char *av[3] = {const_cast<char*>(av1), const_cast<char*>(av2), const_cast<char*>(av3)};
     int ac = 3;
 
     cr_assert_eq(checkArgs(ac, av), 84);
 }
 
 Test(checkArgs, help) {
-    char *av[2] = {"./arcade", "-h"};
+    const char *av1 = "./arcade";
+    const char *av2 = "-h";
+    char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
     int ac = 2;
 
     cr_assert_eq(checkArgs(ac, av), 0);
