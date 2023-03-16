@@ -25,6 +25,7 @@ void SFMLGraphic::displayWindow()
 
 void SFMLGraphic::clearWindow()
 {
+    this->window_.clear();
     return;
 }
 
