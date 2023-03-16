@@ -3,7 +3,7 @@
  ** arcade
  ** File description:
  ** IGraphic
-*/
+ */
 
 #ifndef IGRAPHIC_HPP_
 #define IGRAPHIC_HPP_
@@ -115,32 +115,18 @@ struct shape {
     shapeType type;
 };
 
-class IWindow {
+class IGraphic {
   public:
-    virtual ~IWindow() noexcept = default;
+    virtual ~IGraphic() noexcept = default;
+    virtual void displayText(const text& text) const = 0;
+    virtual void displayShape(const shape& shape) const = 0;
+    virtual void displaySprite(const sprite& sprite) const = 0;
+
     virtual void createWindow(std::string title, int width, int height) = 0;
     virtual void displayWindow() = 0;
     virtual void clearWindow() = 0;
     virtual void destroyWindow() = 0;
     virtual bool isOpenWindow() = 0;
-};
-
-class IDrawable {
-  public:
-    virtual ~IDrawable() noexcept = default;
-    virtual void displayText(const std::unique_ptr<IWindow>& window, const text& text) const = 0;
-    virtual void displayShape(const std::unique_ptr<IWindow>& window, const shape& shape) const = 0;
-    virtual void displaySprite(const std::unique_ptr<IWindow>& window, const sprite& sprite) const = 0;
-    // virtual text& createText() = 0; //Changer proto pour ajouter les infos
-    // virtual shape& createShape() = 0;
-    // virtual sprite& createSprite() = 0;
-};
-
-class IGraphic {
-  public:
-    virtual ~IGraphic() noexcept = default;
-    virtual const std::unique_ptr<IWindow>& getWindow() const = 0;
-    virtual const std::unique_ptr<IDrawable>& getDrawable() const = 0;
     virtual eventKey getEvent() const = 0;
 };
 

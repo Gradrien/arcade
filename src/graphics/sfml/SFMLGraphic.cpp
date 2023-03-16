@@ -6,18 +6,69 @@
 */
 
 #include "SFMLGraphic.hpp"
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <memory>
 
-const std::unique_ptr<IWindow>& SFMLGraphic::getWindow() const
+void SFMLGraphic::createWindow(std::string title, int width, int height)
 {
-    return this->window;
+    this->window_.create(sf::VideoMode(width, height), title);
+    return;
 }
 
-const std::unique_ptr<IDrawable>& SFMLGraphic::getDrawable() const
+void SFMLGraphic::displayWindow()
 {
-    return this->drawables;
+    this->window_.display();
+    return;
 }
 
+void SFMLGraphic::clearWindow()
+{
+    return;
+}
+
+void SFMLGraphic::destroyWindow()
+{
+    return;
+}
+
+bool SFMLGraphic::isOpenWindow()
+{
+    return this->window_.isOpen();
+}
+
+void SFMLGraphic::displayText(const text& text) const
+{
+    (void)text;
+    return;
+}
+
+void SFMLGraphic::drawRectangle(const shape& shape) const
+{
+    sf::Color color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
+    sf::RectangleShape rect(sf::Vector2f(shape.size.width, shape.size.height));
+    rect.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
+    rect.setPosition(sf::Vector2f(shape.pos.x, shape.pos.y));
+    // window_.draw(rect);
+}
+
+void SFMLGraphic::displayShape(const shape& shape) const
+{
+    switch (shape.type)
+    {
+    case shapeType::RECTANGLE :
+        this->drawRectangle(shape);
+        break;
+    default:
+        break;
+    }
+    return;
+}
+
+void SFMLGraphic::displaySprite(const sprite& sprite) const
+{
+    (void)sprite;
+    return;
+}
 eventKey SFMLGraphic::getEvent() const
 {
     return eventKey::LARROW;

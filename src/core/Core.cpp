@@ -37,9 +37,9 @@ void Core::getAllLib()
 }
 
 void Core::gameLoopHandler() {
-    this->graphLib_->getWindow()->createWindow("Arcade", 800, 800);
-    while (this->graphLib_->getWindow()) {
-        this->graphLib_->getWindow()->clearWindow();
-        this->graphLib_->getWindow()->displayWindow();
+    this->graphLib_->createWindow("Arcade", 800, 800);
+    while (this->graphLib_) {
+        this->graphLib_->clearWindow();
+        this->graphLib_->displayWindow();
     }
 }
