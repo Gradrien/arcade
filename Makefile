@@ -18,6 +18,9 @@ SRC_SFML	=	src/graphics/sfml/SFMLGraphic.cpp	\
 				src/graphics/sfml/SFMLGraphicLib.cpp	\
 				src/graphics/sfml/SFMLEvent.cpp	\
 
+SRC_GAMETEST	=	src/games/test_game/TestGame.cpp	\
+					src/games/test_game/TestGameLib.cpp
+
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
 TESTS_SRC	=	tests/tests_args.c
@@ -28,6 +31,7 @@ CORE_NAME = arcade
 
 GAME_NIBBLER = arcade_nibbler.so
 GAME_SNAKE	 = arcade_snake.so
+GAME_TEST	 = test_game.so
 
 GRAPHIC_SFML = arcade_sfml.so
 GRAPHIC_NCUR = arcade_ncurses.so
@@ -37,15 +41,13 @@ TEST_NAME	=	unit_tests
 
 CXXFLAGS	=	-std=c++20 -Wall -Wextra -Werror -fno-gnu-unique
 
-CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games -I ./include/graphics/sfml -I ./include/error
+CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games -I ./include/graphics/sfml -I ./include/error -I ./include/games/test_game
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 
 LDFLAGS	=	-ldl
 
-DEBUGFLAG =	-ggdb3
-
-all:	core graphics
+all:	core graphics games
 .PHONY: all
 
 core:	$(CORE_NAME)
@@ -54,9 +56,11 @@ core:	$(CORE_NAME)
 $(CORE_NAME):	$(OBJ_CORE)
 	$(CC) -o $(CORE_NAME) $(OBJ_CORE) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS)
 
-games:	$(GAME1_NAME) $(GAME_SNAKE)
-	$(CC) -o $(GAME_NIBBLER) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
-	$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+games:
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
+	mv $(GAME_TEST) ./lib/
+#$(CC) -o $(GAME_NIBBLER) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+#$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 .PHONY: games
 
 graphics:
@@ -100,4 +104,5 @@ re:	fclean all
 
 debug:	fclean
 	$(CC) -o $(CORE_NAME) $(SRC_CORE) $(SRC_ERROR) $(SRC_MAIN) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS) $(DEBUGFLAG)
+
 .PHONY: debug
