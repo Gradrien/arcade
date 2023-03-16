@@ -36,22 +36,22 @@ bool SFMLGraphic::isOpenWindow()
     return this->window_.isOpen();
 }
 
-void SFMLGraphic::displayText(const text& text) const
+void SFMLGraphic::displayText(const text& text)
 {
     (void)text;
     return;
 }
 
-void SFMLGraphic::drawRectangle(const shape& shape) const
+void SFMLGraphic::drawRectangle(const shape& shape)
 {
     sf::Color color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
     sf::RectangleShape rect(sf::Vector2f(shape.size.width, shape.size.height));
     rect.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
     rect.setPosition(sf::Vector2f(shape.pos.x, shape.pos.y));
-    // window_.draw(rect);
+    window_.draw(rect);
 }
 
-void SFMLGraphic::displayShape(const shape& shape) const
+void SFMLGraphic::displayShape(const shape& shape)
 {
     switch (shape.type)
     {
@@ -64,7 +64,7 @@ void SFMLGraphic::displayShape(const shape& shape) const
     return;
 }
 
-void SFMLGraphic::displaySprite(const sprite& sprite) const
+void SFMLGraphic::displaySprite(const sprite& sprite)
 {
     (void)sprite;
     return;

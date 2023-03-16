@@ -118,9 +118,9 @@ struct shape {
 class IGraphic {
   public:
     virtual ~IGraphic() noexcept = default;
-    virtual void displayText(const text& text) const = 0;
-    virtual void displayShape(const shape& shape) const = 0;
-    virtual void displaySprite(const sprite& sprite) const = 0;
+    virtual void displayText(const text& text) = 0;
+    virtual void displayShape(const shape& shape) = 0;
+    virtual void displaySprite(const sprite& sprite) = 0;
 
     virtual void createWindow(std::string title, int width, int height) = 0;
     virtual void displayWindow() = 0;

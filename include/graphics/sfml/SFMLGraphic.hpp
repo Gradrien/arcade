@@ -20,13 +20,13 @@ class SFMLGraphic : public IGraphic {
     void clearWindow() override;
     void destroyWindow() override;
     bool isOpenWindow() override;
-    void displayText(const text& text) const override;
-    void displayShape(const shape& shape) const override;
-    void displaySprite(const sprite& sprite) const override;
+    void displayText(const text& text) override;
+    void displayShape(const shape& shape) override;
+    void displaySprite(const sprite& sprite) override;
 
     eventKey getEvent() const override;
   private:
-    void drawRectangle(const shape& shape) const;
+    void drawRectangle(const shape& shape);
     sf::RenderWindow window_;
 };
 
