@@ -11,11 +11,13 @@
 #include "Error.hpp"
 #include "IGame.hpp"
 #include "IGraphic.hpp"
+#include "Menu.hpp"
 #include <memory>
 #include <filesystem>
 
 enum class GState { PLAY, PAUSE, MENU };
 
+class Menu;
 class Core {
   public:
     Core(const char *libName);
@@ -31,6 +33,7 @@ class Core {
     void pushLib(std::string path, std::vector<std::string> &container);
 
   private:
+    Menu *menu;
     GState gameState_;
     std::unique_ptr<IGraphic> graphLib_;
     std::unique_ptr<IGame> gameLib_;

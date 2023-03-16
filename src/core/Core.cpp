@@ -17,6 +17,8 @@ Core::Core(const char* libName)
     this->graphPaths_.push_back(libName);
     this->getAllLib();
     this->gameState_ = GState::MENU;
+    if (this->gameState_ == GState::MENU)
+        this->menu->menuLoopHandler(this->graphLib_, this);
     this->gameLoopHandler();
 }
 
@@ -60,6 +62,8 @@ void Core::gameLoopHandler()
     while (this->graphLib_) {
         this->graphLib_->clearWindow();
         this->handleEvent();
+        if (this->gameState_ == GState::MENU)
+            this->menu->menuLoopHandler(this->graphLib_, this);
         this->graphLib_->displayShape(circleTest);
         this->graphLib_->displayWindow();
     }

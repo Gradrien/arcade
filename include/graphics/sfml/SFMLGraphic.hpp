@@ -11,6 +11,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <memory>
 #include <unordered_map>
 
@@ -31,6 +32,7 @@ class SFMLGraphic : public IGraphic {
   private:
     void drawRectangle(const shape& shape);
     void drawCircle(const shape& shape);
+    std::unordered_map<const text*, sf::Text> textList;
     std::unordered_map<const shape*, sf::RectangleShape> rectList;
     std::unordered_map<const shape*, sf::CircleShape> circleList;
     sf::RenderWindow window_;

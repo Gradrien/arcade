@@ -11,8 +11,10 @@
 
 static int check_library(const char *library)
 {
-    if (open(library, O_RDONLY) == -1)
+    if (open(library, O_RDONLY) == -1) {
+        std::cerr << "Error: library " << library << " not found" << std::endl;
         return 84;
+    }
     if (strcmp(strrchr(library, '.'), ".so") != 0)
         return 84;
     return 0;
