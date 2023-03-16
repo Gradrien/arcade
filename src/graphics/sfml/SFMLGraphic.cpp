@@ -47,11 +47,14 @@ void SFMLGraphic::displayText(const text& text)
 void SFMLGraphic::drawRectangle(const shape& shape)
 {
     if (this->rectList.find(&shape) != this->rectList.end()) {
+        this->rectList[&shape].setSize(sf::Vector2f(shape.size.width, shape.size.height));
+        this->rectList[&shape].setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
+        this->rectList[&shape].setPosition(sf::Vector2f(shape.pos.x, shape.pos.y));
         window_.draw(this->rectList[&shape]);
         return;
     }
-    sf::Color color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
-    sf::RectangleShape rect(sf::Vector2f(shape.size.width, shape.size.height));
+    sf::RectangleShape rect;
+    rect.setSize(sf::Vector2f(shape.size.width, shape.size.height));
     rect.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
     rect.setPosition(sf::Vector2f(shape.pos.x, shape.pos.y));
     this->rectList[&shape] = rect;
@@ -61,10 +64,12 @@ void SFMLGraphic::drawRectangle(const shape& shape)
 void SFMLGraphic::drawCircle(const shape& shape)
 {
     if (this->circleList.find(&shape) != this->circleList.end()) {
+        this->circleList[&shape].setRadius(shape.size.width);
+        this->circleList[&shape].setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
+        this->circleList[&shape].setPosition(shape.pos.x, shape.pos.y);
         window_.draw(this->circleList[&shape]);
         return;
     }
-    sf::Color color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
     sf::CircleShape circle(shape.size.width);
     circle.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
     circle.setPosition(shape.pos.x, shape.pos.y);
