@@ -25,6 +25,10 @@ class Core {
     void updateGame();
     void displayGame();
     void gameLoopHandler();
+    void loadNextGraph();
+    void loadNextGame();
+    void restartGame();
+    void pushLib(std::string path, std::vector<std::string> &container);
 
   private:
     GState gameState_;
@@ -32,8 +36,10 @@ class Core {
     std::unique_ptr<IGame> gameLib_;
     DLLoader<IGraphic> graphLoader_ { DLLoader<IGraphic>() };
     DLLoader<IGame> gameLoader_ { DLLoader<IGame>() };
-    std::vector<std::string> gamePaths;
-    std::vector<std::string> graphPaths;
+    std::vector<std::string> gamePaths_;
+    std::vector<std::string> graphPaths_;
+    std::size_t gameIndex_ {0};
+    std::size_t graphIndex_ {0};
 };
 
 #endif /* !CORE_HPP_ */

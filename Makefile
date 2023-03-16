@@ -43,6 +43,8 @@ SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 
 LDFLAGS	=	-ldl
 
+DEBUGFLAG =	-ggdb3
+
 all:	core graphics
 .PHONY: all
 
@@ -95,3 +97,7 @@ fclean:	clean
 
 re:	fclean all
 .PHONY: re
+
+debug:	fclean
+	$(CC) -o $(CORE_NAME) $(SRC_CORE) $(SRC_ERROR) $(SRC_MAIN) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS) $(DEBUGFLAG)
+.PHONY: debug
