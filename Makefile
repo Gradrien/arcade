@@ -19,11 +19,11 @@ SRC_SFML	=	src/graphics/sfml/SFMLWindow.cpp	\
 				src/graphics/sfml/SFMLGraphic.cpp	\
 				src/graphics/sfml/SFMLGraphicLib.cpp	\
 
-SRC			=	$(SRC_CORE) $(SRC_MAIN) $(SRC_ERROR)
+SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
 TESTS_SRC	=	tests/tests_args.c
 
-OBJ_CORE	=	$(SRC:.cpp=.o)
+OBJ_CORE	=	$(SRC:.cpp=.o) $(SRC_MAIN:.cpp=.o)
 
 CORE_NAME = arcade
 
@@ -67,7 +67,7 @@ graphics:
 .PHONY: graphics
 
 tests_run:
-	$(CC) -o $(TEST_NAME) $(SRC_CORE) $(TESTS_SRC) $(CPPFLAGS) \
+	$(CC) -o $(TEST_NAME) $(SRC) $(TESTS_SRC) $(CPPFLAGS) $(LDFLAGS) \
 	--coverage -lcriterion -lgcov
 	./$(TEST_NAME)
 .PHONY: tests_run
