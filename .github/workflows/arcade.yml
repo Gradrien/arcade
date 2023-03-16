@@ -10,7 +10,7 @@ on:
 env:
   MIRROR_URL: "git@github.com:EpitechPromo2026/B-OOP-400-BDX-4-1-arcade-hippolyte.david.git"
   EXECUTABLE: "arcade"
-  ARGUMENTS: "./lib/arcade_ncurses.so"
+  ARGUMENTS: "./lib/arcade_sfml.so"
 
 jobs:
   check_repository_cleanliness:
@@ -49,7 +49,7 @@ jobs:
           echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
           exit 1
         fi
-        ./$EXECUTABLE
+        ./$EXECUTABLE $ARGUMENTS
 
   run_tests:
     runs-on: ubuntu-latest
