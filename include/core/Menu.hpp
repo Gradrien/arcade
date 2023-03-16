@@ -24,12 +24,12 @@ class Menu {
     void menuLoopHandler(std::unique_ptr<IGraphic> &graphLib, Core *core);
     void handleEvent();
     void display();
-    void setGraphLib(std::unique_ptr<IGraphic> &graphLib);
-    void setGameLib(std::unique_ptr<IGame> &gameLib);
+    std::vector<text> setGraphLib(std::vector<std::string> graphPaths_);
+    std::vector<text> setGameLib(std::vector<std::string> gamePaths_);
+    std::vector<text> guiTextMenu();
 
     private:
     std::unique_ptr<IGraphic> &graphLib_;
-    std::vector<text> textMenu;
     int selectedGame;
     int selectedGraph;
 };

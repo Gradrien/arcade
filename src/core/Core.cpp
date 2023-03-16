@@ -27,6 +27,10 @@ void Core::getAllLib()
     DLLoader<IGraphic> tmpGraphLoader {};
     DLLoader<IGame> tmpGameLoader {};
     const std::filesystem::path path { "./lib" };
+    this->pushLib("nouveau_jeu_incroyable.so", this->gamePaths_);
+    this->pushLib("nouveau_jeu_incroyable2.so", this->gamePaths_);
+    this->pushLib("nouveau_jeu_incroyable3.so", this->gamePaths_);
+    this->pushLib("nouveau_jeu_incroyable4.so", this->gamePaths_);
     for (auto const& dir_entry : std::filesystem::directory_iterator { path }) {
         if (dir_entry.path().filename().c_str()[0] == '.')
             continue;
@@ -48,6 +52,17 @@ void Core::pushLib(std::string path, std::vector<std::string>& container)
             return;
     }
     container.push_back(path);
+}
+
+
+std::vector<std::string> Core::getGraphPaths()
+{
+    return this->graphPaths_;
+}
+
+std::vector<std::string> Core::getGamePaths()
+{
+    return this->gamePaths_;
 }
 
 void Core::gameLoopHandler()

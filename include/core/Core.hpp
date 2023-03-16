@@ -31,6 +31,8 @@ class Core {
     void loadNextGame();
     void restartGame();
     void pushLib(std::string path, std::vector<std::string> &container);
+    std::vector<std::string> getGraphPaths();
+    std::vector<std::string> getGamePaths();
 
   private:
     Menu *menu;

@@ -59,14 +59,14 @@ $(CORE_NAME):	$(OBJ_CORE)
 
 games:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
-	mv $(GAME_TEST) ./lib/
+	mv $(GAME_TEST) ./lib/games/
 #$(CC) -o $(GAME_NIBBLER) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 .PHONY: games
 
 graphics:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
-	mv $(GRAPHIC_SFML) ./lib/
+	mv $(GRAPHIC_SFML) ./lib/graphics/
 #	$(CC) -o $(GRAPHIC_SFML) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #	$(CC) -o $(GRAPHIC_NCUR) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #	$(CC) -o $(GRAPHIC_SDL) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
