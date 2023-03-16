@@ -19,6 +19,10 @@ SRC_SFML	=	src/graphics/sfml/SFMLGraphic.cpp	\
 				src/graphics/sfml/SFMLGraphicLib.cpp	\
 				src/graphics/sfml/SFMLEvent.cpp	\
 
+SRC_NCURSES	=	src/graphics/ncurses/NcursesGraphic.cpp	\
+				src/graphics/ncurses/NcursesGraphicLib.cpp	\
+				src/graphics/ncurses/NcursesEvent.cpp	\
+
 SRC_GAMETEST	=	src/games/test_game/TestGame.cpp	\
 					src/games/test_game/TestGameLib.cpp
 
@@ -35,16 +39,23 @@ GAME_SNAKE	 = arcade_snake.so
 GAME_TEST	 = test_game.so
 
 GRAPHIC_SFML = arcade_sfml.so
-GRAPHIC_NCUR = arcade_ncurses.so
+GRAPHIC_NCURSES = arcade_ncurses.so
 GRAPHIC_SDL  = arcade_sdl2.so
 
 TEST_NAME	=	unit_tests
 
 CXXFLAGS	=	-std=c++20 -Wall -Wextra -Werror -fno-gnu-unique
 
-CPPFLAGS = -I ./include/core -I ./include/graphics -I ./include/games -I ./include/graphics/sfml -I ./include/error -I ./include/games/test_game
+CPPFLAGS	=	-I	./include/core	\
+				-I ./include/graphics	\
+				-I ./include/games	\
+				-I ./include/graphics/sfml	\
+				-I ./include/graphics/ncurses	\
+				-I ./include/error	\
+				-I ./include/games/test_game	\
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
+NCURSESFLAG = -lncurses
 
 LDFLAGS	=	-ldl
 
@@ -67,6 +78,8 @@ games:
 graphics:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
 	mv $(GRAPHIC_SFML) ./lib/graphics/
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_NCURSES) $(SRC_NCURSES) $(CPPFLAGS) $(NCURSESFLAG)
+	mv $(GRAPHIC_NCURSES) ./lib/graphics/
 #	$(CC) -o $(GRAPHIC_SFML) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #	$(CC) -o $(GRAPHIC_NCUR) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 #	$(CC) -o $(GRAPHIC_SDL) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
@@ -96,7 +109,7 @@ fclean:	clean
 	rm -f $(GAME_NIBBLER)
 	rm -f $(GAME_SNAKE)
 	rm -f ./lib/$(GRAPHIC_SFML)
-	rm -f ./lib/$(GRAPHIC_NCUR)
+	rm -f ./lib/$(GRAPHIC_NCURSES)
 	rm -f ./lib/$(GRAPHIC_SDL)
 .PHONY: fclean
 

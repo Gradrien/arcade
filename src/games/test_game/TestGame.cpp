@@ -19,7 +19,7 @@ void TestGame::display(std::unique_ptr<IGraphic>& graphLib)
 
 int TestGame::init()
 {
-    this->rect = { .pos { 200, 200 }, .size { 50, 100 }, .m_color { .r = 0, .g = 151, .b = 255, .a = 255 }, .replacementChar = '#', .text { "Allo" }, .type = shapeType::RECTANGLE };
+    this->rect = { .pos { 400, 400 }, .size { 200, 200 }, .m_color { .r = 0, .g = 151, .b = 255, .a = 255 }, .replacementChar = '#', .text { "Allo" }, .type = shapeType::RECTANGLE };
     return 0;
 }
 
