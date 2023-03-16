@@ -6,12 +6,14 @@
 */
 
 #include "SFMLGraphic.hpp"
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <memory>
 
 void SFMLGraphic::createWindow(std::string title, int width, int height)
 {
     this->window_.create(sf::VideoMode(width, height), title);
+    this->window_.setFramerateLimit(60);
     return;
 }
 
@@ -44,19 +46,40 @@ void SFMLGraphic::displayText(const text& text)
 
 void SFMLGraphic::drawRectangle(const shape& shape)
 {
+    if (this->rectList.find(&shape) != this->rectList.end()) {
+        window_.draw(this->rectList[&shape]);
+        return;
+    }
     sf::Color color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
     sf::RectangleShape rect(sf::Vector2f(shape.size.width, shape.size.height));
     rect.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
     rect.setPosition(sf::Vector2f(shape.pos.x, shape.pos.y));
+    this->rectList[&shape] = rect;
     window_.draw(rect);
+}
+
+void SFMLGraphic::drawCircle(const shape& shape)
+{
+    if (this->circleList.find(&shape) != this->circleList.end()) {
+        window_.draw(this->circleList[&shape]);
+        return;
+    }
+    sf::Color color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
+    sf::CircleShape circle(shape.size.width);
+    circle.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
+    circle.setPosition(shape.pos.x, shape.pos.y);
+    this->circleList[&shape] = circle;
+    window_.draw(circle);
 }
 
 void SFMLGraphic::displayShape(const shape& shape)
 {
-    switch (shape.type)
-    {
-    case shapeType::RECTANGLE :
+    switch (shape.type) {
+    case shapeType::RECTANGLE:
         this->drawRectangle(shape);
+        break;
+    case shapeType::CIRCLE:
+        this->drawCircle(shape);
         break;
     default:
         break;
@@ -68,8 +91,4 @@ void SFMLGraphic::displaySprite(const sprite& sprite)
 {
     (void)sprite;
     return;
-}
-eventKey SFMLGraphic::getEvent() const
-{
-    return eventKey::LARROW;
 }

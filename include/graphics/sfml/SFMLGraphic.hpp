@@ -8,8 +8,11 @@
 #ifndef SFMLGRAPHIC_HPP_
 #define SFMLGRAPHIC_HPP_
 #include "IGraphic.hpp"
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
+#include <unordered_map>
 
 class SFMLGraphic : public IGraphic {
   public:
@@ -23,10 +26,13 @@ class SFMLGraphic : public IGraphic {
     void displayText(const text& text) override;
     void displayShape(const shape& shape) override;
     void displaySprite(const sprite& sprite) override;
+    eventKey getEvent() override;
 
-    eventKey getEvent() const override;
   private:
     void drawRectangle(const shape& shape);
+    void drawCircle(const shape& shape);
+    std::unordered_map<const shape*, sf::RectangleShape> rectList;
+    std::unordered_map<const shape*, sf::CircleShape> circleList;
     sf::RenderWindow window_;
 };
 

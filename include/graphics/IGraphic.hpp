@@ -127,7 +127,7 @@ class IGraphic {
     virtual void clearWindow() = 0;
     virtual void destroyWindow() = 0;
     virtual bool isOpenWindow() = 0;
-    virtual eventKey getEvent() const = 0;
+    virtual eventKey getEvent() = 0;
 };
 
 #endif /* !IGRAPHIC_HPP_ */
