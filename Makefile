@@ -16,6 +16,7 @@ SRC_MAIN	=	src/Main.cpp
 
 SRC_SFML	=	src/graphics/sfml/SFMLGraphic.cpp	\
 				src/graphics/sfml/SFMLGraphicLib.cpp	\
+				src/graphics/sfml/SFMLEvent.cpp	\
 
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 

@@ -27,7 +27,6 @@ class Core {
     void gameLoopHandler();
 
   private:
-    eventKey event_;
     GState gameState_;
     std::unique_ptr<IGraphic> graphLib_;
     std::unique_ptr<IGame> gameLib_;

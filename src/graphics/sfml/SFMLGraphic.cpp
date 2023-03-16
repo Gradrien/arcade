@@ -28,7 +28,7 @@ void SFMLGraphic::clearWindow()
 
 void SFMLGraphic::destroyWindow()
 {
-    return;
+    this->window_.close();
 }
 
 bool SFMLGraphic::isOpenWindow()
