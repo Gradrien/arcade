@@ -81,13 +81,13 @@ void SFMLGraphic::drawRectangle(const shape& shape)
 void SFMLGraphic::drawCircle(const shape& shape)
 {
     if (this->circleList.find(&shape) != this->circleList.end()) {
-        this->circleList[&shape].setRadius(shape.size.width);
+        this->circleList[&shape].setRadius(shape.size.width / 2);
         this->circleList[&shape].setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
         this->circleList[&shape].setPosition(shape.pos.x, shape.pos.y);
         window_.draw(this->circleList[&shape]);
         return;
     }
-    sf::CircleShape circle(shape.size.width);
+    sf::CircleShape circle(shape.size.width / 2);
     circle.setFillColor(sf::Color(shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a));
     circle.setPosition(shape.pos.x, shape.pos.y);
     this->circleList[&shape] = circle;

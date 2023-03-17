@@ -13,7 +13,11 @@ void NcursesGraphic::createWindow(std::string title, int width, int height)
 {
     (void)title;
     initscr();
-    this->window_ = newwin(height / 20, width / 10, 0, 0);
+    this->window_ = newwin(height / 20 + 2, width / 10 + 2, 0, 0);
+    if (!this->window_) {
+        exit(84);
+        //! THROW ERROR
+    }
     this->isOpen_ = true;
     keypad(this->window_, TRUE);
     noecho();
@@ -21,6 +25,8 @@ void NcursesGraphic::createWindow(std::string title, int width, int height)
     halfdelay(1);
     clear();
     refresh();
+    wclear(this->window_);
+    wrefresh(this->window_);
     if (has_colors() == FALSE) {
         endwin();
         //! exit(1); THROW ERROR
@@ -31,17 +37,22 @@ void NcursesGraphic::createWindow(std::string title, int width, int height)
 
 void NcursesGraphic::displayWindow()
 {
-    wrefresh(this->window_);
+    box(this->window_, ACS_VLINE, ACS_HLINE);
+    if (this->window_)
+        wrefresh(this->window_);
 }
 
 void NcursesGraphic::clearWindow()
 {
-    werase(this->window_);
+    if (this->window_)
+        werase(this->window_);
 }
 
 void NcursesGraphic::destroyWindow()
 {
+    delwin(this->window_);
     endwin();
+    this->window_ = nullptr;
     this->isOpen_ = false;
 }
 
@@ -52,7 +63,12 @@ bool NcursesGraphic::isOpenWindow()
 
 void NcursesGraphic::displayText(const text& text)
 {
-    (void)text;
+    int colorNb = (text.m_color.r + text.m_color.g + text.m_color.b) / 3;
+    init_color(colorNb, (text.m_color.r * 1000 / 255), (text.m_color.g * 1000 / 255), (text.m_color.b * 1000 / 255));
+    init_pair(colorNb, colorNb, COLOR_BLACK);
+    wattron(this->window_, COLOR_PAIR(colorNb));
+    mvwprintw(this->window_, (text.pos.y / 20) + 1, (text.pos.x / 10) + 1, text.text.c_str());
+    wattroff(this->window_, COLOR_PAIR(colorNb));
 }
 
 void NcursesGraphic::drawRectangle(const shape& shape)
@@ -60,23 +76,28 @@ void NcursesGraphic::drawRectangle(const shape& shape)
     char str[2] = { shape.replacementChar, 0 };
     for (int x = 0; x < shape.size.width / 10; x++) {
         for (int y = 0; y < shape.size.height / 20; y++) {
-            mvwprintw(this->window_, (shape.pos.y / 20) + y, (shape.pos.x / 10) + x, str);
+            mvwprintw(this->window_, (shape.pos.y / 20) + y + 1, (shape.pos.x / 10) + x + 1, str);
         }
     }
 }
 
 void NcursesGraphic::displayShape(const shape& shape)
 {
+    int colorNb = (shape.m_color.r + shape.m_color.g + shape.m_color.b) / 3;
+    init_color(colorNb, shape.m_color.r * 1000 / 256, shape.m_color.g * 1000 / 256, shape.m_color.b * 1000 / 256);
+    init_pair(colorNb, colorNb, COLOR_BLACK);
+    wattron(this->window_, COLOR_PAIR(colorNb));
     switch (shape.type) {
     case shapeType::RECTANGLE:
         this->drawRectangle(shape);
         break;
     case shapeType::CIRCLE:
-        // this->drawCircle(shape);
+        this->drawRectangle(shape);
         break;
     default:
         break;
     }
+    wattroff(this->window_, COLOR_PAIR(colorNb));
     return;
 }
 

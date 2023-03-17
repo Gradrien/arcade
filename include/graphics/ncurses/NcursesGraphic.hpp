@@ -29,8 +29,6 @@ class NcursesGraphic : public IGraphic {
     bool isOpen_ { false };
     WINDOW* window_;
     void drawRectangle(const shape& shape);
-    // void drawCircle(const shape& shape);
-    // sf::RenderWindow window_;
 };
 
 #endif /* !NCURSESGRAPHIC_HPP_ */
