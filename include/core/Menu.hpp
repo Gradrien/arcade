@@ -29,7 +29,6 @@ class Menu {
     std::vector<text> guiTextMenu();
 
     private:
-    std::unique_ptr<IGraphic> &graphLib_;
     int selectedGame;
     int selectedGraph;
 };

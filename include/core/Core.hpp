@@ -15,7 +15,7 @@
 #include <memory>
 #include <filesystem>
 
-enum class GState { PLAY, PAUSE, MENU };
+enum class GState { PLAY, PAUSE, MENU, QUIT, CONTINUE };
 
 class Menu;
 class Core {
@@ -30,6 +30,8 @@ class Core {
     void loadNextGraph();
     void loadNextGame();
     void restartGame();
+    void quitArcade();
+    void coreStateHandler();
     void pushLib(std::string path, std::vector<std::string> &container);
     std::vector<std::string> getGraphPaths();
     std::vector<std::string> getGamePaths();

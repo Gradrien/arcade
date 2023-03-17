@@ -17,11 +17,9 @@ Core::Core(const char* libName)
     this->graphPaths_.push_back(libName);
     this->getAllLib();
     this->gameState_ = GState::PLAY;
-    if (this->gameState_ == GState::MENU)
-        this->menu->menuLoopHandler(this->graphLib_, this);
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
     this->gameLib_->init();
-    this->gameLoopHandler();
+    this->coreStateHandler();
 }
 
 void Core::getAllLib()
@@ -53,27 +51,41 @@ std::vector<std::string> Core::getGraphPaths() { return this->graphPaths_; }
 
 std::vector<std::string> Core::getGamePaths() { return this->gamePaths_; }
 
-void Core::gameLoopHandler()
+void Core::coreStateHandler()
 {
     this->graphLib_->createWindow("Arcade", 800, 800);
-    while (this->graphLib_) {
-        this->handleEvent();
-        this->graphLib_->clearWindow();
-        if (this->gameState_ == GState::MENU)
+    while (this->graphLib_->isOpenWindow()) {
+        switch (this->gameState_)
+        {
+        case GState::QUIT:
+            this->quitArcade();
+            break;
+        case GState::MENU:
             this->menu->menuLoopHandler(this->graphLib_, this);
-        this->gameLib_->display(this->graphLib_);
-        this->graphLib_->displayWindow();
+            break;
+        case GState::PLAY:
+            this->gameLoopHandler();
+            break;
+        default:
+            break;
+        }
     }
+}
+
+void Core::gameLoopHandler()
+{
+    this->handleEvent();
+    this->graphLib_->clearWindow();
+    this->gameLib_->display(this->graphLib_);
+    this->graphLib_->displayWindow();
 }
 
 void Core::handleEvent()
 {
     eventKey evt = this->graphLib_->getEvent();
     switch (evt) {
-    case eventKey::NULL_EVENT:
-        break;
     case eventKey::Q:
-        this->graphLib_->destroyWindow();
+        this->gameState_ = GState::QUIT;
         break;
     case eventKey::N:
         this->loadNextGraph();
@@ -88,7 +100,8 @@ void Core::handleEvent()
         this->restartGame();
         break;
     default:
-        this->gameLib_->updateGame(evt);
+        if (this->gameState_ != GState::MENU)
+            this->gameLib_->updateGame(evt);
         break;
     }
 }
@@ -113,10 +126,14 @@ void Core::loadNextGraph()
     } else {
         this->graphIndex_ += 1;
     }
-    std::cout << this->graphIndex_ << std::endl;
     this->graphLib_ = nullptr;
     this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[this->graphIndex_]);
     this->graphLib_->createWindow("Arcade", 800, 800);
 }
 
 void Core::restartGame() { return; }
+
+void Core::quitArcade()
+{
+    this->graphLib_->destroyWindow();
+}
