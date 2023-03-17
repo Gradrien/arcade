@@ -59,6 +59,8 @@ NCURSESFLAG = -lncurses
 
 LDFLAGS	=	-ldl
 
+DEBUGFLAG = -ggdb3
+
 all:	core graphics games
 .PHONY: all
 

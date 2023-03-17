@@ -32,6 +32,7 @@ class Core {
     void restartGame();
     void quitArcade();
     void coreStateHandler();
+    GState getCoreState() const;
     void pushLib(std::string path, std::vector<std::string> &container);
     std::vector<std::string> getGraphPaths();
     std::vector<std::string> getGamePaths();

@@ -21,7 +21,7 @@ class Menu {
     public:
     Menu() = default;
     ~Menu() = default;
-    void menuLoopHandler(std::unique_ptr<IGraphic> &graphLib, Core *core);
+    void menuLoopHandler(std::unique_ptr<IGraphic> &graphLib, Core &core);
     void handleEvent();
     void display();
     std::vector<text> setGraphLib(std::vector<std::string> graphPaths_);

@@ -14,6 +14,7 @@ Core::Core(const char* libName)
     this->graphLib_ = this->graphLoader_.getInstance(libName);
     if (!this->graphLib_)
         throw ArcadeError("Graphic lib cannot be loaded");
+    this->graphLib_->createWindow("Arcade", 800, 800);
     this->graphPaths_.push_back(libName);
     this->getAllLib();
     this->gameState_ = GState::PLAY;
@@ -53,31 +54,35 @@ std::vector<std::string> Core::getGamePaths() { return this->gamePaths_; }
 
 void Core::coreStateHandler()
 {
-    this->graphLib_->createWindow("Arcade", 800, 800);
-    while (this->graphLib_->isOpenWindow()) {
-        switch (this->gameState_)
-        {
-        case GState::QUIT:
-            this->quitArcade();
-            break;
-        case GState::MENU:
-            this->menu->menuLoopHandler(this->graphLib_, this);
-            break;
-        case GState::PLAY:
-            this->gameLoopHandler();
-            break;
-        default:
-            break;
-        }
+    switch (this->gameState_) {
+    case GState::QUIT:
+        this->quitArcade();
+        break;
+    case GState::MENU:
+        this->menu->menuLoopHandler(this->graphLib_, *this);
+        break;
+    case GState::PLAY:
+        this->gameLoopHandler();
+        break;
+    case GState::PAUSE:
+        this->gameLoopHandler();
+        break;
+    default:
+        break;
     }
 }
 
 void Core::gameLoopHandler()
 {
-    this->handleEvent();
-    this->graphLib_->clearWindow();
-    this->gameLib_->display(this->graphLib_);
-    this->graphLib_->displayWindow();
+    if (!this->graphLib_->isOpenWindow())
+        this->graphLib_->createWindow("Arcade", 800, 800);
+    while (this->graphLib_->isOpenWindow() && (this->gameState_ == GState::PLAY || this->gameState_ == GState::PAUSE)) {
+        this->handleEvent();
+        this->graphLib_->clearWindow();
+        this->gameLib_->display(this->graphLib_);
+        this->graphLib_->displayWindow();
+    }
+    this->coreStateHandler();
 }
 
 void Core::handleEvent()
@@ -100,7 +105,7 @@ void Core::handleEvent()
         this->restartGame();
         break;
     default:
-        if (this->gameState_ != GState::MENU)
+        if (this->gameState_ != GState::MENU && this->gameState_ != GState::PAUSE)
             this->gameLib_->updateGame(evt);
         break;
     }
@@ -120,20 +125,18 @@ void Core::loadNextGame()
 
 void Core::loadNextGraph()
 {
-    this->graphLib_->destroyWindow();
+    if (this->graphLib_->isOpenWindow())
+        this->graphLib_->destroyWindow();
     if ((this->graphIndex_ + 1) >= this->graphPaths_.size()) {
         this->graphIndex_ = 0;
     } else {
         this->graphIndex_ += 1;
     }
-    this->graphLib_ = nullptr;
     this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[this->graphIndex_]);
-    this->graphLib_->createWindow("Arcade", 800, 800);
 }
 
 void Core::restartGame() { return; }
 
-void Core::quitArcade()
-{
-    this->graphLib_->destroyWindow();
-}
+void Core::quitArcade() { this->graphLib_->destroyWindow(); }
+
+GState Core::getCoreState() const { return this->gameState_; }

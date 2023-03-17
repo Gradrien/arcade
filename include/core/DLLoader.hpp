@@ -20,8 +20,8 @@ class DLLoader {
     std::unique_ptr<T> getInstance(std::string filename)
     {
         std::unique_ptr<T> (*entryPoint)(void);
-        if (this->actualLib_)
-            this->closeLib();
+        // if (this->actualLib_)
+        //     this->closeLib();
         this->actualLib_ = dlopen(filename.c_str(), RTLD_LAZY);
         if (!this->actualLib_) {
             std::cout << dlerror() << std::endl;

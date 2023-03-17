@@ -73,18 +73,23 @@ std::vector<text> Menu::guiTextMenu()
     return gameTextMenu;
 }
 
-void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core* core)
+void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core& core)
 {
-    std::vector<text> libTextMenu = this->setGraphLib(core->getGraphPaths());
-    std::vector<text> gameTextMenu = this->setGameLib(core->getGamePaths());
+    std::vector<text> libTextMenu = this->setGraphLib(core.getGraphPaths());
+    std::vector<text> gameTextMenu = this->setGameLib(core.getGamePaths());
     std::vector<text> guiTextMenu = this->guiTextMenu();
-    core->handleEvent();
-    graphLib->clearWindow();
-    for (auto& i : libTextMenu)
-        graphLib->displayText(i);
-    for (auto& i : gameTextMenu)
-        graphLib->displayText(i);
-    for (auto& i : guiTextMenu)
-        graphLib->displayText(i);
-    graphLib->displayWindow();
+    if (!graphLib->isOpenWindow())
+        graphLib->createWindow("Arcade", 800, 800);
+    while (graphLib->isOpenWindow() && (core.getCoreState() == GState::MENU)) {
+        graphLib->clearWindow();
+        for (auto& i : libTextMenu)
+            graphLib->displayText(i);
+        for (auto& i : gameTextMenu)
+            graphLib->displayText(i);
+        for (auto& i : guiTextMenu)
+            graphLib->displayText(i);
+        graphLib->displayWindow();
+        core.handleEvent();
+    }
+    core.coreStateHandler();
 }
