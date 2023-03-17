@@ -16,32 +16,27 @@ Core::Core(const char* libName)
         throw ArcadeError("Graphic lib cannot be loaded");
     this->graphPaths_.push_back(libName);
     this->getAllLib();
-    this->gameState_ = GState::MENU;
+    this->gameState_ = GState::PLAY;
     if (this->gameState_ == GState::MENU)
         this->menu->menuLoopHandler(this->graphLib_, this);
+    this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
+    this->gameLib_->init();
     this->gameLoopHandler();
 }
 
 void Core::getAllLib()
 {
-    DLLoader<IGraphic> tmpGraphLoader {};
-    DLLoader<IGame> tmpGameLoader {};
-    const std::filesystem::path path { "./lib" };
-    this->pushLib("nouveau_jeu_incroyable.so", this->gamePaths_);
-    this->pushLib("nouveau_jeu_incroyable2.so", this->gamePaths_);
-    this->pushLib("nouveau_jeu_incroyable3.so", this->gamePaths_);
-    this->pushLib("nouveau_jeu_incroyable4.so", this->gamePaths_);
-    for (auto const& dir_entry : std::filesystem::directory_iterator { path }) {
+    const std::filesystem::path gamePath { "./lib/games/" };
+    const std::filesystem::path graphicPath { "./lib/graphics/" };
+    for (auto const& dir_entry : std::filesystem::directory_iterator { gamePath }) {
         if (dir_entry.path().filename().c_str()[0] == '.')
             continue;
-        if (tmpGraphLoader.getInstance(dir_entry.path())) {
-            this->pushLib(dir_entry.path(), this->graphPaths_);
+        this->pushLib(dir_entry.path(), this->gamePaths_);
+    }
+    for (auto const& dir_entry : std::filesystem::directory_iterator { graphicPath }) {
+        if (dir_entry.path().filename().c_str()[0] == '.')
             continue;
-        }
-        if (tmpGameLoader.getInstance(dir_entry.path())) {
-            this->pushLib(dir_entry.path(), this->gamePaths_);
-            continue;
-        }
+        this->pushLib(dir_entry.path(), this->graphPaths_);
     }
 }
 
@@ -54,45 +49,33 @@ void Core::pushLib(std::string path, std::vector<std::string>& container)
     container.push_back(path);
 }
 
+std::vector<std::string> Core::getGraphPaths() { return this->graphPaths_; }
 
-std::vector<std::string> Core::getGraphPaths()
-{
-    return this->graphPaths_;
-}
-
-std::vector<std::string> Core::getGamePaths()
-{
-    return this->gamePaths_;
-}
+std::vector<std::string> Core::getGamePaths() { return this->gamePaths_; }
 
 void Core::gameLoopHandler()
 {
-    shape circleTest = { .pos { 200, 200 },
-        .size { 50, 100 },
-        .m_color { .r = 0, .g = 151, .b = 255, .a = 255 },
-        .replacementChar = '#',
-        .text { "Allo" },
-        .type = shapeType::RECTANGLE };
     this->graphLib_->createWindow("Arcade", 800, 800);
     while (this->graphLib_) {
-        this->graphLib_->clearWindow();
         this->handleEvent();
+        this->graphLib_->clearWindow();
         if (this->gameState_ == GState::MENU)
             this->menu->menuLoopHandler(this->graphLib_, this);
-        this->graphLib_->displayShape(circleTest);
+        this->gameLib_->display(this->graphLib_);
         this->graphLib_->displayWindow();
     }
 }
 
 void Core::handleEvent()
 {
-    switch (this->graphLib_->getEvent()) {
+    eventKey evt = this->graphLib_->getEvent();
+    switch (evt) {
     case eventKey::NULL_EVENT:
         break;
     case eventKey::Q:
         this->graphLib_->destroyWindow();
         break;
-    case eventKey::TAB:
+    case eventKey::N:
         this->loadNextGraph();
         break;
     case eventKey::G:
@@ -105,12 +88,22 @@ void Core::handleEvent()
         this->restartGame();
         break;
     default:
-        // Send event to game lib
+        this->gameLib_->updateGame(evt);
         break;
     }
 }
 
-void Core::loadNextGame() { return; }
+void Core::loadNextGame()
+{
+    if ((this->gameIndex_ + 1) >= this->gamePaths_.size()) {
+        this->gameIndex_ = 0;
+    } else {
+        this->gameIndex_ += 1;
+    }
+    this->gameLib_ = nullptr;
+    this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[this->gameIndex_]);
+    this->gameLib_->init();
+}
 
 void Core::loadNextGraph()
 {
@@ -120,6 +113,7 @@ void Core::loadNextGraph()
     } else {
         this->graphIndex_ += 1;
     }
+    std::cout << this->graphIndex_ << std::endl;
     this->graphLib_ = nullptr;
     this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[this->graphIndex_]);
     this->graphLib_->createWindow("Arcade", 800, 800);
