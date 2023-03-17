@@ -59,7 +59,7 @@ Test(checkArgs, wrong_lib2)
 Test(checkArgs, one_arg)
 {
     const char *av1 = "./arcade";
-    const char *av2 = "./lib/arcade_sfml.so";
+    const char *av2 = "./lib/graphics/arcade_sfml.so";
     char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
     int ac = 2;
 
