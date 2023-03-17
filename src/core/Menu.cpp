@@ -7,7 +7,7 @@
 
 #include "Menu.hpp"
 
-std::vector<text> Menu::setGameLib(std::vector<std::string> gamePaths_)
+std::vector<text> Menu::setGameLibText(std::vector<std::string> gamePaths_)
 {
     std::vector<text> gameTextMenu2;
     std::vector<std::string> gamePaths = gamePaths_;
@@ -26,7 +26,7 @@ std::vector<text> Menu::setGameLib(std::vector<std::string> gamePaths_)
     return gameTextMenu2;
 }
 
-std::vector<text> Menu::setGraphLib(std::vector<std::string> graphPaths_)
+std::vector<text> Menu::setGraphLibText(std::vector<std::string> graphPaths_)
 {
     std::vector<text> libTextMenu2;
     std::vector<std::string> graphPaths = graphPaths_;
@@ -75,8 +75,8 @@ std::vector<text> Menu::guiTextMenu()
 
 void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core& core)
 {
-    std::vector<text> libTextMenu = this->setGraphLib(core.getGraphPaths());
-    std::vector<text> gameTextMenu = this->setGameLib(core.getGamePaths());
+    std::vector<text> libTextMenu = this->setGraphLibText(core.getGraphPaths());
+    std::vector<text> gameTextMenu = this->setGameLibText(core.getGamePaths());
     std::vector<text> guiTextMenu = this->guiTextMenu();
     if (!graphLib->isOpenWindow())
         graphLib->createWindow("Arcade", 800, 800);

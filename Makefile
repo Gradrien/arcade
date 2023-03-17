@@ -9,6 +9,7 @@ CC	=	g++
 
 SRC_CORE	=	src/core/ArgsHandler.cpp	\
 				src/core/Menu.cpp	\
+				src/core/MenuEvent.cpp	\
 				src/core/Core.cpp
 
 SRC_ERROR	=	src/error/Error.cpp

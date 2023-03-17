@@ -24,8 +24,8 @@ class Menu {
     void menuLoopHandler(std::unique_ptr<IGraphic> &graphLib, Core &core);
     void handleEvent();
     void display();
-    std::vector<text> setGraphLib(std::vector<std::string> graphPaths_);
-    std::vector<text> setGameLib(std::vector<std::string> gamePaths_);
+    std::vector<text> setGraphLibText(std::vector<std::string> graphPaths_);
+    std::vector<text> setGameLibText(std::vector<std::string> gamePaths_);
     std::vector<text> guiTextMenu();
 
     private:
