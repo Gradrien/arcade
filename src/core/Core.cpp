@@ -106,7 +106,7 @@ void Core::handleEvent()
         if (this->gameState_ == GState::PLAY)
             this->gameLib_->updateGame(evt);
         if (this->gameState_ == GState::MENU)
-            this->menu->handleEvent(evt);
+            this->menu->handleEvent(evt, *this);
         break;
     }
 }
@@ -133,6 +133,36 @@ void Core::loadNextGraph()
         this->graphIndex_ += 1;
     }
     this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[this->graphIndex_]);
+}
+
+int Core::findPathIndex(const std::string& path, const std::vector<std::string>& vec) const
+{
+    for (std::size_t i = 0; i < vec.size(); ++i) {
+        if (vec[i] == path)
+            return static_cast<int>(i);
+    }
+    return -1;
+}
+
+void Core::loadSpecificGraph(std::string path)
+{
+    int index = this->findPathIndex(path, this->graphPaths_);
+    if (index == -1)
+        return;
+    if (this->graphLib_->isOpenWindow())
+        this->graphLib_->destroyWindow();
+    this->graphLib_ = this->graphLoader_.getInstance(path);
+    this->graphIndex_ = index;
+}
+
+void Core::loadSpecificGame(std::string path)
+{
+    int index = this->findPathIndex(path, this->gamePaths_);
+    if (index == -1)
+        return;
+    this->gameLib_ = this->gameLoader_.getInstance(path);
+    this->gameLib_->init();
+    this->gameIndex_ = index;
 }
 
 void Core::restartGame() { return; }

@@ -73,7 +73,16 @@ std::vector<text> Menu::guiTextMenu()
     return gameTextMenu;
 }
 
-void Menu::handleEvent(eventKey evt) { (void)evt; }
+void Menu::handleEvent(eventKey evt, Core& core) {
+    switch (evt)
+    {
+    case eventKey::BARROW:
+        core.loadSpecificGraph(core.getGraphPaths()[1]);
+        break;
+    default:
+        break;
+    }
+}
 
 void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core& core)
 {

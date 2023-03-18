@@ -28,10 +28,13 @@ class Core {
     void displayGame();
     void gameLoopHandler();
     void loadNextGraph();
+    void loadSpecificGraph(std::string path);
+    void loadSpecificGame(std::string path);
     void loadNextGame();
     void restartGame();
     void quitArcade();
     void coreStateHandler();
+    int findPathIndex(const std::string &path, const std::vector<std::string> &vec) const;
     GState getCoreState() const;
     void pushLib(std::string path, std::vector<std::string> &container);
     std::vector<std::string> getGraphPaths();
