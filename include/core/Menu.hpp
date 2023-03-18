@@ -22,7 +22,7 @@ class Menu {
     Menu() = default;
     ~Menu() = default;
     void menuLoopHandler(std::unique_ptr<IGraphic> &graphLib, Core &core);
-    void handleEvent();
+    void handleEvent(eventKey evt);
     void display();
     std::vector<text> setGraphLibText(std::vector<std::string> graphPaths_);
     std::vector<text> setGameLibText(std::vector<std::string> gamePaths_);

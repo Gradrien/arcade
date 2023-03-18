@@ -55,6 +55,7 @@ std::vector<std::string> Core::getGamePaths() { return this->gamePaths_; }
 void Core::coreStateHandler()
 {
     while (this->gameState_ != GState::QUIT) {
+        this->handleEvent();
         switch (this->gameState_) {
         case GState::MENU:
             this->menu->menuLoopHandler(this->graphLib_, *this);
@@ -74,7 +75,6 @@ void Core::gameLoopHandler()
 {
     if (!this->graphLib_->isOpenWindow())
         this->graphLib_->createWindow("Arcade", 800, 800);
-    this->handleEvent();
     this->graphLib_->clearWindow();
     this->gameLib_->display(this->graphLib_);
     this->graphLib_->displayWindow();
@@ -100,8 +100,10 @@ void Core::handleEvent()
         this->restartGame();
         break;
     default:
-        if (this->gameState_ != GState::MENU && this->gameState_ != GState::PAUSE)
+        if (this->gameState_ == GState::PLAY)
             this->gameLib_->updateGame(evt);
+        if (this->gameState_ == GState::MENU)
+            this->menu->handleEvent(evt);
         break;
     }
 }

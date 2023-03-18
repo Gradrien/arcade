@@ -73,6 +73,8 @@ std::vector<text> Menu::guiTextMenu()
     return gameTextMenu;
 }
 
+void Menu::handleEvent(eventKey evt) { (void)evt; }
+
 void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core& core)
 {
     std::vector<text> libTextMenu = this->setGraphLibText(core.getGraphPaths());
