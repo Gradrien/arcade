@@ -75,7 +75,6 @@ std::vector<text> Menu::guiTextMenu()
 
 void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core& core)
 {
-    if (!)
     std::vector<text> libTextMenu = this->setGraphLibText(core.getGraphPaths());
     std::vector<text> gameTextMenu = this->setGameLibText(core.getGamePaths());
     std::vector<text> guiTextMenu = this->guiTextMenu();
