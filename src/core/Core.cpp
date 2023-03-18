@@ -55,6 +55,9 @@ std::vector<std::string> Core::getGamePaths() { return this->gamePaths_; }
 void Core::coreStateHandler()
 {
     while (this->gameState_ != GState::QUIT) {
+        this->gamePaths_.clear();
+        this->graphPaths_.clear();
+        this->getAllLib();
         this->handleEvent();
         switch (this->gameState_) {
         case GState::MENU:
