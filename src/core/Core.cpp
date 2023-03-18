@@ -165,7 +165,7 @@ void Core::loadSpecificGame(std::string path)
     this->gameIndex_ = index;
 }
 
-void Core::restartGame() { return; }
+void Core::restartGame() { this->gameLib_->reset(); }
 
 void Core::quitArcade() { this->graphLib_->destroyWindow(); }
 
