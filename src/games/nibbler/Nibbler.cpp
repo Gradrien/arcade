@@ -29,14 +29,32 @@ void Nibbler::initNibbler()
     }
 }
 
+void Nibbler::initMap() { this->walls_ = allMaps[0]; }
+
+bool Nibbler::isCollided(shape s1, shape s2)
+{
+    if ((s1.pos.x >= s2.pos.x) && (s1.pos.x <= s2.pos.x + s2.size.width)) {
+        if ((s1.pos.y >= s2.pos.y) && (s1.pos.y <= s2.pos.y + s2.size.height)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 int Nibbler::init()
 {
     initNibbler();
+    initMap();
     return 0;
 }
 
 void Nibbler::display(std::unique_ptr<IGraphic>& graphLib)
 {
+    if (this->state == playerState::DEAD)
+        return;
+    for (shape wall : this->walls_) {
+        graphLib->displayShape(wall);
+    }
     for (shape part : this->nibbler_) {
         graphLib->displayShape(part);
     }
@@ -94,7 +112,15 @@ void Nibbler::moveSnake()
 int Nibbler::updateGame(eventKey evtKey)
 {
     this->updateDirection(evtKey);
-    moveSnake();
+    this->moveSnake();
+    for (shape snakePart : this->nibbler_) {
+        for (shape wall : this->walls_) {
+            if (this->isCollided(snakePart, wall)) {
+                this->state = playerState::DEAD;
+                return 0;
+            }
+        }
+    }
     return 0;
 }
 
