@@ -12,6 +12,15 @@
 
 enum class direction { UP, DOWN, LEFT, RIGHT };
 
+const std::vector<std::vector<shape>> allMaps {
+    { { .pos { 0, 0 }, .size { 20, 800 }, .m_color = { 232, 63, 51, 255 }, .replacementChar = '#', .text = "", .type = shapeType::RECTANGLE },
+        { .pos { 0, 0 }, .size { 800, 20 }, .m_color = { 232, 63, 51, 255 }, .replacementChar = '#', .text = "", .type = shapeType::RECTANGLE },
+        { .pos { 0, 780 }, .size { 800, 20 }, .m_color = { 232, 63, 51, 255 }, .replacementChar = '#', .text = "", .type = shapeType::RECTANGLE },
+        { .pos { 780, 0 }, .size { 20, 800 }, .m_color = { 232, 63, 51, 255 }, .replacementChar = '#', .text = "", .type = shapeType::RECTANGLE },
+        { .pos { 200, 250 }, .size { 400, 40 }, .m_color = { 232, 63, 51, 255 }, .replacementChar = '#', .text = "", .type = shapeType::RECTANGLE },
+        { .pos { 390, 400 }, .size { 20, 300 }, .m_color = { 232, 63, 51, 255 }, .replacementChar = '#', .text = "", .type = shapeType::RECTANGLE } }
+};
+
 class Nibbler : public IGame {
   public:
     Nibbler() = default;
