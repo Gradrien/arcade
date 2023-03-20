@@ -15,12 +15,8 @@ void Nibbler::reset()
 
 void Nibbler::initNibbler()
 {
-    color color[] = {
-        {.r = 255, .g = 255, .b = 255, .a = 255},
-        {.r = 240, .g = 0, .b = 0, .a = 255},
-        {.r = 0, .g = 254, .b = 0, .a = 255},
-        {.r = 0, .g = 0, .b = 255, .a = 255}
-    };
+    color color[] = { { .r = 255, .g = 255, .b = 255, .a = 255 }, { .r = 240, .g = 0, .b = 0, .a = 255 },
+        { .r = 0, .g = 254, .b = 0, .a = 255 }, { .r = 0, .g = 0, .b = 255, .a = 255 } };
 
     for (int i = 0; i < this->nibblerSize_; i++) {
         shape obj = { .pos { ((4 * this->cellSize_) - (i * cellSize_)), 60 },
@@ -50,16 +46,20 @@ void Nibbler::updateDirection(eventKey evtKey)
 {
     switch (evtKey) {
     case eventKey::LARROW:
-        this->dir_ = direction::LEFT;
+        if (this->dir_ != direction::RIGHT)
+            this->dir_ = direction::LEFT;
         break;
     case eventKey::UARROW:
-        this->dir_ = direction::UP;
+        if (this->dir_ != direction::DOWN)
+            this->dir_ = direction::UP;
         break;
     case eventKey::BARROW:
-        this->dir_ = direction::DOWN;
+        if (this->dir_ != direction::UP)
+            this->dir_ = direction::DOWN;
         break;
     case eventKey::RARROW:
-        this->dir_ = direction::RIGHT;
+        if (this->dir_ != direction::LEFT)
+            this->dir_ = direction::RIGHT;
         break;
     default:
         break;
