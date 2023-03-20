@@ -26,6 +26,9 @@ SRC_NCURSES	=	src/graphics/ncurses/NcursesGraphic.cpp	\
 SRC_GAMETEST	=	src/games/test_game/TestGame.cpp	\
 					src/games/test_game/TestGameLib.cpp
 
+SRC_NIBBLER	=	src/games/nibbler/Nibbler.cpp	\
+				src/games/nibbler/NibblerLib.cpp
+
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
 TESTS_SRC	=	tests/tests_args.c
@@ -53,6 +56,7 @@ CPPFLAGS	=	-I	./include/core	\
 				-I ./include/graphics/ncurses	\
 				-I ./include/error	\
 				-I ./include/games/test_game	\
+				-I ./include/games/nibbler	\
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 NCURSESFLAG = -lncurses
@@ -68,12 +72,13 @@ core:	$(CORE_NAME)
 .PHONY: core
 
 $(CORE_NAME):	$(OBJ_CORE)
-	$(CC) -o $(CORE_NAME) $(OBJ_CORE) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS)
+	$(CC) -o $(CORE_NAME) $(OBJ_CORE) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
 games:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
 	mv $(GAME_TEST) ./lib/games/
-#$(CC) -o $(GAME_NIBBLER) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_NIBBLER) $(SRC_NIBBLER) $(CPPFLAGS)
+	mv $(GAME_NIBBLER) ./lib/games/
 #$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 .PHONY: games
 
