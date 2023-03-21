@@ -36,9 +36,12 @@ class Core {
     void coreStateHandler();
     int findPathIndex(const std::string &path, const std::vector<std::string> &vec) const;
     GState getCoreState() const;
+    void setCoreState(const GState& state);
     void pushLib(std::string path, std::vector<std::string> &container);
     std::vector<std::string> getGraphPaths();
     std::vector<std::string> getGamePaths();
+    std::size_t getGraphIndex() const;
+    void setGraphIndex(const std::size_t& index);
 
   private:
     std::unique_ptr<Menu> menu_;
@@ -50,7 +53,7 @@ class Core {
     std::vector<std::string> gamePaths_;
     std::vector<std::string> graphPaths_;
     std::size_t gameIndex_ {0};
-    std::size_t graphIndex_ {0};
+    std::size_t graphIndex_ {1};
 };
 
 #endif /* !CORE_HPP_ */

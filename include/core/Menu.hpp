@@ -32,6 +32,8 @@ class Menu {
     std::vector<text> guiTextMenu_;
     std::vector<text> gameTextMenu_;
     std::vector<text> libTextMenu_;
+    int incrLib_ {0};
+    bool isGameSelected_ {false};
 };
 
 #endif /* !MENU_HPP_ */

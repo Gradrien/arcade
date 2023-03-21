@@ -9,7 +9,6 @@
 
 Core::Core(const char* libName)
 {
-    this->menu_ = std::make_unique<Menu>(*this);
     if (!libName)
         throw ArcadeError("Invalid number of argument");
     this->graphLib_ = this->graphLoader_.getInstance(libName);
@@ -21,6 +20,7 @@ Core::Core(const char* libName)
     this->gameState_ = GState::PLAY;
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
     this->gameLib_->init();
+    this->menu_ = std::make_unique<Menu>(*this);
     this->coreStateHandler();
 }
 
@@ -171,3 +171,9 @@ void Core::restartGame() { this->gameLib_->reset(); }
 void Core::quitArcade() { this->graphLib_->destroyWindow(); }
 
 GState Core::getCoreState() const { return this->gameState_; }
+
+void Core::setCoreState(const GState& state) { this->gameState_ = state; }
+
+std::size_t Core::getGraphIndex() const { return this->graphIndex_; }
+
+void Core::setGraphIndex(const std::size_t& index) { this->graphIndex_ = index; }
