@@ -23,6 +23,10 @@ SRC_NCURSES	=	src/graphics/ncurses/NcursesGraphic.cpp	\
 				src/graphics/ncurses/NcursesGraphicLib.cpp	\
 				src/graphics/ncurses/NcursesEvent.cpp	\
 
+SRC_SDL	=	src/graphics/sdl/SDLGraphic.cpp	\
+				src/graphics/sdl/SDLGraphicLib.cpp	\
+				src/graphics/sdl/SDLEvent.cpp	\
+
 SRC_GAMETEST	=	src/games/test_game/TestGame.cpp	\
 					src/games/test_game/TestGameLib.cpp
 
@@ -54,12 +58,14 @@ CPPFLAGS	=	-I	./include/core	\
 				-I ./include/games	\
 				-I ./include/graphics/sfml	\
 				-I ./include/graphics/ncurses	\
+				-I ./include/graphics/sdl	\
 				-I ./include/error	\
 				-I ./include/games/test_game	\
 				-I ./include/games/nibbler	\
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 NCURSESFLAG = -lncurses
+SDLFLAG = -lSDL2 -lSDL_ttf
 
 LDFLAGS	=	-ldl
 
@@ -87,9 +93,9 @@ graphics:
 	mv $(GRAPHIC_SFML) ./lib/graphics/
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_NCURSES) $(SRC_NCURSES) $(CPPFLAGS) $(NCURSESFLAG)
 	mv $(GRAPHIC_NCURSES) ./lib/graphics/
-#	$(CC) -o $(GRAPHIC_SFML) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
-#	$(CC) -o $(GRAPHIC_NCUR) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
-#	$(CC) -o $(GRAPHIC_SDL) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SDL) $(SRC_SDL) $(CPPFLAGS) $(SDLFLAG)
+	mv $(GRAPHIC_SDL) ./lib/graphics/
+
 .PHONY: graphics
 
 tests_run:
