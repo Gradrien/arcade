@@ -12,64 +12,29 @@
 
 enum class direction { UP, DOWN, LEFT, RIGHT };
 
-enum class playerState { ALIVE, DEAD };
+enum class playerState { ALIVE, DEAD, STOP };
 
-const std::vector<std::vector<shape>> wallMaps { { { .pos { 0, 0 },
-                                                       .size { 20, 800 },
-                                                       .m_color = { 7, 71, 166, 255 },
-                                                       .replacementChar = '#',
-                                                       .text = "",
-                                                       .type = shapeType::RECTANGLE },
-    { .pos { 0, 0 },
-        .size { 800, 20 },
-        .m_color = { 7, 71, 166, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
-    { .pos { 0, 780 },
-        .size { 800, 20 },
-        .m_color = { 7, 71, 166, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
-    { .pos { 780, 0 },
-        .size { 20, 800 },
-        .m_color = { 7, 71, 166, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
-    { .pos { 200, 250 },
-        .size { 400, 40 },
-        .m_color = { 7, 71, 166, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
-    { .pos { 390, 400 },
-        .size { 20, 300 },
-        .m_color = { 7, 71, 166, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE } } };
-
-const std::vector<std::vector<shape>> fruitMaps { {
-    { .pos { 100, 100 },
-        .size { 20, 20 },
-        .m_color = { 153, 35, 29, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
-    { .pos { 200, 500 },
-        .size { 20, 20 },
-        .m_color = { 153, 35, 29, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
-    { .pos { 400, 100 },
-        .size { 20, 20 },
-        .m_color = { 153, 35, 29, 255 },
-        .replacementChar = '#',
-        .text = "",
-        .type = shapeType::RECTANGLE },
+const std::vector<std::vector<std::string>> allMaps = { {
+    "11111111111111111111",
+    "10000000000000000001",
+    "10000011111111111111",
+    "10020000000001000001",
+    "10000000000001000001",
+    "10000200000001000001",
+    "10000000000001000001",
+    "10000000000001000001",
+    "10000000000001000001",
+    "10020000100000000011",
+    "10000000100000000011",
+    "10000000100000020011",
+    "10000000100000000011",
+    "10000000100000000011",
+    "10000000100000000011",
+    "10000000111111111111",
+    "10000200001000000001",
+    "10000000001000000001",
+    "10003000001000000001",
+    "11111111111111111111",
 } };
 
 class Nibbler : public IGame {
@@ -84,19 +49,22 @@ class Nibbler : public IGame {
 
   private:
     void parseMap(const std::string& path);
-    void initNibbler();
-    void initMap();
-    void moveSnake();
+    void initNibbler(int x, int y);
+    void loadMap(int index);
+    void moveSnake(std::vector<shape>& tmp);
     bool isCollided(shape s1, shape s2);
     void updateDirection(eventKey evtKey);
     void foodHandler();
+    void addWall(int x, int y);
+    void addFood(int x, int y);
     direction dir_ { direction::RIGHT };
     int nibblerSize_ { 4 };
-    unsigned int speed_ { 20 };
     std::vector<shape> walls_;
     std::vector<shape> nibbler_;
     std::vector<shape> food_;
-    int cellSize_ { 20 };
+    int cellWidth_ { 20 };
+    int cellHeight_ { 20 };
+    int mapIndex_ { 0 };
     playerState state { playerState::ALIVE };
 };
 
