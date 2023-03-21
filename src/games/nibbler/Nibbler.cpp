@@ -9,7 +9,29 @@
 
 void Nibbler::reset()
 {
-    this->nibblerSize_ = 4;
+    this->mapIndex_ = 0;
+    if (!this->walls_.empty())
+        this->walls_.clear();
+    if (!this->food_.empty())
+        this->food_.clear();
+    if (!this->nibbler_.empty())
+        this->nibbler_.clear();
+    this->loadMap(this->mapIndex_);
+    this->state = playerState::ALIVE;
+    this->dir_ = direction::RIGHT;
+}
+
+void Nibbler::resetLevel()
+{
+    if (!this->walls_.empty())
+        this->walls_.clear();
+    if (!this->food_.empty())
+        this->food_.clear();
+    if (!this->nibbler_.empty())
+        this->nibbler_.clear();
+    this->loadMap(this->mapIndex_);
+    this->state = playerState::ALIVE;
+    this->dir_ = direction::RIGHT;
 }
 
 void Nibbler::initNibbler(int x, int y)
@@ -69,6 +91,7 @@ void Nibbler::loadMap(int index)
                 break;
             case '2':
                 this->addFood(x, y);
+                this->remainingFood_++;
                 break;
             case '3':
                 this->initNibbler(x * this->cellWidth_, y * this->cellHeight_);
@@ -142,8 +165,10 @@ void Nibbler::updateDirection(eventKey evtKey)
     }
 }
 
-void Nibbler::moveSnake(std::vector<shape>&tmp)
+void Nibbler::moveSnake(std::vector<shape>& tmp)
 {
+    if (this->state == playerState::DEAD)
+        return;
     for (std::size_t i = tmp.size() - 1; i >= 1; i--) {
         tmp[i].pos.x = tmp[i - 1].pos.x;
         tmp[i].pos.y = tmp[i - 1].pos.y;
@@ -171,6 +196,15 @@ int Nibbler::updateGame(eventKey evtKey)
 {
     std::vector<shape> tmp = this->nibbler_;
     this->updateDirection(evtKey);
+    if (this->state == playerState::DEAD) {
+        if (!this->nibbler_.empty()) {
+            this->nibbler_.pop_back();
+            return 0;
+        }
+        this->resetLevel();
+        return 0;
+    }
+
     if (this->state == playerState::ALIVE)
         this->moveSnake(tmp);
     for (shape wall : this->walls_) {
@@ -180,7 +214,21 @@ int Nibbler::updateGame(eventKey evtKey)
         }
     }
     this->nibbler_ = tmp;
+    for (std::size_t i = 1; i < this->nibbler_.size(); i++) {
+        if ((this->nibbler_[i].pos.x == this->nibbler_[0].pos.x)
+            && (this->nibbler_[i].pos.y == this->nibbler_[0].pos.y)) {
+            this->state = playerState::DEAD;
+            return 0;
+        }
+    }
     this->foodHandler();
+    if (this->remainingFood_ <= 0) {
+        if (allMaps.size() == static_cast<std::size_t>(this->mapIndex_ + 1))
+            this->mapIndex_ = 0;
+        else
+            this->mapIndex_++;
+        this->resetLevel();
+    }
     return 0;
 }
 
@@ -204,6 +252,7 @@ void Nibbler::foodHandler()
                 std::vector<shape>::iterator it = this->food_.begin() + i;
                 this->food_.erase(it);
             }
+            this->remainingFood_--;
         }
     }
 }
