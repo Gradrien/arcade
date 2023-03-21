@@ -7,9 +7,15 @@
 
 #include "Menu.hpp"
 
-std::vector<text> Menu::setGameLibText(std::vector<std::string> gamePaths_)
+Menu::Menu(Core &core)
 {
-    std::vector<text> gameTextMenu2;
+    this->createGuiTextMenu();
+    this->setGraphLibText(core.getGraphPaths());
+    this->setGameLibText(core.getGamePaths());
+}
+
+void Menu::setGameLibText(std::vector<std::string> gamePaths_)
+{
     std::vector<std::string> gamePaths = gamePaths_;
 
     int pos_y = 200;
@@ -20,15 +26,13 @@ std::vector<text> Menu::setGameLibText(std::vector<std::string> gamePaths_)
         game.m_color = { 255, 255, 255, 255 };
         game.pos = { 360, pos_y };
         game.text = gamePaths[i];
-        gameTextMenu2.push_back(game);
+        this->gameTextMenu_.push_back(game);
         pos_y += 50;
     }
-    return gameTextMenu2;
 }
 
-std::vector<text> Menu::setGraphLibText(std::vector<std::string> graphPaths_)
+void Menu::setGraphLibText(std::vector<std::string> graphPaths_)
 {
-    std::vector<text> libTextMenu2;
     std::vector<std::string> graphPaths = graphPaths_;
 
     int pos_y = 200;
@@ -39,15 +43,13 @@ std::vector<text> Menu::setGraphLibText(std::vector<std::string> graphPaths_)
         lib.m_color = { 255, 255, 255, 255 };
         lib.pos = { 40, pos_y };
         lib.text = graphPaths[i];
-        libTextMenu2.push_back(lib);
+        this->libTextMenu_.push_back(lib);
         pos_y += 50;
     }
-    return libTextMenu2;
 }
 
-std::vector<text> Menu::guiTextMenu()
+void Menu::createGuiTextMenu()
 {
-    std::vector<text> gameTextMenu;
     text avLib;
     text avGame;
     text userEntry;
@@ -67,10 +69,9 @@ std::vector<text> Menu::guiTextMenu()
     userEntry.m_color = { 255, 255, 255, 255 };
     userEntry.pos = { 20, 600 };
     userEntry.text = "Enter your name :";
-    gameTextMenu.push_back(avLib);
-    gameTextMenu.push_back(avGame);
-    gameTextMenu.push_back(userEntry);
-    return gameTextMenu;
+    guiTextMenu_.push_back(avLib);
+    guiTextMenu_.push_back(avGame);
+    guiTextMenu_.push_back(userEntry);
 }
 
 void Menu::handleEvent(eventKey evt, Core& core) {
@@ -79,25 +80,25 @@ void Menu::handleEvent(eventKey evt, Core& core) {
     case eventKey::BARROW:
         core.loadSpecificGraph(core.getGraphPaths()[1]);
         break;
+    case eventKey::UARROW:
+        core.loadSpecificGraph(core.getGraphPaths()[0]);
+        break;
     default:
         break;
     }
 }
 
-void Menu::menuLoopHandler(std::unique_ptr<IGraphic>& graphLib, Core& core)
+void Menu::menuLoopHandler(IGraphic &graphLib, Core& core)
 {
-    std::vector<text> libTextMenu = this->setGraphLibText(core.getGraphPaths());
-    std::vector<text> gameTextMenu = this->setGameLibText(core.getGamePaths());
-    std::vector<text> guiTextMenu = this->guiTextMenu();
-    if (!graphLib->isOpenWindow())
-        graphLib->createWindow("Arcade", 800, 800);
-    graphLib->clearWindow();
-    for (auto& i : libTextMenu)
-        graphLib->displayText(i);
-    for (auto& i : gameTextMenu)
-        graphLib->displayText(i);
-    for (auto& i : guiTextMenu)
-        graphLib->displayText(i);
-    graphLib->displayWindow();
+    if (!graphLib.isOpenWindow())
+        graphLib.createWindow("Arcade", 800, 800);
+    graphLib.clearWindow();
+    for (auto& i : this->libTextMenu_)
+        graphLib.displayText(i);
+    for (auto& i : this->gameTextMenu_)
+        graphLib.displayText(i);
+    for (auto& i : this->guiTextMenu_)
+        graphLib.displayText(i);
+    graphLib.displayWindow();
     core.handleEvent();
 }

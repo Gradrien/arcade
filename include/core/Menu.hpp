@@ -19,18 +19,19 @@ class Core;
 
 class Menu {
     public:
-    Menu() = default;
+    Menu(Core &core);
     ~Menu() = default;
-    void menuLoopHandler(std::unique_ptr<IGraphic> &graphLib, Core &core);
+    void menuLoopHandler(IGraphic &graphLib, Core &core);
     void handleEvent(eventKey evt, Core &core);
     void display();
-    std::vector<text> setGraphLibText(std::vector<std::string> graphPaths_);
-    std::vector<text> setGameLibText(std::vector<std::string> gamePaths_);
-    std::vector<text> guiTextMenu();
+    void setGraphLibText(std::vector<std::string> graphPaths_);
+    void setGameLibText(std::vector<std::string> gamePaths_);
+    void createGuiTextMenu();
 
     private:
-    int selectedGame;
-    int selectedGraph;
+    std::vector<text> guiTextMenu_;
+    std::vector<text> gameTextMenu_;
+    std::vector<text> libTextMenu_;
 };
 
 #endif /* !MENU_HPP_ */
