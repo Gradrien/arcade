@@ -41,7 +41,7 @@ class Core {
     std::vector<std::string> getGamePaths();
 
   private:
-    Menu *menu;
+    std::unique_ptr<Menu> menu_;
     GState gameState_;
     std::unique_ptr<IGraphic> graphLib_;
     std::unique_ptr<IGame> gameLib_;

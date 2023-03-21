@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2023
+²** EPITECH PROJECT, 2023
 ** arcade
 ** File description:
 ** Core
@@ -9,6 +9,7 @@
 
 Core::Core(const char* libName)
 {
+    this->menu_ = std::make_unique<Menu>(*this);
     if (!libName)
         throw ArcadeError("Invalid number of argument");
     this->graphLib_ = this->graphLoader_.getInstance(libName);
@@ -61,7 +62,7 @@ void Core::coreStateHandler()
         this->handleEvent();
         switch (this->gameState_) {
         case GState::MENU:
-            this->menu->menuLoopHandler(this->graphLib_, *this);
+            this->menu_->menuLoopHandler(*this->graphLib_, *this);
             break;
         case GState::PLAY:
         case GState::PAUSE:
@@ -106,7 +107,7 @@ void Core::handleEvent()
         if (this->gameState_ == GState::PLAY)
             this->gameLib_->updateGame(evt);
         if (this->gameState_ == GState::MENU)
-            this->menu->handleEvent(evt, *this);
+            this->menu_->handleEvent(evt, *this);
         break;
     }
 }
