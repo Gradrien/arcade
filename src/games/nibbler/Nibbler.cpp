@@ -15,21 +15,28 @@ void Nibbler::reset()
 
 void Nibbler::initNibbler()
 {
-    color color[] = { { .r = 255, .g = 255, .b = 255, .a = 255 }, { .r = 240, .g = 0, .b = 0, .a = 255 },
-        { .r = 0, .g = 254, .b = 0, .a = 255 }, { .r = 0, .g = 0, .b = 255, .a = 255 } };
-
     for (int i = 0; i < this->nibblerSize_; i++) {
-        shape obj = { .pos { ((4 * this->cellSize_) - (i * cellSize_)), 60 },
-            .size { this->cellSize_, this->cellSize_ },
-            .m_color = color[i],
-            .replacementChar = 'o',
-            .text = "",
-            .type = shapeType::RECTANGLE };
+        shape obj;
+        if (i == 0) {
+            obj = { .pos { ((4 * this->cellSize_) - ((this->nibblerSize_ - 1) * cellSize_)), 60 },
+                .size { this->cellSize_, this->cellSize_ },
+                .m_color = { 123, 148, 144, 255 },
+                .replacementChar = 'o',
+                .text = "",
+                .type = shapeType::RECTANGLE };
+        } else {
+            obj = { .pos { ((4 * this->cellSize_) - (i * cellSize_)), 60 },
+                .size { this->cellSize_, this->cellSize_ },
+                .m_color = { 2, 130, 108, 255 },
+                .replacementChar = 'o',
+                .text = "",
+                .type = shapeType::RECTANGLE };
+        }
         this->nibbler_.push_back(obj);
     }
 }
 
-void Nibbler::initMap() { this->walls_ = allMaps[0]; }
+void Nibbler::initMap() { this->walls_ = wallMaps[0]; }
 
 bool Nibbler::isCollided(shape s1, shape s2)
 {
@@ -45,6 +52,7 @@ int Nibbler::init()
 {
     initNibbler();
     initMap();
+    this->food_ = fruitMaps[0];
     return 0;
 }
 
@@ -54,6 +62,9 @@ void Nibbler::display(std::unique_ptr<IGraphic>& graphLib)
         return;
     for (shape wall : this->walls_) {
         graphLib->displayShape(wall);
+    }
+    for (shape fruit : this->food_) {
+        graphLib->displayShape(fruit);
     }
     for (shape part : this->nibbler_) {
         graphLib->displayShape(part);
@@ -113,15 +124,36 @@ int Nibbler::updateGame(eventKey evtKey)
 {
     this->updateDirection(evtKey);
     this->moveSnake();
-    for (shape snakePart : this->nibbler_) {
-        for (shape wall : this->walls_) {
-            if (this->isCollided(snakePart, wall)) {
-                this->state = playerState::DEAD;
-                return 0;
-            }
+    for (shape wall : this->walls_) {
+        if (this->isCollided(this->nibbler_[0], wall)) {
+            this->state = playerState::DEAD;
+            return 0;
         }
     }
+    this->foodHandler();
     return 0;
 }
 
 std::string Nibbler::getSpritePath() { return ""; }
+
+void Nibbler::foodHandler()
+{
+    for (std::size_t i = 0; i < this->food_.size(); i++) {
+        if (isCollided(this->food_[i], this->nibbler_[0])) {
+            shape obj = { .pos { this->nibbler_[this->nibbler_.size() - 1].pos.x - this->cellSize_,
+                              this->nibbler_[this->nibbler_.size() - 1].pos.y },
+                .size { this->cellSize_, this->cellSize_ },
+                .m_color = { 2, 130, 108, 255 },
+                .replacementChar = 'o',
+                .text = "",
+                .type = shapeType::RECTANGLE };
+            this->nibbler_.push_back(obj);
+            if (i + 1 == this->food_.size())
+                this->food_.pop_back();
+            else {
+                std::vector<shape>::iterator it = this->food_.begin() + i;
+                this->food_.erase(it);
+            }
+        }
+    }
+}
