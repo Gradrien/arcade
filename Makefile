@@ -65,7 +65,7 @@ CPPFLAGS	=	-I	./include/core	\
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 NCURSESFLAG = -lncurses
-SDLFLAG = -lSDL2
+SDLFLAG = -lSDL2 -lSDL_ttf
 
 LDFLAGS	=	-ldl
 

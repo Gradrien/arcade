@@ -45,6 +45,7 @@ jobs:
       run: make clean
     - name: Check executable files exists
       run: |
+        sudo apt-get install libsdl-ttf2.0-dev
         if [ ! -f $i ]; then
           echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
           exit 1
