@@ -36,6 +36,7 @@ static const std::unordered_map<std::string, libType> validLibs {
   {"arcade_qt5.so", libType::GRAPHICAL},
   {"arcade_snake.so", libType::GAME},
   {"arcade_nibbler.so", libType::GAME},
+  {"test_game.so", libType::GAME},
   {"arcade_pacman.so", libType::GAME},
   {"arcade_qix.so", libType::GAME},
   {"arcade_centipede.so", libType::GAME},
@@ -65,6 +66,10 @@ class Core {
     void pushLib(std::string path, std::vector<std::string>& container);
     std::vector<std::string> getGraphPaths();
     std::vector<std::string> getGamePaths();
+    std::string getCurrentGraph() const;
+    std::string getCurrentGame() const;
+    void setCurrentGraph(const std::string& currentGraph);
+    void setCurrentGame(const std::string& currentGame);
 
   private:
     std::unique_ptr<Menu> menu_;

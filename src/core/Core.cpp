@@ -183,3 +183,11 @@ void Core::quitArcade() { this->graphLib_->destroyWindow(); }
 GState Core::getCoreState() const { return this->gameState_; }
 
 void Core::setCoreState(const GState& state) { this->gameState_ = state; }
+
+std::string Core::getCurrentGraph() const { return this->currentGraph_; }
+
+std::string Core::getCurrentGame() const { return this->currentGame_; }
+
+void Core::setCurrentGraph(const std::string& path) { this->currentGraph_ = path; }
+
+void Core::setCurrentGame(const std::string& path) { this->currentGame_ = path; }
