@@ -161,6 +161,7 @@ void Core::loadSpecificGraph(std::string path)
         return;
     if (this->graphLib_->isOpenWindow())
         this->graphLib_->destroyWindow();
+    this->graphLib_.release();
     this->graphLib_ = this->graphLoader_.getInstance(path);
     this->currentGraph_ = path;
 }
@@ -170,6 +171,7 @@ void Core::loadSpecificGame(std::string path)
     int index = this->findPathIndex(path, this->gamePaths_);
     if (index == -1)
         return;
+    this->gameLib_.release();
     this->gameLib_ = this->gameLoader_.getInstance(path);
     this->gameLib_->init();
     this->currentGame_ = path;
