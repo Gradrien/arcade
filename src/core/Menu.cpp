@@ -100,8 +100,10 @@ void Menu::handleEvent(eventKey evt, Core& core)
     case eventKey::A:
         if (isGameSelected_ == false)
             core.loadSpecificGraph(libTextMenu_[incrLib_].text);
-        else
+        else {
+            core.loadSpecificGame(gameTextMenu_[incrGame_].text);
             core.setCoreState(GState::PLAY);
+        }
         break;
     case eventKey::RARROW:
         isGameSelected_ = true;
@@ -128,7 +130,10 @@ void Menu::handleEvent(eventKey evt, Core& core)
                 guiTextMenu_[4].pos.y = 200;
             } else
                 guiTextMenu_[4].pos.y += 50;
-            core.loadNextGame();
+            if (incrGame_ >= static_cast<int>(gameTextMenu_.size()) - 1)
+                incrGame_ = 0;
+            else
+                incrGame_++;
         }
         break;
     case eventKey::UARROW:
@@ -147,7 +152,10 @@ void Menu::handleEvent(eventKey evt, Core& core)
                 guiTextMenu_[4].pos.y = 200 + 50 * (static_cast<int>(gameTextMenu_.size() - 1));
             } else
                 guiTextMenu_[4].pos.y -= 50;
-            core.loadNextGame();
+            if (incrGame_ <= 0)
+                incrGame_ = static_cast<int>(gameTextMenu_.size()) - 1;
+            else
+                incrGame_--;
         }
         break;
     default:

@@ -33,6 +33,7 @@ class Menu {
     std::vector<text> gameTextMenu_;
     std::vector<text> libTextMenu_;
     int incrLib_ {0};
+    int incrGame_ {0};
     bool isGameSelected_ {false};
 };
 
