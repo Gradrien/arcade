@@ -12,15 +12,40 @@
 #include "IGame.hpp"
 #include "IGraphic.hpp"
 #include "Menu.hpp"
-#include <memory>
 #include <filesystem>
+#include <memory>
+#include <unordered_map>
 
 enum class GState { PLAY, PAUSE, MENU, QUIT, CONTINUE };
+
+enum class libType { GRAPHICAL, GAME };
+
+static const std::unordered_map<std::string, libType> validLibs {
+  {"arcade_ncurses.so", libType::GRAPHICAL},
+  {"arcade_sdl2.so", libType::GRAPHICAL},
+  {"arcade_ndk++.so", libType::GRAPHICAL},
+  {"arcade_aalib.so", libType::GRAPHICAL},
+  {"arcade_libcaca.so", libType::GRAPHICAL},
+  {"arcade_allegro5.so", libType::GRAPHICAL},
+  {"arcade_xlib.so", libType::GRAPHICAL},
+  {"arcade_gtk+.so", libType::GRAPHICAL},
+  {"arcade_sfml.so", libType::GRAPHICAL},
+  {"arcade_irrlicht.so", libType::GRAPHICAL},
+  {"arcade_opengl.so", libType::GRAPHICAL},
+  {"arcade_vulkan.so", libType::GRAPHICAL},
+  {"arcade_qt5.so", libType::GRAPHICAL},
+  {"arcade_snake.so", libType::GAME},
+  {"arcade_nibbler.so", libType::GAME},
+  {"arcade_pacman.so", libType::GAME},
+  {"arcade_qix.so", libType::GAME},
+  {"arcade_centipede.so", libType::GAME},
+  {"arcade_solarfox.so", libType::GAME}
+};
 
 class Menu;
 class Core {
   public:
-    Core(const char *libName);
+    Core(const char* libName);
     ~Core() = default;
     void getAllLib();
     void handleEvent();
@@ -34,10 +59,10 @@ class Core {
     void restartGame();
     void quitArcade();
     void coreStateHandler();
-    int findPathIndex(const std::string &path, const std::vector<std::string> &vec) const;
+    int findPathIndex(const std::string& path, const std::vector<std::string>& vec) const;
     GState getCoreState() const;
     void setCoreState(const GState& state);
-    void pushLib(std::string path, std::vector<std::string> &container);
+    void pushLib(std::string path, std::vector<std::string>& container);
     std::vector<std::string> getGraphPaths();
     std::vector<std::string> getGamePaths();
 

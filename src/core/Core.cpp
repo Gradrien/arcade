@@ -27,17 +27,16 @@ Core::Core(const char* libName)
 
 void Core::getAllLib()
 {
-    const std::filesystem::path gamePath { "./lib/games/" };
-    const std::filesystem::path graphicPath { "./lib/graphics/" };
-    for (auto const& dir_entry : std::filesystem::directory_iterator { gamePath }) {
+    const std::filesystem::path libPath { "./lib" };
+    for (auto const& dir_entry : std::filesystem::directory_iterator { libPath }) {
         if (dir_entry.path().filename().c_str()[0] == '.')
             continue;
-        this->pushLib(dir_entry.path(), this->gamePaths_);
-    }
-    for (auto const& dir_entry : std::filesystem::directory_iterator { graphicPath }) {
-        if (dir_entry.path().filename().c_str()[0] == '.')
+        if (validLibs.find(dir_entry.path().filename()) == validLibs.end())
             continue;
-        this->pushLib(dir_entry.path(), this->graphPaths_);
+        if (validLibs.at(dir_entry.path().filename()) == libType::GAME)
+            this->pushLib(dir_entry.path(), this->gamePaths_);
+        else
+            this->pushLib(dir_entry.path(), this->graphPaths_);
     }
 }
 
