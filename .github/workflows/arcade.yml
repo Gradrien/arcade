@@ -40,7 +40,6 @@ jobs:
         fetch-depth: 0
     - name: Install SDL_ttf
       run: |
-        sudo apt-get update
         sudo snap install -y libsdl2-ttf-dev
       timeout-minutes: 2
     - name: Compilation test
