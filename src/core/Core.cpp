@@ -18,7 +18,7 @@ Core::Core(const char* libName)
     this->graphPaths_.push_back(libName);
     this->currentGraph_ = libName;
     this->getAllLib();
-    this->gameState_ = GState::PLAY;
+    this->gameState_ = GState::MENU;
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
     this->gameLib_->init();
     this->menu_ = std::make_unique<Menu>(*this);
@@ -121,6 +121,7 @@ void Core::loadNextGame()
     index++;
     if (static_cast<std::size_t>(index) >= this->gamePaths_.size())
         index = 0;
+    this->gameLib_.release();
     this->gameLib_ = nullptr;
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[index]);
     this->gameLib_->init();
@@ -137,6 +138,7 @@ void Core::loadNextGraph()
     index++;
     if (static_cast<std::size_t>(index) >= this->graphPaths_.size())
         index = 0;
+    this->graphLib_.release();
     this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[index]);
     this->currentGraph_ = this->graphPaths_[index];
 }

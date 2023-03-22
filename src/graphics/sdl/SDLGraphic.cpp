@@ -79,7 +79,6 @@ void SDLGraphic::displayText(const text& text)
 
 void SDLGraphic::drawRectangle(const shape& shape)
 {
-    // (void)shape;
     SDL_Rect rect;
     rect.x = shape.pos.x;
     rect.y = shape.pos.y;
@@ -96,7 +95,6 @@ void SDLGraphic::drawRectangle(const shape& shape)
 
 void SDLGraphic::drawCircle(const shape& shape)
 {
-    // (void)shape;
     SDL_SetRenderDrawColor(this->renderer_, shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
     int radius = shape.size.width / 2;
     for (int width = 0; width < radius * 2; width++) {
