@@ -26,6 +26,9 @@ void Menu::setGameLibText(std::vector<std::string> gamePaths_)
         game.m_color = { 255, 255, 255, 255 };
         game.pos = { 380, pos_y };
         game.text = gamePaths[i];
+        game.text.erase(0, 12);
+        game.text.erase((game.text.length() - 3), 3);
+        game.size = { static_cast<int>(game.fontSize * 1.33 * 0.46 * game.text.length()), static_cast<int>(game.fontSize * 1.33) };
         this->gameTextMenu_.push_back(game);
         pos_y += 50;
     }
@@ -42,8 +45,10 @@ void Menu::setGraphLibText(std::vector<std::string> graphPaths_)
         lib.fontPath = "assets/fonts/arial.ttf";
         lib.m_color = { 255, 255, 255, 255 };
         lib.pos = { 60, pos_y };
-        lib.size = { 400, 40 };
         lib.text = graphPaths[i];
+        lib.text.erase(0, 15);
+        lib.text.erase((lib.text.length() - 3), 3);
+        lib.size = { static_cast<int>(lib.fontSize * 1.33 * 0.46 * lib.text.length()), static_cast<int>(lib.fontSize * 1.33) };
         this->libTextMenu_.push_back(lib);
         pos_y += 50;
     }
@@ -62,31 +67,31 @@ void Menu::createGuiTextMenu()
     avLib.m_color = { 255, 255, 255, 255 };
     avLib.pos = { 20, 130 };
     avLib.text = "Available libraires";
-    avLib.size = { 400, 40 };
+    avLib.size = { static_cast<int>(avLib.fontSize * 1.33 * 0.46 * avLib.text.length() - 80), static_cast<int>(avLib.fontSize * 1.33) };
     avGame.fontSize = 30;
     avGame.fontPath = "assets/fonts/arial.ttf";
     avGame.m_color = { 255, 255, 255, 255 };
     avGame.pos = { 340, 130 };
     avGame.text = "Available games";
-    avGame.size = { 400, 40 };
+    avGame.size = { static_cast<int>(avGame.fontSize * 1.33 * 0.46 * avGame.text.length() - 80), static_cast<int>(avGame.fontSize * 1.33) };
     userEntry.fontSize = 30;
     userEntry.fontPath = "assets/fonts/arial.ttf";
     userEntry.m_color = { 255, 255, 255, 255 };
     userEntry.pos = { 20, 600 };
     userEntry.text = "Enter your name :";
-    userEntry.size = { 400, 40 };
+    userEntry.size = { static_cast<int>(userEntry.fontSize * 1.33 * 0.46 * userEntry.text.length() - 60), static_cast<int>(userEntry.fontSize * 1.33) };
     selectLibCurs.fontSize = 25;
     selectLibCurs.fontPath = "assets/fonts/arial.ttf";
     selectLibCurs.m_color = { 0, 255, 0, 255 };
     selectLibCurs.pos = { 20, 200 };
     selectLibCurs.text = ">";
-    selectLibCurs.size = { 40, 40 };
+    selectLibCurs.size = { 20, 40 };
     selectGameCurs.fontSize = 25;
     selectGameCurs.fontPath = "assets/fonts/arial.ttf";
     selectGameCurs.m_color = { 255, 255, 255, 255 };
     selectGameCurs.pos = { 350, 200 };
     selectGameCurs.text = ">";
-    selectGameCurs.size = { 40, 40 };
+    selectGameCurs.size = { 20, 40 };
     guiTextMenu_.push_back(avLib);
     guiTextMenu_.push_back(avGame);
     guiTextMenu_.push_back(userEntry);
