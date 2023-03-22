@@ -98,7 +98,7 @@ graphicals:
 
 .PHONY: graphicals
 
-tests_run:
+tests_run: graphicals games
 	$(CC) -o $(TEST_NAME) $(SRC) $(TESTS_SRC) $(CPPFLAGS) $(LDFLAGS) \
 	--coverage -lcriterion -lgcov
 	./$(TEST_NAME)
