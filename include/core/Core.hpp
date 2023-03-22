@@ -40,8 +40,6 @@ class Core {
     void pushLib(std::string path, std::vector<std::string> &container);
     std::vector<std::string> getGraphPaths();
     std::vector<std::string> getGamePaths();
-    std::size_t getGraphIndex() const;
-    void setGraphIndex(const std::size_t& index);
 
   private:
     std::unique_ptr<Menu> menu_;
@@ -52,8 +50,8 @@ class Core {
     DLLoader<IGame> gameLoader_ { DLLoader<IGame>() };
     std::vector<std::string> gamePaths_;
     std::vector<std::string> graphPaths_;
-    std::size_t gameIndex_ {0};
-    std::size_t graphIndex_ {1};
+    std::string currentGraph_;
+    std::string currentGame_;
 };
 
 #endif /* !CORE_HPP_ */

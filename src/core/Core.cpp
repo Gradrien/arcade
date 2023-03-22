@@ -16,6 +16,7 @@ Core::Core(const char* libName)
         throw ArcadeError("Graphic lib cannot be loaded");
     this->graphLib_->createWindow("Arcade", 800, 800);
     this->graphPaths_.push_back(libName);
+    this->currentGraph_ = libName;
     this->getAllLib();
     this->gameState_ = GState::PLAY;
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
@@ -114,32 +115,38 @@ void Core::handleEvent()
 
 void Core::loadNextGame()
 {
-    if ((this->gameIndex_ + 1) >= this->gamePaths_.size()) {
-        this->gameIndex_ = 0;
-    } else {
-        this->gameIndex_ += 1;
-    }
+    int index = this->findPathIndex(this->currentGame_, this->gamePaths_);
+    if (index == -1)
+        return;
+    index++;
+    if (static_cast<std::size_t>(index) >= this->gamePaths_.size())
+        index = 0;
     this->gameLib_ = nullptr;
-    this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[this->gameIndex_]);
+    this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[index]);
     this->gameLib_->init();
+    this->currentGame_ = this->gamePaths_[index];
 }
 
 void Core::loadNextGraph()
 {
     if (this->graphLib_->isOpenWindow())
         this->graphLib_->destroyWindow();
-    if ((this->graphIndex_ + 1) >= this->graphPaths_.size()) {
-        this->graphIndex_ = 0;
-    } else {
-        this->graphIndex_ += 1;
-    }
-    this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[this->graphIndex_]);
+    int index = this->findPathIndex(this->currentGraph_, this->graphPaths_);
+    if (index == -1)
+        return;
+    index++;
+    if (static_cast<std::size_t>(index) >= this->graphPaths_.size())
+        index = 0;
+    this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[index]);
+    this->currentGraph_ = this->graphPaths_[index];
 }
 
 int Core::findPathIndex(const std::string& path, const std::vector<std::string>& vec) const
 {
+    const std::filesystem::path libPath { path };
     for (std::size_t i = 0; i < vec.size(); ++i) {
-        if (vec[i] == path)
+        const std::filesystem::path tmp { vec[i] };
+        if (tmp.filename() == libPath.filename())
             return static_cast<int>(i);
     }
     return -1;
@@ -153,7 +160,7 @@ void Core::loadSpecificGraph(std::string path)
     if (this->graphLib_->isOpenWindow())
         this->graphLib_->destroyWindow();
     this->graphLib_ = this->graphLoader_.getInstance(path);
-    this->graphIndex_ = index;
+    this->currentGraph_ = path;
 }
 
 void Core::loadSpecificGame(std::string path)
@@ -163,7 +170,7 @@ void Core::loadSpecificGame(std::string path)
         return;
     this->gameLib_ = this->gameLoader_.getInstance(path);
     this->gameLib_->init();
-    this->gameIndex_ = index;
+    this->currentGame_ = path;
 }
 
 void Core::restartGame() { this->gameLib_->reset(); }
@@ -173,7 +180,3 @@ void Core::quitArcade() { this->graphLib_->destroyWindow(); }
 GState Core::getCoreState() const { return this->gameState_; }
 
 void Core::setCoreState(const GState& state) { this->gameState_ = state; }
-
-std::size_t Core::getGraphIndex() const { return this->graphIndex_; }
-
-void Core::setGraphIndex(const std::size_t& index) { this->graphIndex_ = index; }
