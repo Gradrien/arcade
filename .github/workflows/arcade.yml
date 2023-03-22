@@ -38,6 +38,10 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    - name: Install SDL_ttf
+      run: |
+        sudo apt-get install libsdl-ttf2.0-dev
+      timeout-minutes: 2
     - name: Compilation test
       run: make
       timeout-minutes: 2
@@ -45,7 +49,6 @@ jobs:
       run: make clean
     - name: Check executable files exists
       run: |
-        sudo apt-get install libsdl-ttf2.0-dev
         if [ ! -f $i ]; then
           echo "::error file=$i,line=1,endLine=1,title=Executable file not found::$i"
           exit 1
