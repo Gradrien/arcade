@@ -71,7 +71,7 @@ LDFLAGS	=	-ldl
 
 DEBUGFLAG = -ggdb3
 
-all:	core graphics games
+all:	core graphicals games
 .PHONY: all
 
 core:	$(CORE_NAME)
@@ -82,21 +82,21 @@ $(CORE_NAME):	$(OBJ_CORE)
 
 games:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
-	mv $(GAME_TEST) ./lib/games/
+	mv $(GAME_TEST) ./lib/
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_NIBBLER) $(SRC_NIBBLER) $(CPPFLAGS)
-	mv $(GAME_NIBBLER) ./lib/games/
+	mv $(GAME_NIBBLER) ./lib/
 #$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
 .PHONY: games
 
-graphics:
+graphicals:
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
-	mv $(GRAPHIC_SFML) ./lib/graphics/
+	mv $(GRAPHIC_SFML) ./lib/
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_NCURSES) $(SRC_NCURSES) $(CPPFLAGS) $(NCURSESFLAG)
-	mv $(GRAPHIC_NCURSES) ./lib/graphics/
+	mv $(GRAPHIC_NCURSES) ./lib/
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SDL) $(SRC_SDL) $(CPPFLAGS) $(SDLFLAG)
-	mv $(GRAPHIC_SDL) ./lib/graphics/
+	mv $(GRAPHIC_SDL) ./lib/
 
-.PHONY: graphics
+.PHONY: graphicals
 
 tests_run:
 	$(CC) -o $(TEST_NAME) $(SRC) $(TESTS_SRC) $(CPPFLAGS) $(LDFLAGS) \
@@ -118,9 +118,9 @@ clean: clean_tests
 .PHONY: clean
 
 fclean:	clean
-	rm -f $(CORE_NAME)
-	rm -f $(GAME_NIBBLER)
-	rm -f $(GAME_SNAKE)
+	rm -f ./lib/$(CORE_NAME)
+	rm -f ./lib/$(GAME_NIBBLER)
+	rm -f ./lib/$(GAME_SNAKE)
 	rm -f ./lib/$(GRAPHIC_SFML)
 	rm -f ./lib/$(GRAPHIC_NCURSES)
 	rm -f ./lib/$(GRAPHIC_SDL)
