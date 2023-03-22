@@ -40,7 +40,7 @@ jobs:
         fetch-depth: 0
     - name: Install SDL_ttf
       run: |
-        sudo apt install sdl2-ttf
+        apt-get install SDL2_ttf-devel
       timeout-minutes: 2
     - name: Compilation test
       run: make
