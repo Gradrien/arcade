@@ -25,7 +25,6 @@ void Menu::setGameLibText(std::vector<std::string> gamePaths_)
         game.fontPath = "assets/fonts/arial.ttf";
         game.m_color = { 255, 255, 255, 255 };
         game.pos = { 380, pos_y };
-        game.size = { 300, 40 };
         game.text = gamePaths[i];
         this->gameTextMenu_.push_back(game);
         pos_y += 50;
@@ -43,7 +42,7 @@ void Menu::setGraphLibText(std::vector<std::string> graphPaths_)
         lib.fontPath = "assets/fonts/arial.ttf";
         lib.m_color = { 255, 255, 255, 255 };
         lib.pos = { 60, pos_y };
-        lib.size = { 300, 40 };
+        lib.size = { 400, 40 };
         lib.text = graphPaths[i];
         this->libTextMenu_.push_back(lib);
         pos_y += 50;
@@ -63,19 +62,19 @@ void Menu::createGuiTextMenu()
     avLib.m_color = { 255, 255, 255, 255 };
     avLib.pos = { 20, 130 };
     avLib.text = "Available libraires";
-    avLib.size = { 300, 40 };
+    avLib.size = { 400, 40 };
     avGame.fontSize = 30;
     avGame.fontPath = "assets/fonts/arial.ttf";
     avGame.m_color = { 255, 255, 255, 255 };
     avGame.pos = { 340, 130 };
     avGame.text = "Available games";
-    avGame.size = { 300, 40 };
+    avGame.size = { 400, 40 };
     userEntry.fontSize = 30;
     userEntry.fontPath = "assets/fonts/arial.ttf";
     userEntry.m_color = { 255, 255, 255, 255 };
     userEntry.pos = { 20, 600 };
     userEntry.text = "Enter your name :";
-    userEntry.size = { 300, 40 };
+    userEntry.size = { 400, 40 };
     selectLibCurs.fontSize = 25;
     selectLibCurs.fontPath = "assets/fonts/arial.ttf";
     selectLibCurs.m_color = { 0, 255, 0, 255 };
@@ -99,8 +98,10 @@ void Menu::handleEvent(eventKey evt, Core& core)
 {
     switch (evt) {
     case eventKey::A:
-        core.loadSpecificGraph(libTextMenu_[incrLib_].text);
-        core.setCoreState(GState::PLAY);
+        if (isGameSelected_ == false)
+            core.loadSpecificGraph(libTextMenu_[incrLib_].text);
+        else
+            core.setCoreState(GState::PLAY);
         break;
     case eventKey::RARROW:
         isGameSelected_ = true;
