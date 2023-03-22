@@ -6,7 +6,6 @@
 */
 
 #include "SDLGraphic.hpp"
-#include <SDL2/SDL.h>
 #include <memory>
 
 void SDLGraphic::createWindow(std::string title, int width, int height)
@@ -14,6 +13,9 @@ void SDLGraphic::createWindow(std::string title, int width, int height)
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         //! ERROR
         exit(84);
+    }
+    if (TTF_Init() < 0) {
+        //! ERROR
     }
     this->window_ = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
     if (!this->window_) {
@@ -59,26 +61,20 @@ bool SDLGraphic::isOpenWindow()
 
 void SDLGraphic::displayText(const text& text)
 {
-    (void)text;
-    // TTF_Font* Sans = TTF_OpenFont(m_text.fontPath.c_str(), m_text.fontSize);
-
-    // SDL_Color textColor = {m_text.m_color.r, m_text.m_color.g, m_text.m_color.b, m_text.m_color.b};
-
-    // SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, m_text.text.c_str(), textColor);
-
-    // SDL_Texture* Message = SDL_CreateTextureFromSurface(this->renderer_, surfaceMessage);
-
-    // SDL_Rect Message_rect; // create a rect
-    // Message_rect.x = m_text.pos.x; // controls the rect's x coordinate
-    // Message_rect.y = m_text.pos.y; // controls the rect's y coordinte
-    // Message_rect.w = 500; // controls the width of the rect
-    // Message_rect.h = 100; // controls the height of the rect
-    // SDL_RenderCopy(this->renderer_, Message, NULL, &Message_rect);
-
-    // // Don't forget to free your surface and texture
-    // SDL_FreeSurface(surfaceMessage);
-    // SDL_DestroyTexture(Message);
-    // return;
+    if (this->fonts_.find(text.fontSize) == this->fonts_.end())
+        this->fonts_[text.fontSize] = TTF_OpenFont(text.fontPath.c_str(), text.fontSize);
+    Uint8 r = text.m_color.r;
+    Uint8 g = text.m_color.g;
+    Uint8 b = text.m_color.b;
+    Uint8 a = text.m_color.a;
+    SDL_Color textColor = { r, g, b, a };
+    SDL_Surface* surfaceText = TTF_RenderText_Solid(this->fonts_[text.fontSize], text.text.c_str(), textColor);
+    SDL_Texture* SDLtext = SDL_CreateTextureFromSurface(this->renderer_, surfaceText);
+    SDL_Rect textRect = {.x = text.pos.x, .y = text.pos.y, .w = text.size.width, .h = text.size.height};
+    SDL_RenderCopy(this->renderer_, SDLtext, NULL, &textRect);
+    SDL_FreeSurface(surfaceText);
+    SDL_DestroyTexture(SDLtext);
+    return;
 }
 
 void SDLGraphic::drawRectangle(const shape& shape)

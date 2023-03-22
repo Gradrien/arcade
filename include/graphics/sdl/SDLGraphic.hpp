@@ -9,6 +9,7 @@
 #define SDLGRAPHIC_HPP_
 #include "IGraphic.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <memory>
 #include <unordered_map>
 
@@ -30,6 +31,7 @@ class SDLGraphic : public IGraphic {
     SDL_Window* window_;
     SDL_Renderer* renderer_;
     SDL_Surface* surface_;
+    std::unordered_map<int, TTF_Font*> fonts_;
     void drawRectangle(const shape& shape);
     void drawCircle(const shape& shape);
     bool isOpen_ { false };

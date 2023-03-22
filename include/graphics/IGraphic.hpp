@@ -100,6 +100,7 @@ struct sprite {
 
 struct text {
     coord pos;
+    elemSize size;
     int fontSize;
     std::string fontPath;
     color m_color;

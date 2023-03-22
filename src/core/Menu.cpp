@@ -7,7 +7,7 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(Core &core)
+Menu::Menu(Core& core)
 {
     this->setGraphLibText(core.getGraphPaths());
     this->setGameLibText(core.getGamePaths());
@@ -25,6 +25,7 @@ void Menu::setGameLibText(std::vector<std::string> gamePaths_)
         game.fontPath = "assets/fonts/arial.ttf";
         game.m_color = { 255, 255, 255, 255 };
         game.pos = { 380, pos_y };
+        game.size = { 300, 40 };
         game.text = gamePaths[i];
         this->gameTextMenu_.push_back(game);
         pos_y += 50;
@@ -42,6 +43,7 @@ void Menu::setGraphLibText(std::vector<std::string> graphPaths_)
         lib.fontPath = "assets/fonts/arial.ttf";
         lib.m_color = { 255, 255, 255, 255 };
         lib.pos = { 60, pos_y };
+        lib.size = { 300, 40 };
         lib.text = graphPaths[i];
         this->libTextMenu_.push_back(lib);
         pos_y += 50;
@@ -61,26 +63,31 @@ void Menu::createGuiTextMenu()
     avLib.m_color = { 255, 255, 255, 255 };
     avLib.pos = { 20, 130 };
     avLib.text = "Available libraires";
+    avLib.size = { 300, 40 };
     avGame.fontSize = 30;
     avGame.fontPath = "assets/fonts/arial.ttf";
     avGame.m_color = { 255, 255, 255, 255 };
     avGame.pos = { 340, 130 };
     avGame.text = "Available games";
+    avGame.size = { 300, 40 };
     userEntry.fontSize = 30;
     userEntry.fontPath = "assets/fonts/arial.ttf";
     userEntry.m_color = { 255, 255, 255, 255 };
     userEntry.pos = { 20, 600 };
     userEntry.text = "Enter your name :";
+    userEntry.size = { 300, 40 };
     selectLibCurs.fontSize = 25;
     selectLibCurs.fontPath = "assets/fonts/arial.ttf";
     selectLibCurs.m_color = { 0, 255, 0, 255 };
     selectLibCurs.pos = { 20, 200 };
     selectLibCurs.text = ">";
+    selectLibCurs.size = { 40, 40 };
     selectGameCurs.fontSize = 25;
     selectGameCurs.fontPath = "assets/fonts/arial.ttf";
     selectGameCurs.m_color = { 255, 255, 255, 255 };
     selectGameCurs.pos = { 350, 200 };
     selectGameCurs.text = ">";
+    selectGameCurs.size = { 40, 40 };
     guiTextMenu_.push_back(avLib);
     guiTextMenu_.push_back(avGame);
     guiTextMenu_.push_back(userEntry);
@@ -90,8 +97,7 @@ void Menu::createGuiTextMenu()
 
 void Menu::handleEvent(eventKey evt, Core& core)
 {
-    switch (evt)
-    {
+    switch (evt) {
     case eventKey::A:
         core.loadSpecificGraph(libTextMenu_[incrLib_].text);
         core.setCoreState(GState::PLAY);
@@ -125,7 +131,7 @@ void Menu::handleEvent(eventKey evt, Core& core)
         }
         break;
     case eventKey::UARROW:
-         if (isGameSelected_ == false) {
+        if (isGameSelected_ == false) {
             if (guiTextMenu_[3].pos.y - 50 < 200) {
                 guiTextMenu_[3].pos.y = 200 + 50 * (static_cast<int>(libTextMenu_.size() - 1));
             } else {
@@ -135,20 +141,20 @@ void Menu::handleEvent(eventKey evt, Core& core)
                 incrLib_ = static_cast<int>(libTextMenu_.size()) - 1;
             else
                 incrLib_--;
-         } else {
+        } else {
             if (guiTextMenu_[4].pos.y - 50 < 200) {
                 guiTextMenu_[4].pos.y = 200 + 50 * (static_cast<int>(gameTextMenu_.size() - 1));
             } else
                 guiTextMenu_[4].pos.y -= 50;
             core.loadNextGame();
-         }
+        }
         break;
     default:
         break;
     }
 }
 
-void Menu::menuLoopHandler(IGraphic &graphLib, Core& core)
+void Menu::menuLoopHandler(IGraphic& graphLib, Core& core)
 {
     if (!graphLib.isOpenWindow())
         graphLib.createWindow("Arcade", 800, 800);
