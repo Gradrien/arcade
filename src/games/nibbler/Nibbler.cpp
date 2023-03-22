@@ -192,6 +192,46 @@ void Nibbler::moveSnake(std::vector<shape>& tmp)
     }
 }
 
+bool Nibbler::isNibblerInCell(int x, int y)
+{
+    for (shape part : this->nibbler_) {
+        if (part.pos.x == (x * this->cellWidth_) && part.pos.y == (y * this->cellHeight_)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Nibbler::chooseDirection()
+{
+    coord pos = { .x = this->nibbler_[0].pos.x / this->cellWidth_, .y = this->nibbler_[0].pos.y / this->cellHeight_ };
+    const bool up = (allMaps[this->mapIndex_][pos.y - 1][pos.x] != '1') && !isNibblerInCell(pos.x, pos.y - 1);
+    const bool down = (allMaps[this->mapIndex_][pos.y + 1][pos.x] != '1') && !isNibblerInCell(pos.x, pos.y + 1);
+    const bool left = (allMaps[this->mapIndex_][pos.y][pos.x - 1] != '1') && !isNibblerInCell(pos.x - 1, pos.y);
+    const bool right = (allMaps[this->mapIndex_][pos.y][pos.x + 1] != '1') && !isNibblerInCell(pos.x + 1, pos.y);
+
+    if (this->dir_ == direction::LEFT || this->dir_ == direction::RIGHT) {
+        if (up && !down) {
+            this->dir_ = direction::UP;
+            return;
+        }
+        if (!up && down) {
+            this->dir_ = direction::DOWN;
+            return;
+        }
+    } else {
+        if (left && !right) {
+            this->dir_ = direction::LEFT;
+            return;
+        }
+        if (!left && right) {
+            this->dir_ = direction::RIGHT;
+            return;
+        }
+    }
+    this->state = playerState::STOP;
+}
+
 int Nibbler::updateGame(eventKey evtKey)
 {
     std::vector<shape> tmp = this->nibbler_;
@@ -209,7 +249,7 @@ int Nibbler::updateGame(eventKey evtKey)
         this->moveSnake(tmp);
     for (shape wall : this->walls_) {
         if (this->isCollided(tmp[0], wall)) {
-            this->state = playerState::STOP;
+            this->chooseDirection();
             return 0;
         }
     }

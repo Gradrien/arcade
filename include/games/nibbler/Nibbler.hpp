@@ -79,6 +79,8 @@ class Nibbler : public IGame {
     void addWall(int x, int y);
     void addFood(int x, int y);
     void resetLevel();
+    void chooseDirection();
+    bool isNibblerInCell(int x, int y);
     direction dir_ { direction::RIGHT };
     int nibblerSize_ { 4 };
     std::vector<shape> walls_;
