@@ -22,7 +22,7 @@ void NcursesGraphic::createWindow(std::string title, int width, int height)
     keypad(this->window_, TRUE);
     noecho();
     curs_set(0);
-    halfdelay(1);
+    nodelay(this->window_, TRUE);
     clear();
     refresh();
     wclear(this->window_);

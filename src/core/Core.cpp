@@ -6,6 +6,8 @@
 */
 
 #include "Core.hpp"
+#include <chrono>
+#include <ctime>
 
 Core::Core(const char* libName)
 {
@@ -55,7 +57,13 @@ std::vector<std::string> Core::getGamePaths() { return this->gamePaths_; }
 
 void Core::coreStateHandler()
 {
+    std::clock_t start = std::clock();
     while (this->gameState_ != GState::QUIT) {
+        std::clock_t end = std::clock();
+        if ((end - start) <= 65000) {
+            continue;
+        }
+        start = std::clock();
         this->gamePaths_.clear();
         this->graphPaths_.clear();
         this->getAllLib();
