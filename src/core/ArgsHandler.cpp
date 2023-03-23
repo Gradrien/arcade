@@ -41,7 +41,7 @@ static int checkLine(char *str)
     if (!str)
         return 84;
     keyword = strtok(str, "=");
-    if (strcmp(keyword, "DISPLAY") != 0 || strcmp(keyword, "XDG_RUNTIME_DIR") || strcmp(keyword, "TERM"))
+    if (strcmp(keyword, "DISPLAY") != 0 && strcmp(keyword, "XDG_RUNTIME_DIR") && strcmp(keyword, "TERM"))
         return 84;
     return EXIT_SUCCESS;
 }
