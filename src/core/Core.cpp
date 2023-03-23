@@ -24,7 +24,6 @@ Core::Core(const char* libName)
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
     this->gameLib_->init();
     this->menu_ = std::make_unique<Menu>(*this);
-    this->coreStateHandler();
 }
 
 void Core::getAllLib()
