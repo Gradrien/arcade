@@ -34,25 +34,12 @@ int checkArgs(int ac, char **av)
     return 0;
 }
 
-static int checkLine(char *str)
-{
-    char *keyword = NULL;
-
-    if (!str)
-        return 84;
-    keyword = strtok(str, "=");
-    if (strcmp(keyword, "DISPLAY") != 0 && strcmp(keyword, "XDG_RUNTIME_DIR") && strcmp(keyword, "TERM"))
-        return 84;
-    return EXIT_SUCCESS;
-}
 
 int checkEnv(char **env)
 {
     if (!env)
         return 84;
-    for (int i = 0; env[i] != NULL; i += 1) {
-        if (checkLine(env[i]) == 0)
-            return EXIT_SUCCESS;
-    }
-    return 84;
+    if (!getenv("DISPLAY") || !getenv("XDG_RUNTIME_DIR") || !getenv("TERM") || !getenv("COLORTERM"))
+        return 84;
+    return 0;
 }
