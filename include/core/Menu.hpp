@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <chrono>
 
 class Core;
 
@@ -27,14 +28,26 @@ class Menu {
     void setGraphLibText(std::vector<std::string> graphPaths_);
     void setGameLibText(std::vector<std::string> gamePaths_);
     void createGuiTextMenu();
+    void createTitleMenu();
+    void applyChanges(Core &core);
+    void chooseGame();
+    void chooseLib();
+    void moveUp(Core &core);
+    void moveDown(Core &core);
+    void highlightSelected(Core &core);
+    void highlightTitle(const int count);
+    void loopTitle();
 
     private:
+    std::vector<text> titleMenu_;
     std::vector<text> guiTextMenu_;
     std::vector<text> gameTextMenu_;
     std::vector<text> libTextMenu_;
     int incrLib_ {0};
     int incrGame_ {0};
     bool isGameSelected_ {false};
+    int counter_ {0};
+    std::chrono::steady_clock::time_point lastUpdateTime_;
 };
 
 #endif /* !MENU_HPP_ */
