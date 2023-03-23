@@ -41,13 +41,13 @@ OBJ_CORE	=	$(SRC:.cpp=.o) $(SRC_MAIN:.cpp=.o)
 
 CORE_NAME = arcade
 
-GAME_NIBBLER = arcade_nibbler.so
-GAME_SNAKE	 = arcade_snake.so
-GAME_TEST	 = test_game.so
+GAME_NIBBLER = ./lib/arcade_nibbler.so
+GAME_SNAKE	 = ./lib/arcade_snake.so
+GAME_TEST	 = ./lib/test_game.so
 
-GRAPHIC_SFML = arcade_sfml.so
-GRAPHIC_NCURSES = arcade_ncurses.so
-GRAPHIC_SDL  = arcade_sdl2.so
+GRAPHIC_SFML = ./lib/arcade_sfml.so
+GRAPHIC_NCURSES = ./lib/arcade_ncurses.so
+GRAPHIC_SDL  = ./lib/arcade_sdl2.so
 
 TEST_NAME	=	unit_tests
 
@@ -80,23 +80,26 @@ core:	$(CORE_NAME)
 $(CORE_NAME):	$(OBJ_CORE)
 	$(CC) -o $(CORE_NAME) $(OBJ_CORE) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
 
-games:
-	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
-	mv $(GAME_TEST) ./lib/
-	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_NIBBLER) $(SRC_NIBBLER) $(CPPFLAGS)
-	mv $(GAME_NIBBLER) ./lib/
-#$(CC) -o $(GAME_SNAKE) $(OBJ) $(CXXFLAGS) $(CPPFLAGS)
+graphicals: $(GRAPHIC_SFML) $(GRAPHIC_NCURSES) $(GRAPHIC_SDL)
+.PHONY: graphicals
+
+$(GRAPHIC_SFML):
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
+
+$(GRAPHIC_NCURSES):
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_NCURSES) $(SRC_NCURSES) $(CPPFLAGS) $(NCURSESFLAG)
+
+$(GRAPHIC_SDL):
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SDL) $(SRC_SDL) $(CPPFLAGS) $(SDLFLAG)
+
+games: $(GAME_TEST) $(GAME_NIBBLER)
 .PHONY: games
 
-graphicals:
-	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
-	mv $(GRAPHIC_SFML) ./lib/
-	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_NCURSES) $(SRC_NCURSES) $(CPPFLAGS) $(NCURSESFLAG)
-	mv $(GRAPHIC_NCURSES) ./lib/
-	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SDL) $(SRC_SDL) $(CPPFLAGS) $(SDLFLAG)
-	mv $(GRAPHIC_SDL) ./lib/
+$(GAME_TEST):
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
 
-.PHONY: graphicals
+$(GAME_NIBBLER):
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_NIBBLER) $(SRC_NIBBLER) $(CPPFLAGS)
 
 tests_run: graphicals games
 	$(CC) -o $(TEST_NAME) $(SRC) $(TESTS_SRC) $(CPPFLAGS) $(LDFLAGS) \
@@ -118,12 +121,12 @@ clean: clean_tests
 .PHONY: clean
 
 fclean:	clean
-	rm -f ./lib/$(CORE_NAME)
-	rm -f ./lib/$(GAME_NIBBLER)
-	rm -f ./lib/$(GAME_SNAKE)
-	rm -f ./lib/$(GRAPHIC_SFML)
-	rm -f ./lib/$(GRAPHIC_NCURSES)
-	rm -f ./lib/$(GRAPHIC_SDL)
+	rm -f $(CORE_NAME)
+	rm -f $(GAME_NIBBLER)
+	rm -f $(GAME_SNAKE)
+	rm -f $(GRAPHIC_SFML)
+	rm -f $(GRAPHIC_NCURSES)
+	rm -f $(GRAPHIC_SDL)
 .PHONY: fclean
 
 re:	fclean all
