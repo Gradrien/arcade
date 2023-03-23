@@ -5,6 +5,13 @@
 ** SDLEventKey
 */
 
+/****************************************************************
+ * @file SDLEventKey.hpp
+ * @brief SDLEventKey class
+ * @details This class is used to handle the SDL event key
+ * @version 0.1
+ * @date 2021-03-15
+ * ****************************************************************/
 #ifndef SDLEVENTKEY_HPP_
 #define SDLEVENTKEY_HPP_
 #include "IGraphic.hpp"

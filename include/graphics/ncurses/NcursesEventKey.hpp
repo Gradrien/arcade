@@ -5,6 +5,13 @@
 ** SFMLEventKey
 */
 
+/****************************************************************
+ * @file NcursesEventKey.hpp
+ * @brief NcursesEventKey class
+ * @details This file is used to handle the NcursesEventKey
+ * @version 0.1
+ * @date 2021-03-15
+ * ***************************************************************/
 #ifndef NCURSESEVENTKEY_HPP_
 #define NCURSESEVENTKEY_HPP_
 #include "IGraphic.hpp"

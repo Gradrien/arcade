@@ -5,6 +5,13 @@
 ** SFMLEventKey
 */
 
+/****************************************************************
+ * @file SFMLEventKey.hpp
+ * @brief SFMLEventKey class
+ * @details This class is used to handle the SFML event key
+ * @version 0.1
+ * @date 2021-03-15
+ * ****************************************************************/
 #ifndef SFMLEVENTKEY_HPP_
 #define SFMLEVENTKEY_HPP_
 #include "IGraphic.hpp"

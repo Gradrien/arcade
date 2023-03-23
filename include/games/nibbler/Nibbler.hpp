@@ -5,13 +5,35 @@
 ** Snake
 */
 
+/****************************************************************
+ * @file Nibbler.hpp
+ * @brief Nibbler class
+ * @details This class is used to handle the Nibbler game
+ * @version 0.1
+ * @date 2021-03-15
+ * ***************************************************************/
 #ifndef NIBBLER_HPP_
 #define NIBBLER_HPP_
 #include "IGame.hpp"
 #include <vector>
 
+/****************************************************************
+ * @brief Direction enum
+ * @details This enum is used to handle the direction of the snake
+ * @param UP
+ * @param DOWN
+ * @param LEFT
+ * @param RIGHT
+ * ***************************************************************/
 enum class direction { UP, DOWN, LEFT, RIGHT };
 
+/****************************************************************
+ * @brief Player state enum
+ * @details This enum is used to handle the state of the player
+ * @param ALIVE
+ * @param DEAD
+ * @param STOP
+ * ***************************************************************/
 enum class playerState { ALIVE, DEAD, STOP };
 
 const std::vector<std::vector<std::string>> allMaps = { {
@@ -59,14 +81,44 @@ const std::vector<std::vector<std::string>> allMaps = { {
         "11111111111111111111",
     } };
 
+/****************************************************************
+ * @class Nibbler
+ * @brief Nibbler class
+ * @details This class is used to handle the Nibbler game
+ * ***************************************************************/
 class Nibbler : public IGame {
   public:
     Nibbler() = default;
     ~Nibbler() = default;
+    /****************************************************************
+     * @brief Get the sprite path
+     * @details This function is used to get the sprite path
+     * @return std::string
+     * ***************************************************************/
     std::string getSpritePath() override;
+    /****************************************************************
+     * @brief Display the game
+     * @details This function is used to display the game
+     * @param IGraphic
+     * ***************************************************************/
     void display(std::unique_ptr<IGraphic>&) override;
+    /****************************************************************
+     * @brief init the game
+     * @details This function is used to init the game and load the map
+     * @return int
+     * ***************************************************************/
     int init() override;
+    /****************************************************************
+     * @brief Reset the game
+     * @details This function is used to reset the game
+     * ***************************************************************/
     void reset() override;
+    /****************************************************************
+     * @brief Update the game
+     * @details This function is used to update the game
+     * @param eventKey
+     * @return int
+     * ***************************************************************/
     int updateGame(eventKey evtKey) override;
 
   private:
