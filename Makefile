@@ -35,7 +35,7 @@ SRC_NIBBLER	=	src/games/nibbler/Nibbler.cpp	\
 
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
-TESTS_SRC	=	tests/tests_args.c
+TESTS_SRC	=	tests/tests_args.cpp
 
 OBJ_CORE	=	$(SRC:.cpp=.o) $(SRC_MAIN:.cpp=.o)
 

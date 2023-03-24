@@ -31,4 +31,18 @@ int checkArgs(int ac, char **av);
  * ************************************************/
 int checkEnv(char **env);
 
+/****************************************************************
+ * @brief Display the usage
+ * @details This function is used to display the usage
+ * ************************************************/
+void displayUsage();
+
+/****************************************************************
+ * @brief Check the library
+ * @param library
+ * @details This function is used to check the library
+ * @return int
+ * ************************************************/
+int checkLibrary(const char *library);
+
 #endif /* !PARSER_HPP_ */

@@ -9,7 +9,7 @@
 #include <iostream>
 #include <fcntl.h>
 
-static int checkLibrary(const char *library)
+int checkLibrary(const char *library)
 {
     if (open(library, O_RDONLY) == -1) {
         std::cerr << "Error: library " << library << " not found" << std::endl;
@@ -20,20 +20,33 @@ static int checkLibrary(const char *library)
     return 0;
 }
 
+void displayUsage()
+{
+    std::cout << "USAGE" << std::endl;
+    std::cout << "\t" << "./arcade " << " [library]" << std::endl;
+    std::cout << "DESCRIPTION" << std::endl;
+    std::cout << "\tlibrary\t\tlibrary to load" << std::endl;
+    std::cout << "NATIVE AVAILABLE LIBRARIES" << std::endl;
+    std::cout << "\t./lib/lib_arcade_sfml.so" << std::endl;
+    std::cout << "\t./lib/lib_arcade_ncurses.so" << std::endl;
+    std::cout << "\t./lib/lib_arcade_sdl2.so" << std::endl;
+    std::cout << "Feel free to implement your own library" << std::endl;
+}
+
 int checkArgs(int ac, char **av)
 {
-    if (ac != 2 || !(av && av[1]))
+    if (ac != 2 || !(av && av[1])) {
+        displayUsage();
         return 84;
+    }
     if (strcmp(av[1], "--help") == 0 || strcmp(av[1], "-h") == 0) {
-        std::cout << "USAGE: ./arcade [lib_name.so]" << std::endl;
-        std::cout << "\tlib_name.so  ->  name of the library" << std::endl;
-        return 0;
+        displayUsage();
+        exit(0);
     }
     if (checkLibrary(av[1]) == 84)
         return 84;
     return 0;
 }
-
 
 int checkEnv(char **env)
 {
