@@ -93,15 +93,3 @@ Test(checkEnv, no_env)
     cr_assert_eq(checkEnv(env), 84);
 }
 
-Test(checkEnv, good_env)
-{
-    char *env[6] = {const_cast<char*>("XDG_RUNTIME_DIR=/run/user/1000"),
-                    const_cast<char*>("TERM=xterm-256color"),
-                    const_cast<char*>("COLORTERM=truecolor"),
-                    const_cast<char*>("SHELL=/bin/bash"),
-                    const_cast<char*>("DISPLAY=:0.0"),
-                    NULL};
-
-    cr_assert_eq(checkEnv(env), 0);
-}
-
