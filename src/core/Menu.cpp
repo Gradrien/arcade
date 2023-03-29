@@ -6,6 +6,7 @@
 */
 
 #include "Menu.hpp"
+#include <random>
 
 Menu::Menu()
 {
@@ -15,6 +16,15 @@ Menu::Menu()
     this->createGuiTextMenu();
     this->createTitleMenu();
     lastUpdateTime_ = std::chrono::steady_clock::now();
+}
+
+int random(int low, int high)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(low, high);
+
+    return dist(gen);
 }
 
 void Menu::setLibNameMenu()
@@ -42,7 +52,7 @@ void Menu::setGameLibText()
         game.fontSize = 20;
         game.fontPath = "assets/fonts/arial.ttf";
         game.m_color = { 255, 255, 255, 255 };
-        game.pos = { 460, pos_y };
+        game.pos = { 500, pos_y };
         game.text = gamePaths_[i];
         game.text.erase((game.text.length() - 3), 3);
         game.size = { static_cast<int>(game.fontSize * 1.33 * 0.46 * game.text.length()), static_cast<int>(game.fontSize * 1.33) };
@@ -140,13 +150,13 @@ void Menu::createGuiTextMenu()
     avGame.fontSize = 30;
     avGame.fontPath = "assets/fonts/arial.ttf";
     avGame.m_color = { 255, 255, 255, 255 };
-    avGame.pos = { 420, 170 };
+    avGame.pos = { 460, 170 };
     avGame.text = "Available games";
     avGame.size = { static_cast<int>(avGame.fontSize * 1.33 * 0.46 * avGame.text.length() - 80), static_cast<int>(avGame.fontSize * 1.33) };
-    userEntry.fontSize = 30;
+    userEntry.fontSize = 40;
     userEntry.fontPath = "assets/fonts/arial.ttf";
     userEntry.m_color = { 255, 255, 255, 255 };
-    userEntry.pos = { 250, 200 };
+    userEntry.pos = { 220, 200 };
     userEntry.text = "Please type your name";
     userEntry.size = { static_cast<int>(userEntry.fontSize * 1.33 * 0.46 * userEntry.text.length() - 60), static_cast<int>(userEntry.fontSize * 1.33) };
     selectLibCurs.fontSize = 25;
@@ -158,7 +168,7 @@ void Menu::createGuiTextMenu()
     selectGameCurs.fontSize = 25;
     selectGameCurs.fontPath = "assets/fonts/arial.ttf";
     selectGameCurs.m_color = { 255, 255, 255, 0 };
-    selectGameCurs.pos = { 430, 240 };
+    selectGameCurs.pos = { 470, 240 };
     selectGameCurs.text = ">";
     selectGameCurs.size = { 20, 40 };
     userName_.fontSize = 30;
@@ -167,10 +177,10 @@ void Menu::createGuiTextMenu()
     userName_.pos = { 300, 300 };
     userName_.text = "";
     userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length() - 80), static_cast<int>(userName_.fontSize * 1.33) };
-    welcomeMessage.fontSize = 30;
+    welcomeMessage.fontSize = 40;
     welcomeMessage.fontPath = "assets/fonts/arial.ttf";
     welcomeMessage.m_color = { 255, 255, 255, 255 };
-    welcomeMessage.pos = { 200, 500 };
+    welcomeMessage.pos = { 100, 500 };
     welcomeMessage.text = "Welcome to the Arcade ";
     welcomeMessage.size = { static_cast<int>(welcomeMessage.fontSize * 1.33 * 0.46 * welcomeMessage.text.length() - 60), static_cast<int>(welcomeMessage.fontSize * 1.33) };
 
@@ -270,19 +280,31 @@ bool Menu::isUserTyping() const
     return isUserTyping_;
 }
 
+void Menu::createNewUser()
+{
+    if (userName_.text.size() == 0)
+        userName_.text = "Player" + std::to_string(random(100, 999));
+    isUserTyping_ = false;
+    guiTextMenu_[5].text = "Welcome to the Arcade ";
+    guiTextMenu_[5].text.append(userName_.text);
+}
+
+void Menu::deleteChar()
+{
+    if (userName_.text.size() > 0)
+        userName_.text.pop_back();
+}
+
 void Menu::handleUserInput(eventKey evt)
 {
     if (isUserTyping_ == true) {
-        if (evt == eventKey::DELETE) {
-            if (userName_.text.size() > 0)
-                userName_.text.pop_back();
-        } else if (evt == eventKey::ENTER) {
-            isUserTyping_ = false;
-            guiTextMenu_[5].text = "Welcome to the Arcade ";
-            guiTextMenu_[5].text.append(userName_.text);
-        } else if (this->keyMap_.find(evt) != this->keyMap_.end()) {
+        if (evt == eventKey::DELETE)
+            deleteChar();
+        else if (evt == eventKey::ENTER)
+            createNewUser();
+        else if (this->keyMap_.find(evt) != this->keyMap_.end()
+                && userName_.text.size() < 10)
             userName_.text += keyMap_[evt];
-        }
     }
 }
 

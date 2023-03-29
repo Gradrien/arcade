@@ -124,6 +124,8 @@ class Menu {
 
     private:
     void setLibNameMenu();
+    void createNewUser();
+    void deleteChar();
     std::vector<std::string> graphPaths_;
     std::vector<std::string> gamePaths_;
     std::vector<text> titleMenu_;
