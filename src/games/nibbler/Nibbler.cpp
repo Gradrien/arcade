@@ -302,6 +302,8 @@ int Nibbler::updateGame(eventKey evtKey)
         timer_ -= 1;
         lastUpdateTime_ = now;
     }
+    if (timer_ > 58 && score_ == 0)
+        return 0;
     if (timer_ == 0)
         this->state = playerState::DEAD;
     this->updateDirection(evtKey);

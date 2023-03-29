@@ -131,7 +131,7 @@ class Snake : public IGame {
     int cellHeight_ { 20 };
     int mapIndex_ { 0 };
     int score_ { 0 };
-    int timer_ { 60 };
+    int timer_ { 0 };
     playerState state { playerState::ALIVE };
     std::chrono::steady_clock::time_point lastUpdateTime_;
 };

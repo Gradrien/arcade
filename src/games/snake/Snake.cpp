@@ -285,6 +285,8 @@ int Snake::updateGame(eventKey evtKey)
         timer_ += 1;
         lastUpdateTime_ = now;
     }
+    if (timer_ < 1)
+        return 0;
     if (this->state == playerState::ALIVE)
         this->updateDirection(evtKey);
     if (this->state == playerState::DEAD) {
