@@ -43,11 +43,15 @@ void SFMLGraphic::displayText(const text& m_text)
 {
     sf::Color color(m_text.m_color.r, m_text.m_color.g, m_text.m_color.b, m_text.m_color.a);
     sf::Font my_font;
-    if (!my_font.loadFromFile(m_text.fontPath)) {
+    if (this->fonts_.find(m_text.fontSize) != this->fonts_.end()) {
+        my_font = this->fonts_[m_text.fontSize];
+    } else if (!my_font.loadFromFile(m_text.fontPath)) {
         std::cerr << "Error: font not found" << std::endl;
         return;
     }
+    this->fonts_[m_text.fontSize] = my_font;
     if (this->textList.find(&m_text) != this->textList.end()) {
+        this->textList[&m_text].setString(m_text.text);
         this->textList[&m_text].setFillColor(color);
         this->textList[&m_text].setPosition(sf::Vector2f(m_text.pos.x, m_text.pos.y));
         window_.draw(this->textList[&m_text]);

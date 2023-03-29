@@ -101,6 +101,7 @@ class SFMLGraphic : public IGraphic {
     std::unordered_map<const text*, sf::Text> textList;
     std::unordered_map<const shape*, sf::RectangleShape> rectList;
     std::unordered_map<const shape*, sf::CircleShape> circleList;
+    std::unordered_map<int, sf::Font> fonts_;
     sf::RenderWindow window_;
 };
 
