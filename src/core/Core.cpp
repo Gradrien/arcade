@@ -94,6 +94,9 @@ void Core::gameLoopHandler()
 void Core::handleEvent()
 {
     eventKey evt = this->graphLib_->getEvent();
+
+    if (this->menu_->isUserTyping() && this->gameState_ == GState::MENU)
+        return this->menu_->handleEvent(evt, *this);
     switch (evt) {
     case eventKey::Q:
         this->gameState_ = GState::QUIT;

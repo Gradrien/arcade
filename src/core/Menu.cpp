@@ -129,6 +129,7 @@ void Menu::createGuiTextMenu()
     text userEntry;
     text selectLibCurs;
     text selectGameCurs;
+    text welcomeMessage;
 
     avLib.fontSize = 30;
     avLib.fontPath = "assets/fonts/arial.ttf";
@@ -145,8 +146,8 @@ void Menu::createGuiTextMenu()
     userEntry.fontSize = 30;
     userEntry.fontPath = "assets/fonts/arial.ttf";
     userEntry.m_color = { 255, 255, 255, 255 };
-    userEntry.pos = { 100, 600 };
-    userEntry.text = "Enter your name :";
+    userEntry.pos = { 250, 200 };
+    userEntry.text = "Please type your name";
     userEntry.size = { static_cast<int>(userEntry.fontSize * 1.33 * 0.46 * userEntry.text.length() - 60), static_cast<int>(userEntry.fontSize * 1.33) };
     selectLibCurs.fontSize = 25;
     selectLibCurs.fontPath = "assets/fonts/arial.ttf";
@@ -160,11 +161,25 @@ void Menu::createGuiTextMenu()
     selectGameCurs.pos = { 430, 240 };
     selectGameCurs.text = ">";
     selectGameCurs.size = { 20, 40 };
+    userName_.fontSize = 30;
+    userName_.fontPath = "assets/fonts/arial.ttf";
+    userName_.m_color = { 255, 255, 255, 255 };
+    userName_.pos = { 300, 300 };
+    userName_.text = "";
+    userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length() - 80), static_cast<int>(userName_.fontSize * 1.33) };
+    welcomeMessage.fontSize = 30;
+    welcomeMessage.fontPath = "assets/fonts/arial.ttf";
+    welcomeMessage.m_color = { 255, 255, 255, 255 };
+    welcomeMessage.pos = { 200, 500 };
+    welcomeMessage.text = "Welcome to the Arcade ";
+    welcomeMessage.size = { static_cast<int>(welcomeMessage.fontSize * 1.33 * 0.46 * welcomeMessage.text.length() - 60), static_cast<int>(welcomeMessage.fontSize * 1.33) };
+
     guiTextMenu_.push_back(avLib);
     guiTextMenu_.push_back(avGame);
     guiTextMenu_.push_back(userEntry);
     guiTextMenu_.push_back(selectLibCurs);
     guiTextMenu_.push_back(selectGameCurs);
+    guiTextMenu_.push_back(welcomeMessage);
 }
 
 void Menu::applyChanges(Core &core)
@@ -250,8 +265,31 @@ void Menu::moveDown(Core &core)
     }
 }
 
+bool Menu::isUserTyping() const
+{
+    return isUserTyping_;
+}
+
+void Menu::handleUserInput(eventKey evt)
+{
+    if (isUserTyping_ == true) {
+        if (evt == eventKey::DELETE) {
+            if (userName_.text.size() > 0)
+                userName_.text.pop_back();
+        } else if (evt == eventKey::ENTER) {
+            isUserTyping_ = false;
+            guiTextMenu_[5].text = "Welcome to the Arcade ";
+            guiTextMenu_[5].text.append(userName_.text);
+        } else if (this->keyMap_.find(evt) != this->keyMap_.end()) {
+            userName_.text += keyMap_[evt];
+        }
+    }
+}
+
 void Menu::handleEvent(eventKey evt, Core& core)
 {
+    if (isUserTyping_ == true)
+        return handleUserInput(evt);
     switch (evt) {
     case eventKey::A:
         applyChanges(core);
@@ -267,6 +305,12 @@ void Menu::handleEvent(eventKey evt, Core& core)
         break;
     case eventKey::BARROW:
         moveDown(core);
+        break;
+    case eventKey::T:
+        isUserTyping_ = true;
+        break;
+    case eventKey::ENTER:
+        isUserTyping_ = false;
         break;
     default:
         break;
@@ -345,14 +389,20 @@ void Menu::menuLoopHandler(IGraphic& graphLib, Core& core)
     graphLib.clearWindow();
     highlightSelected(core);
     loopTitle();
-    for (auto& i : this->libTextMenu_)
-        graphLib.displayText(i);
-    for (auto& i : this->gameTextMenu_)
-        graphLib.displayText(i);
-    for (auto& i : this->guiTextMenu_)
-        graphLib.displayText(i);
-    for (auto& i : this->titleMenu_)
-        graphLib.displayText(i);
+    if (isUserTyping_ == false) {
+        for (auto& i : this->libTextMenu_)
+            graphLib.displayText(i);
+        for (auto& i : this->gameTextMenu_)
+            graphLib.displayText(i);
+        for (std::size_t i = 0; i < this->guiTextMenu_.size(); i++)
+            if (i != 2)
+                graphLib.displayText(guiTextMenu_[i]);
+        for (auto& i : this->titleMenu_)
+            graphLib.displayText(i);
+    } else {
+        graphLib.displayText(guiTextMenu_[2]);
+        graphLib.displayText(userName_);
+    }
     graphLib.displayWindow();
     core.handleEvent();
 }

@@ -22,6 +22,7 @@
 #include <vector>
 #include <memory>
 #include <chrono>
+#include <unordered_map>
 
 class Core;
 
@@ -118,6 +119,8 @@ class Menu {
      * @details This function is used to loop the title to highlight it letter by letter
      * ************************************************/
     void loopTitle();
+    void handleUserInput(eventKey evt);
+    bool isUserTyping() const;
 
     private:
     void setLibNameMenu();
@@ -127,11 +130,52 @@ class Menu {
     std::vector<text> guiTextMenu_;
     std::vector<text> gameTextMenu_;
     std::vector<text> libTextMenu_;
+    text userName_;
     int incrLib_ {0};
     int incrGame_ {0};
     bool isGameSelected_ {false};
+    bool isUserTyping_ {true};
     int counter_ {0};
     std::chrono::steady_clock::time_point lastUpdateTime_;
+    std::unordered_map<eventKey, char> keyMap_ = {
+        {eventKey::A, 'a'},
+        {eventKey::B, 'b'},
+        {eventKey::C, 'c'},
+        {eventKey::D, 'd'},
+        {eventKey::E, 'e'},
+        {eventKey::F, 'f'},
+        {eventKey::G, 'g'},
+        {eventKey::H, 'h'},
+        {eventKey::I, 'i'},
+        {eventKey::J, 'j'},
+        {eventKey::K, 'k'},
+        {eventKey::L, 'l'},
+        {eventKey::M, 'm'},
+        {eventKey::N, 'n'},
+        {eventKey::O, 'o'},
+        {eventKey::P, 'p'},
+        {eventKey::Q, 'q'},
+        {eventKey::R, 'r'},
+        {eventKey::S, 's'},
+        {eventKey::T, 't'},
+        {eventKey::U, 'u'},
+        {eventKey::V, 'v'},
+        {eventKey::W, 'w'},
+        {eventKey::X, 'x'},
+        {eventKey::Y, 'y'},
+        {eventKey::Z, 'z'},
+        {eventKey::ZERO, '0'},
+        {eventKey::ONE, '1'},
+        {eventKey::TWO, '2'},
+        {eventKey::THREE, '3'},
+        {eventKey::FOUR, '4'},
+        {eventKey::FIVE, '5'},
+        {eventKey::SIX, '6'},
+        {eventKey::SEVEN, '7'},
+        {eventKey::EIGHT, '8'},
+        {eventKey::NINE, '9'},
+        {eventKey::SPACE, ' '}
+    };
 };
 
 #endif /* !MENU_HPP_ */
