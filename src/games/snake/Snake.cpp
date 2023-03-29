@@ -28,7 +28,7 @@ void Snake::initText()
     score.m_color = { 255, 255, 255, 255 };
     score.pos = { 50, 0 };
     score.text = "Score: " + std::to_string(score_);
-    timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
+    score.size = { static_cast<int>(score.fontSize * 1.33 * 0.46 * score.text.length()), static_cast<int>(score.fontSize * 1.33) };
     timer.fontSize = 30;
     timer.fontPath = "assets/fonts/arial.ttf";
     timer.m_color = { 255, 255, 255, 255 };
