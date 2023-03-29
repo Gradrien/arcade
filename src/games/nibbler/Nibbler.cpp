@@ -83,6 +83,7 @@ void Nibbler::loadMap(int index)
 {
     this->cellHeight_ = 800 / allMaps[index].size();
     this->cellWidth_ = 800 / allMaps[index][0].size();
+    this->remainingFood_ = 0;
     for (std::size_t y = 0; y < allMaps[index].size(); y++) {
         for (std::size_t x = 0; x < allMaps[index][y].size(); x++) {
             switch (allMaps[index][y][x]) {
