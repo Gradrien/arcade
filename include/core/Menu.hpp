@@ -37,7 +37,7 @@ class Menu {
      * @param core
      * @details This function is used to construct the menu
      ****************************************************************/
-    Menu(Core &core);
+    Menu();
     ~Menu() = default;
     /****************************************************************
      * @brief Run the menu
@@ -55,16 +55,14 @@ class Menu {
     void handleEvent(eventKey evt, Core &core);
     /****************************************************************
      * @brief Set the Graph Lib Text object
-     * @param graphPaths_
      * @details This function is used to set the graph lib text
      * ************************************************/
-    void setGraphLibText(std::vector<std::string> graphPaths_);
+    void setGraphLibText();
     /****************************************************************
      * @brief Set the Game Lib Text object
-     * @param gamePaths_
      * @details This function is used to set the game lib text
      * ************************************************/
-    void setGameLibText(std::vector<std::string> gamePaths_);
+    void setGameLibText();
     /****************************************************************
      * @brief Set the Gui Text object
      * @details This function is used to set the gui text
@@ -122,6 +120,9 @@ class Menu {
     void loopTitle();
 
     private:
+    void setLibNameMenu();
+    std::vector<std::string> graphPaths_;
+    std::vector<std::string> gamePaths_;
     std::vector<text> titleMenu_;
     std::vector<text> guiTextMenu_;
     std::vector<text> gameTextMenu_;

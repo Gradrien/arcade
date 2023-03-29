@@ -23,7 +23,7 @@ Core::Core(const char* libName)
     this->gameState_ = GState::MENU;
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
     this->gameLib_->init();
-    this->menu_ = std::make_unique<Menu>(*this);
+    this->menu_ = std::make_unique<Menu>();
 }
 
 void Core::getAllLib()

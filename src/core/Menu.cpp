@@ -7,28 +7,43 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(Core& core)
+Menu::Menu()
 {
-    this->setGraphLibText(core.getGraphPaths());
-    this->setGameLibText(core.getGamePaths());
+    this->setLibNameMenu();
+    this->setGraphLibText();
+    this->setGameLibText();
     this->createGuiTextMenu();
     this->createTitleMenu();
     lastUpdateTime_ = std::chrono::steady_clock::now();
 }
 
-void Menu::setGameLibText(std::vector<std::string> gamePaths_)
+void Menu::setLibNameMenu()
 {
-    std::vector<std::string> gamePaths = gamePaths_;
+    const std::filesystem::path libPath { "./lib/" };
 
+    for (auto const& dir_entry : std::filesystem::directory_iterator { libPath }) {
+        if (dir_entry.path().filename().c_str()[0] == '.')
+            continue;
+        if (validLibs.find(dir_entry.path().filename()) == validLibs.end())
+            continue;
+        if (validLibs.at(dir_entry.path().filename()) == libType::GRAPHICAL)
+            graphPaths_.push_back(dir_entry.path().filename().c_str());
+        else if(validLibs.at(dir_entry.path().filename()) == libType::GAME)
+            gamePaths_.push_back(dir_entry.path().filename().c_str());
+    }
+}
+
+void Menu::setGameLibText()
+{
     int pos_y = 240;
-    for (size_t i = 0; i < gamePaths.size(); i++) {
+
+    for (size_t i = 0; i < gamePaths_.size(); i++) {
         text game;
         game.fontSize = 20;
         game.fontPath = "assets/fonts/arial.ttf";
         game.m_color = { 255, 255, 255, 255 };
         game.pos = { 460, pos_y };
-        game.text = gamePaths[i];
-        game.text.erase(0, 6);
+        game.text = gamePaths_[i];
         game.text.erase((game.text.length() - 3), 3);
         game.size = { static_cast<int>(game.fontSize * 1.33 * 0.46 * game.text.length()), static_cast<int>(game.fontSize * 1.33) };
         this->gameTextMenu_.push_back(game);
@@ -36,19 +51,17 @@ void Menu::setGameLibText(std::vector<std::string> gamePaths_)
     }
 }
 
-void Menu::setGraphLibText(std::vector<std::string> graphPaths_)
+void Menu::setGraphLibText()
 {
-    std::vector<std::string> graphPaths = graphPaths_;
-
     int pos_y = 240;
-    for (size_t i = 0; i < graphPaths.size(); i++) {
+
+    for (size_t i = 0; i < graphPaths_.size(); i++) {
         text lib;
         lib.fontSize = 20;
         lib.fontPath = "assets/fonts/arial.ttf";
         lib.m_color = { 255, 255, 255, 255 };
         lib.pos = { 140, pos_y };
-        lib.text = graphPaths[i];
-        lib.text.erase(0, 6);
+        lib.text = graphPaths_[i];
         lib.text.erase((lib.text.length() - 3), 3);
         lib.size = { static_cast<int>(lib.fontSize * 1.33 * 0.46 * lib.text.length()), static_cast<int>(lib.fontSize * 1.33) };
         this->libTextMenu_.push_back(lib);
@@ -276,8 +289,12 @@ void Menu::highlightSelected(Core &core)
 {
     for (std::size_t i = 0; i < this->libTextMenu_.size(); i++) {
         libTextMenu_[i].m_color = { 255, 255, 255, 255 };
-        if (core.getCurrentGraph() == "./lib/" + libTextMenu_[i].text + ".so")
+        if (core.getCurrentGraph() == "./lib/" + libTextMenu_[i].text + ".so"
+            || core.getCurrentGraph() == "lib/" + libTextMenu_[i].text + ".so") {
             libTextMenu_[i].m_color = { 0, 255, 0, 255 };
+            incrLib_ = static_cast<int>(i);
+            guiTextMenu_[3].pos.y = 240 + 50 * static_cast<int>(i);
+        }
     }
     for (std::size_t i = 0; i < this->gameTextMenu_.size(); i++) {
         gameTextMenu_[i].m_color = { 255, 255, 255, 255 };

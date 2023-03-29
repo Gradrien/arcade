@@ -185,7 +185,7 @@ class Core {
     /********************************************************
      * @brief Get the game paths
      * This function is used to get the game paths
-     * @return std::vector<std::string> 
+     * @return std::vector<std::string>
      * *****************************************************/
     std::vector<std::string> getGamePaths();
     /********************************************************
