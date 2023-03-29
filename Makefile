@@ -17,18 +17,15 @@ SRC_MAIN	=	src/Main.cpp
 
 SRC_SFML	=	src/graphics/sfml/SFMLGraphic.cpp	\
 				src/graphics/sfml/SFMLGraphicLib.cpp	\
-				src/graphics/sfml/SFMLEvent.cpp	\
+				src/graphics/sfml/SFMLEvent.cpp
 
 SRC_NCURSES	=	src/graphics/ncurses/NcursesGraphic.cpp	\
 				src/graphics/ncurses/NcursesGraphicLib.cpp	\
-				src/graphics/ncurses/NcursesEvent.cpp	\
+				src/graphics/ncurses/NcursesEvent.cpp
 
-SRC_SDL	=	src/graphics/sdl/SDLGraphic.cpp	\
+SRC_SDL		=	src/graphics/sdl/SDLGraphic.cpp	\
 				src/graphics/sdl/SDLGraphicLib.cpp	\
-				src/graphics/sdl/SDLEvent.cpp	\
-
-SRC_GAMETEST	=	src/games/test_game/TestGame.cpp	\
-					src/games/test_game/TestGameLib.cpp
+				src/graphics/sdl/SDLEvent.cpp
 
 SRC_NIBBLER	=	src/games/nibbler/Nibbler.cpp	\
 				src/games/nibbler/NibblerLib.cpp
@@ -46,7 +43,13 @@ OBJ_SNAKE	=	$(SRC_SNAKE:.cpp=.o)
 
 OBJ_NIBBLER	=	$(SRC_NIBBLER:.cpp=.o)
 
-CORE_NAME = arcade
+OBJ_SFML	=	$(SRC_SFML:.cpp=.o)
+
+OBJ_NCURSES	=	$(SRC_NCURSES:.cpp=.o)
+
+OBJ_SDL		=	$(SRC_SDL:.cpp=.o)
+
+CORE_NAME 	= 	arcade
 
 GAME_NIBBLER = ./lib/arcade_nibbler.so
 GAME_SNAKE	 = ./lib/arcade_snake.so
@@ -91,20 +94,17 @@ $(CORE_NAME):	$(OBJ_CORE)
 graphicals: $(GRAPHIC_SFML) $(GRAPHIC_NCURSES) $(GRAPHIC_SDL)
 .PHONY: graphicals
 
-$(GRAPHIC_SFML):
+$(GRAPHIC_SFML): $(OBJ_SFML)
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SFML) $(SRC_SFML) $(CPPFLAGS) $(SFMLFLAGS)
 
-$(GRAPHIC_NCURSES):
+$(GRAPHIC_NCURSES): $(OBJ_NCURSES)
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_NCURSES) $(SRC_NCURSES) $(CPPFLAGS) $(NCURSESFLAG)
 
-$(GRAPHIC_SDL):
+$(GRAPHIC_SDL): $(OBJ_SDL)
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SDL) $(SRC_SDL) $(CPPFLAGS) $(SDLFLAG)
 
-games: $(GAME_TEST) $(GAME_NIBBLER) $(GAME_SNAKE)
+games: $(GAME_NIBBLER) $(GAME_SNAKE)
 .PHONY: games
-
-$(GAME_TEST):
-	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
 
 $(GAME_NIBBLER): $(OBJ_NIBBLER)
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_NIBBLER) $(SRC_NIBBLER) $(CPPFLAGS)
@@ -146,6 +146,6 @@ re:	fclean all
 .PHONY: re
 
 debug:	fclean
-	$(CC) -o $(CORE_NAME) $(SRC_CORE) $(SRC_ERROR) $(SRC_MAIN) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS) $(DEBUGFLAG)
-
+	$(CC) -o $(CORE_NAME) $(SRC_CORE) $(SRC_ERROR) $(SRC_MAIN) $(CXXFLAGS) \
+	$(CPPFLAGS) $(LDFLAGS) $(SFMLFLAGS) $(DEBUGFLAG)
 .PHONY: debug
