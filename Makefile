@@ -33,11 +33,18 @@ SRC_GAMETEST	=	src/games/test_game/TestGame.cpp	\
 SRC_NIBBLER	=	src/games/nibbler/Nibbler.cpp	\
 				src/games/nibbler/NibblerLib.cpp
 
+SRC_SNAKE	=	src/games/snake/Snake.cpp	\
+				src/games/snake/SnakeLib.cpp
+
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
 TESTS_SRC	=	tests/tests_args.cpp
 
 OBJ_CORE	=	$(SRC:.cpp=.o) $(SRC_MAIN:.cpp=.o)
+
+OBJ_SNAKE	=	$(SRC_SNAKE:.cpp=.o)
+
+OBJ_NIBBLER	=	$(SRC_NIBBLER:.cpp=.o)
 
 CORE_NAME = arcade
 
@@ -62,6 +69,7 @@ CPPFLAGS	=	-I	./include/core	\
 				-I ./include/error	\
 				-I ./include/games/test_game	\
 				-I ./include/games/nibbler	\
+				-I ./include/games/snake
 
 SFMLFLAGS = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 NCURSESFLAG = -lncurses
@@ -92,14 +100,17 @@ $(GRAPHIC_NCURSES):
 $(GRAPHIC_SDL):
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GRAPHIC_SDL) $(SRC_SDL) $(CPPFLAGS) $(SDLFLAG)
 
-games: $(GAME_TEST) $(GAME_NIBBLER)
+games: $(GAME_TEST) $(GAME_NIBBLER) $(GAME_SNAKE)
 .PHONY: games
 
 $(GAME_TEST):
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_TEST) $(SRC_GAMETEST) $(CPPFLAGS)
 
-$(GAME_NIBBLER):
+$(GAME_NIBBLER): $(OBJ_NIBBLER)
 	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_NIBBLER) $(SRC_NIBBLER) $(CPPFLAGS)
+
+$(GAME_SNAKE): $(OBJ_SNAKE)
+	$(CC) $(CXXFLAGS) -fpic -shared -o $(GAME_SNAKE) $(SRC_SNAKE) $(CPPFLAGS)
 
 tests_run: graphicals games
 	$(CC) -o $(TEST_NAME) $(SRC) $(TESTS_SRC) $(CPPFLAGS) $(LDFLAGS) \
@@ -118,6 +129,8 @@ coverage:
 
 clean: clean_tests
 	rm -f $(OBJ_CORE)
+	rm -f $(OBJ_SNAKE)
+	rm -f $(OBJ_NIBBLER)
 .PHONY: clean
 
 fclean:	clean
