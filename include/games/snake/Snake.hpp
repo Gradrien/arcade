@@ -16,6 +16,7 @@
 #define SNAKE_HPP_
 #include "IGame.hpp"
 #include <vector>
+#include <chrono>
 
 /****************************************************************
  * @brief Direction enum
@@ -116,9 +117,9 @@ class Snake : public IGame {
     void foodHandler();
     void addWall(int x, int y);
     void addFood(int x, int y);
-    int getScore();
     void resetLevel();
     void gameOver();
+    void restartEvent(eventKey evtKey);
     bool isSnakeInCell(int x, int y);
     direction dir_ { direction::RIGHT };
     int snakeSize_ { 4 };
@@ -130,7 +131,9 @@ class Snake : public IGame {
     int cellHeight_ { 20 };
     int mapIndex_ { 0 };
     int score_ { 0 };
+    int timer_ { 60 };
     playerState state { playerState::ALIVE };
+    std::chrono::steady_clock::time_point lastUpdateTime_;
 };
 
 #endif /* !SNAKE_HPP_ */

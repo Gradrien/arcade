@@ -17,22 +17,34 @@ int random(int low, int high)
     return dist(gen);
 }
 
-int Snake::getScore()
-{
-    return this->score_;
-}
-
 void Snake::initText()
 {
     text score;
+    text timer;
+    text gameOver;
 
     score.fontSize = 30;
     score.fontPath = "assets/fonts/arial.ttf";
-    score.m_color = { 0, 255, 0, 255 };
-    score.pos = { 0, 0 };
-    score.text = "Score: " + this->getScore();
-    score.size = { static_cast<int>(score.fontSize * 1.33 * 0.46 * score.text.length() - 80), static_cast<int>(score.fontSize * 1.33) };
+    score.m_color = { 255, 255, 255, 255 };
+    score.pos = { 50, 0 };
+    score.text = "Score: " + std::to_string(score_);
+    timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
+    timer.fontSize = 30;
+    timer.fontPath = "assets/fonts/arial.ttf";
+    timer.m_color = { 255, 255, 255, 255 };
+    timer.pos = { 600, 0 };
+    timer.text = "Timer: " + std::to_string(timer_);
+    timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
+    gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
+    gameOver.fontSize = 30;
+    gameOver.fontPath = "assets/fonts/arial.ttf";
+    gameOver.m_color = { 255, 0, 0, 255 };
+    gameOver.pos = { 200, 350 };
+    gameOver.text = "YOU LOST! Press R to restart";
+    gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
     this->texts_.push_back(score);
+    this->texts_.push_back(timer);
+    this->texts_.push_back(gameOver);
 }
 
 void Snake::reset()
@@ -45,6 +57,10 @@ void Snake::reset()
     if (!this->snake_.empty())
         this->snake_.clear();
     this->loadMap(this->mapIndex_);
+    this->score_ = 0;
+    this->timer_ = 0;
+    texts_[0].text = "Score: " + std::to_string(score_);
+    texts_[1].text = "Timer: " + std::to_string(timer_);
     this->state = playerState::ALIVE;
     this->dir_ = direction::RIGHT;
 }
@@ -59,6 +75,9 @@ void Snake::resetLevel()
         this->snake_.clear();
     this->loadMap(this->mapIndex_);
     this->score_ = 0;
+    this->timer_ = 0;
+    texts_[0].text = "Score: " + std::to_string(score_);
+    texts_[1].text = "Timer: " + std::to_string(timer_);
     this->state = playerState::ALIVE;
     this->dir_ = direction::RIGHT;
 }
@@ -143,13 +162,19 @@ bool Snake::isCollided(shape s1, shape s2)
 int Snake::init()
 {
     loadMap(this->mapIndex_);
+    initText();
+    lastUpdateTime_ = std::chrono::steady_clock::now();
     return 0;
 }
 
 void Snake::display(IGraphic& graphLib)
 {
-    if (this->state == playerState::DEAD)
+    if (this->state == playerState::DEAD) {
+        for (std::size_t i = 0; i < texts_.size(); ++i) {
+            graphLib.displayText(texts_[i]);
+        }
         return;
+    }
     for (shape wall : this->walls_) {
         graphLib.displayShape(wall);
     }
@@ -159,8 +184,10 @@ void Snake::display(IGraphic& graphLib)
     for (shape part : this->snake_) {
         graphLib.displayShape(part);
     }
-    for (text txt : this->texts_) {
-        graphLib.displayText(txt);
+    texts_[0].text = "Score: " + std::to_string(score_);
+    texts_[1].text = "Timer: " + std::to_string(timer_);
+    for (std::size_t i = 0; i < 2; ++i) {
+        graphLib.displayText(texts_[i]);
     }
 }
 
@@ -196,6 +223,17 @@ void Snake::updateDirection(eventKey evtKey)
     }
 }
 
+void Snake::restartEvent(eventKey evtKey)
+{
+    switch (evtKey) {
+    case eventKey::R:
+        this->resetLevel();
+        break;
+    default:
+        break;
+    }
+}
+
 void Snake::moveSnake(std::vector<shape>& tmp)
 {
     if (this->state == playerState::DEAD)
@@ -204,7 +242,6 @@ void Snake::moveSnake(std::vector<shape>& tmp)
         tmp[i].pos.x = tmp[i - 1].pos.x;
         tmp[i].pos.y = tmp[i - 1].pos.y;
     }
-
     switch (this->dir_) {
     case direction::LEFT:
         tmp[0].pos.x -= this->cellWidth_;
@@ -241,13 +278,21 @@ void Snake::gameOver()
 int Snake::updateGame(eventKey evtKey)
 {
     std::vector<shape> tmp = this->snake_;
-    this->updateDirection(evtKey);
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTime_).count();
+
+    if (elapsed >= 1000) {
+        timer_ += 1;
+        lastUpdateTime_ = now;
+    }
+    if (this->state == playerState::ALIVE)
+        this->updateDirection(evtKey);
     if (this->state == playerState::DEAD) {
         if (!this->snake_.empty()) {
             this->snake_.pop_back();
             return 0;
         }
-        this->resetLevel();
+        restartEvent(evtKey);
         return 0;
     }
 
@@ -275,6 +320,9 @@ std::string Snake::getSpritePath() { return ""; }
 
 void Snake::foodHandler()
 {
+    int x = random(1, 18);
+    int y = random(1, 18);
+
     for (std::size_t i = 0; i < this->food_.size(); i++) {
         if (isCollided(this->food_[i], this->snake_[0])) {
             shape obj = { .pos { this->snake_[this->snake_.size() - 1].pos.x - this->cellWidth_,
@@ -291,8 +339,12 @@ void Snake::foodHandler()
                 std::vector<shape>::iterator it = this->food_.begin() + i;
                 this->food_.erase(it);
             }
-            this->addFood(random(1, 18), random(1, 18));
-            score_++;
+            while (isSnakeInCell(x, y)) {
+                x = random(1, 18);
+                y = random(1, 18);
+            }
+            this->addFood(x, y);
+            this->score_ += 1;
         }
     }
 }

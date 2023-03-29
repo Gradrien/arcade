@@ -7,6 +7,36 @@
 
 #include "Nibbler.hpp"
 
+void Nibbler::initText()
+{
+    text score;
+    text timer;
+    text gameOver;
+
+    score.fontSize = 30;
+    score.fontPath = "assets/fonts/arial.ttf";
+    score.m_color = { 255, 255, 255, 255 };
+    score.pos = { 50, 0 };
+    score.text = "Score: " + std::to_string(score_);
+    timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
+    timer.fontSize = 30;
+    timer.fontPath = "assets/fonts/arial.ttf";
+    timer.m_color = { 255, 255, 255, 255 };
+    timer.pos = { 600, 0 };
+    timer.text = "Timer: " + std::to_string(timer_);
+    timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
+    gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
+    gameOver.fontSize = 30;
+    gameOver.fontPath = "assets/fonts/arial.ttf";
+    gameOver.m_color = { 255, 0, 0, 255 };
+    gameOver.pos = { 200, 350 };
+    gameOver.text = "YOU LOST! Press R to restart";
+    gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
+    this->texts_.push_back(score);
+    this->texts_.push_back(timer);
+    this->texts_.push_back(gameOver);
+}
+
 void Nibbler::reset()
 {
     this->mapIndex_ = 0;
@@ -17,6 +47,10 @@ void Nibbler::reset()
     if (!this->nibbler_.empty())
         this->nibbler_.clear();
     this->loadMap(this->mapIndex_);
+    this->score_ = 0;
+    this->timer_ = 60;
+    texts_[0].text = "Score: " + std::to_string(score_);
+    texts_[1].text = "Timer: " + std::to_string(timer_);
     this->state = playerState::ALIVE;
     this->dir_ = direction::RIGHT;
 }
@@ -30,6 +64,9 @@ void Nibbler::resetLevel()
     if (!this->nibbler_.empty())
         this->nibbler_.clear();
     this->loadMap(this->mapIndex_);
+    this->timer_ += 20;
+    texts_[0].text = "Score: " + std::to_string(score_);
+    texts_[1].text = "Timer: " + std::to_string(timer_);
     this->state = playerState::ALIVE;
     this->dir_ = direction::RIGHT;
 }
@@ -116,13 +153,19 @@ bool Nibbler::isCollided(shape s1, shape s2)
 int Nibbler::init()
 {
     loadMap(this->mapIndex_);
+    timer_ = 60;
+    initText();
     return 0;
 }
 
 void Nibbler::display(IGraphic& graphLib)
 {
-    if (this->state == playerState::DEAD)
+    if (this->state == playerState::DEAD) {
+        for (std::size_t i = 0; i < texts_.size(); ++i) {
+            graphLib.displayText(texts_[i]);
+        }
         return;
+    }
     for (shape wall : this->walls_) {
         graphLib.displayShape(wall);
     }
@@ -131,6 +174,11 @@ void Nibbler::display(IGraphic& graphLib)
     }
     for (shape part : this->nibbler_) {
         graphLib.displayShape(part);
+    }
+    texts_[0].text = "Score: " + std::to_string(score_);
+    texts_[1].text = "Timer: " + std::to_string(timer_);
+    for (std::size_t i = 0; i < 2; ++i) {
+        graphLib.displayText(texts_[i]);
     }
 }
 
@@ -160,6 +208,17 @@ void Nibbler::updateDirection(eventKey evtKey)
             this->dir_ = direction::RIGHT;
             this->state = playerState::ALIVE;
         }
+        break;
+    default:
+        break;
+    }
+}
+
+void Nibbler::restartEvent(eventKey evtKey)
+{
+    switch (evtKey) {
+    case eventKey::R:
+        this->resetLevel();
         break;
     default:
         break;
@@ -236,13 +295,22 @@ void Nibbler::chooseDirection()
 int Nibbler::updateGame(eventKey evtKey)
 {
     std::vector<shape> tmp = this->nibbler_;
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTime_).count();
+
+    if (elapsed >= 1000 && timer_ > 0) {
+        timer_ -= 1;
+        lastUpdateTime_ = now;
+    }
+    if (timer_ == 0)
+        this->state = playerState::DEAD;
     this->updateDirection(evtKey);
     if (this->state == playerState::DEAD) {
         if (!this->nibbler_.empty()) {
             this->nibbler_.pop_back();
             return 0;
         }
-        this->resetLevel();
+        restartEvent(evtKey);
         return 0;
     }
 
@@ -294,6 +362,7 @@ void Nibbler::foodHandler()
                 this->food_.erase(it);
             }
             this->remainingFood_--;
+            this->score_ += 1;
         }
     }
 }

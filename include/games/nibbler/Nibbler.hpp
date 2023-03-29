@@ -16,6 +16,7 @@
 #define NIBBLER_HPP_
 #include "IGame.hpp"
 #include <vector>
+#include <chrono>
 
 /****************************************************************
  * @brief Direction enum
@@ -123,6 +124,7 @@ class Nibbler : public IGame {
 
   private:
     void initNibbler(int x, int y);
+    void initText();
     void loadMap(int index);
     void moveSnake(std::vector<shape>& tmp);
     bool isCollided(shape s1, shape s2);
@@ -131,6 +133,7 @@ class Nibbler : public IGame {
     void addWall(int x, int y);
     void addFood(int x, int y);
     void resetLevel();
+    void restartEvent(eventKey evtKey);
     void chooseDirection();
     bool isNibblerInCell(int x, int y);
     direction dir_ { direction::RIGHT };
@@ -138,11 +141,15 @@ class Nibbler : public IGame {
     std::vector<shape> walls_;
     std::vector<shape> nibbler_;
     std::vector<shape> food_;
+    std::vector<text> texts_;
     int cellWidth_ { 20 };
     int cellHeight_ { 20 };
     int mapIndex_ { 0 };
     int remainingFood_ { 0 };
+    int score_ { 0 };
+    int timer_ { 0 };
     playerState state { playerState::ALIVE };
+    std::chrono::steady_clock::time_point lastUpdateTime_;
 };
 
 #endif /* !NIBBLER_HPP_ */

@@ -131,6 +131,9 @@ clean: clean_tests
 	rm -f $(OBJ_CORE)
 	rm -f $(OBJ_SNAKE)
 	rm -f $(OBJ_NIBBLER)
+	rm -f $(OBJ_SFML)
+	rm -f $(OBJ_NCURSES)
+	rm -f $(OBJ_SDL)
 .PHONY: clean
 
 fclean:	clean
