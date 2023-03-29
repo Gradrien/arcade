@@ -118,18 +118,18 @@ int Nibbler::init()
     return 0;
 }
 
-void Nibbler::display(std::unique_ptr<IGraphic>& graphLib)
+void Nibbler::display(IGraphic& graphLib)
 {
     if (this->state == playerState::DEAD)
         return;
     for (shape wall : this->walls_) {
-        graphLib->displayShape(wall);
+        graphLib.displayShape(wall);
     }
     for (shape fruit : this->food_) {
-        graphLib->displayShape(fruit);
+        graphLib.displayShape(fruit);
     }
     for (shape part : this->nibbler_) {
-        graphLib->displayShape(part);
+        graphLib.displayShape(part);
     }
 }
 

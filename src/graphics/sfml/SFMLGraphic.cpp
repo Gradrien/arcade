@@ -41,9 +41,9 @@ bool SFMLGraphic::isOpenWindow()
 
 void SFMLGraphic::displayText(const text& m_text)
 {
-    sf::Font MyFont;
     sf::Color color(m_text.m_color.r, m_text.m_color.g, m_text.m_color.b, m_text.m_color.a);
-    if (!MyFont.loadFromFile(m_text.fontPath)) {
+    sf::Font my_font;
+    if (!my_font.loadFromFile(m_text.fontPath)) {
         std::cerr << "Error: font not found" << std::endl;
         return;
     }
@@ -53,11 +53,11 @@ void SFMLGraphic::displayText(const text& m_text)
         window_.draw(this->textList[&m_text]);
         return;
     }
-    sf::Text newText(m_text.text, MyFont, m_text.fontSize);
-    newText.setFillColor(color);
-    newText.setPosition(sf::Vector2f(m_text.pos.x, m_text.pos.y));
-    this->textList[&m_text] = newText;
-    window_.draw(newText);
+    sf::Text new_text(m_text.text, my_font, m_text.fontSize);
+    new_text.setFillColor(color);
+    new_text.setPosition(sf::Vector2f(m_text.pos.x, m_text.pos.y));
+    this->textList[&m_text] = new_text;
+    window_.draw(new_text);
     return;
 }
 

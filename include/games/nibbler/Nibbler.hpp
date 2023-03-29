@@ -101,7 +101,7 @@ class Nibbler : public IGame {
      * @details This function is used to display the game
      * @param IGraphic
      * ***************************************************************/
-    void display(std::unique_ptr<IGraphic>&) override;
+    void display(IGraphic &) override;
     /****************************************************************
      * @brief init the game
      * @details This function is used to init the game and load the map

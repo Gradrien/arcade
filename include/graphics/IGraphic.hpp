@@ -201,7 +201,7 @@ class IGraphic {
      * @param height
      * @return void
      * */
-    virtual void createWindow(std::string title, int width, int height) = 0;
+    virtual void createWindow(std::string title, int width, int height) = 0; // Ajouter dans le constructeur
     /*********************************************
      * @brief This method is used to display window
      * @return void

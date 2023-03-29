@@ -87,7 +87,7 @@ void Core::gameLoopHandler()
     if (!this->graphLib_->isOpenWindow())
         this->graphLib_->createWindow("Arcade", 800, 800);
     this->graphLib_->clearWindow();
-    this->gameLib_->display(this->graphLib_);
+    this->gameLib_->display(*this->graphLib_);
     this->graphLib_->displayWindow();
 }
 

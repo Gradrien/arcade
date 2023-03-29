@@ -35,7 +35,7 @@ class IGame {
      * @param IGraphic&
      * @details This function is used to display the game
      * ************************************************/
-    virtual void display(std::unique_ptr<IGraphic> &) = 0;
+    virtual void display(IGraphic &) = 0; //Ne pas donner de ref uniquePtr
     /****************************************************************
      * @brief Init the game
      * @details This function is used to init the game

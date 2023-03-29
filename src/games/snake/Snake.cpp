@@ -146,21 +146,21 @@ int Snake::init()
     return 0;
 }
 
-void Snake::display(std::unique_ptr<IGraphic>& graphLib)
+void Snake::display(IGraphic& graphLib)
 {
     if (this->state == playerState::DEAD)
         return;
     for (shape wall : this->walls_) {
-        graphLib->displayShape(wall);
+        graphLib.displayShape(wall);
     }
     for (shape fruit : this->food_) {
-        graphLib->displayShape(fruit);
+        graphLib.displayShape(fruit);
     }
     for (shape part : this->snake_) {
-        graphLib->displayShape(part);
+        graphLib.displayShape(part);
     }
     for (text txt : this->texts_) {
-        graphLib->displayText(txt);
+        graphLib.displayText(txt);
     }
 }
 
