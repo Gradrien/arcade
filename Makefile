@@ -35,7 +35,8 @@ SRC_SNAKE	=	src/games/snake/Snake.cpp	\
 
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
-TESTS_SRC	=	tests/tests_args.cpp
+TESTS_SRC	=	tests/tests_args.cpp \
+				tests/tests_menu.cpp \
 
 OBJ_CORE	=	$(SRC:.cpp=.o) $(SRC_MAIN:.cpp=.o)
 
