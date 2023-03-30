@@ -119,8 +119,26 @@ class Menu {
      * @details This function is used to loop the title to highlight it letter by letter
      * ************************************************/
     void loopTitle();
-    void handleUserInput(eventKey evt);
+    /****************************************************************
+     * @brief Handle the user input
+     * @details This function is used to handle the user input
+     * @param evt
+     * @param core
+     * ************************************************/
+    void handleUserInput(eventKey evt, Core &core);
+    /****************************************************************
+     * @brief Tell if the user is typing
+     * @details This function is used to tell if the user is typing and returns a boolean
+     * @return true if the user is typing else returns false
+     * @param name
+     * ************************************************/
     bool isUserTyping() const;
+    /****************************************************************
+     * @brief Get the User Name object
+     * @details This function is used to get the user name
+     * @return std::string
+     * ************************************************/
+    std::string getUserName() const;
 
     private:
     void setLibNameMenu();

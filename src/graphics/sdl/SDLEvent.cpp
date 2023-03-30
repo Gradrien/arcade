@@ -15,7 +15,7 @@ eventKey SDLGraphic::getEvent()
     switch (event.type) {
     case SDL_WINDOWEVENT:
         if (event.window.event == SDL_WINDOWEVENT_CLOSE)
-            return eventKey::Q;
+            return eventKey::QUIT;
         break;
     case SDL_KEYDOWN:
         if (keyEvent.find(event.key.keysym.sym) == keyEvent.end())

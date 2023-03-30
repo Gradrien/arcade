@@ -98,6 +98,9 @@ void Core::handleEvent()
     if (this->menu_->isUserTyping() && this->gameState_ == GState::MENU)
         return this->menu_->handleEvent(evt, *this);
     switch (evt) {
+    case eventKey::QUIT:
+        this->gameState_ = GState::QUIT;
+        break;
     case eventKey::Q:
         this->gameState_ = GState::QUIT;
         break;

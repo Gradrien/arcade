@@ -14,7 +14,7 @@ eventKey SFMLGraphic::getEvent()
     if (!this->window_.pollEvent(event))
         return eventKey::NULL_EVENT;
     if (event.type == sf::Event::Closed)
-        return eventKey::Q;
+        return eventKey::QUIT;
     if (event.type != sf::Event::KeyPressed)
         return eventKey::NULL_EVENT;
     if (keyEvent.find(event.key.code) == keyEvent.end())

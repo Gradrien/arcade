@@ -295,7 +295,7 @@ void Menu::deleteChar()
         userName_.text.pop_back();
 }
 
-void Menu::handleUserInput(eventKey evt)
+void Menu::handleUserInput(eventKey evt, Core &core)
 {
     userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length()), static_cast<int>(userName_.fontSize * 1.33) };
     if (isUserTyping_ == true) {
@@ -303,16 +303,20 @@ void Menu::handleUserInput(eventKey evt)
             deleteChar();
         else if (evt == eventKey::ENTER)
             createNewUser();
+        else if (evt == eventKey::QUIT)
+            core.setCoreState(GState::QUIT);
         else if (this->keyMap_.find(evt) != this->keyMap_.end()
             && userName_.text.size() < 10)
             userName_.text += keyMap_[evt];
     }
 }
 
+std::string Menu::getUserName() const { return this->userName_.text; }
+
 void Menu::handleEvent(eventKey evt, Core& core)
 {
     if (isUserTyping_ == true)
-        return handleUserInput(evt);
+        return handleUserInput(evt, core);
     switch (evt) {
     case eventKey::A:
         applyChanges(core);

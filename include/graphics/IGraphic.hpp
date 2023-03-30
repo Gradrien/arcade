@@ -71,7 +71,8 @@ enum class eventKey {
     ZERO,
     CTRL,
     ALT,
-    SHIFT
+    SHIFT,
+    QUIT
 };
 
 /****************************
