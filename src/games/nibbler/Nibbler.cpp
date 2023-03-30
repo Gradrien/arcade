@@ -55,7 +55,7 @@ void Nibbler::reset()
         this->nibbler_.clear();
     this->loadMap(this->mapIndex_);
     this->score_ = 0;
-    this->timer_ = 60;
+    this->timer_ = 80;
     texts_[0].text = "Score: " + std::to_string(score_);
     texts_[1].text = "Timer: " + std::to_string(timer_);
     this->state = playerState::ALIVE;
@@ -160,7 +160,7 @@ bool Nibbler::isCollided(shape s1, shape s2)
 int Nibbler::init()
 {
     loadMap(this->mapIndex_);
-    timer_ = 60;
+    timer_ = 80;
     initText();
     return 0;
 }
@@ -222,6 +222,12 @@ void Nibbler::updateDirection(eventKey evtKey)
             this->dir_ = direction::RIGHT;
             this->state = playerState::ALIVE;
         }
+        break;
+    case eventKey::ONE:
+        this->mapIndex_ += 1;
+        if (static_cast<std::size_t>(this->mapIndex_) >= allMaps.size())
+            this->mapIndex_ = 0;
+        resetLevel();
         break;
     default:
         break;
@@ -316,7 +322,7 @@ int Nibbler::updateGame(eventKey evtKey)
         timer_ -= 1;
         lastUpdateTime_ = now;
     }
-    if (timer_ > 58 && score_ == 0)
+    if (timer_ > 78 && score_ == 0)
         return 0;
     if (timer_ == 0)
         this->state = playerState::DEAD;
