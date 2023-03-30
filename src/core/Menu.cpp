@@ -38,7 +38,7 @@ void Menu::setLibNameMenu()
             continue;
         if (validLibs.at(dir_entry.path().filename()) == libType::GRAPHICAL)
             graphPaths_.push_back(dir_entry.path().filename().c_str());
-        else if(validLibs.at(dir_entry.path().filename()) == libType::GAME)
+        else if (validLibs.at(dir_entry.path().filename()) == libType::GAME)
             gamePaths_.push_back(dir_entry.path().filename().c_str());
     }
 }
@@ -192,7 +192,7 @@ void Menu::createGuiTextMenu()
     guiTextMenu_.push_back(welcomeMessage);
 }
 
-void Menu::applyChanges(Core &core)
+void Menu::applyChanges(Core& core)
 {
     core.loadSpecificGraph("./lib/" + libTextMenu_[incrLib_].text + ".so");
     core.loadSpecificGame("./lib/" + gameTextMenu_[incrGame_].text + ".so");
@@ -212,7 +212,7 @@ void Menu::chooseLib()
     guiTextMenu_[4].m_color = { 255, 255, 255, 0 };
 }
 
-void Menu::moveUp(Core &core)
+void Menu::moveUp(Core& core)
 {
     if (isGameSelected_ == false) {
         if (guiTextMenu_[3].pos.y - 50 < 240) {
@@ -244,7 +244,7 @@ void Menu::moveUp(Core &core)
     }
 }
 
-void Menu::moveDown(Core &core)
+void Menu::moveDown(Core& core)
 {
     if (isGameSelected_ == false) {
         if (guiTextMenu_[3].pos.y + 50 >= (240 + static_cast<int>(libTextMenu_.size()) * 50)) {
@@ -297,13 +297,14 @@ void Menu::deleteChar()
 
 void Menu::handleUserInput(eventKey evt)
 {
+    userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length()), static_cast<int>(userName_.fontSize * 1.33) };
     if (isUserTyping_ == true) {
         if (evt == eventKey::DELETE)
             deleteChar();
         else if (evt == eventKey::ENTER)
             createNewUser();
         else if (this->keyMap_.find(evt) != this->keyMap_.end()
-                && userName_.text.size() < 10)
+            && userName_.text.size() < 10)
             userName_.text += keyMap_[evt];
     }
 }
@@ -351,7 +352,7 @@ void Menu::highlightTitle(const int count)
     }
 }
 
-void Menu::highlightSelected(Core &core)
+void Menu::highlightSelected(Core& core)
 {
     for (std::size_t i = 0; i < this->libTextMenu_.size(); i++) {
         libTextMenu_[i].m_color = { 255, 255, 255, 255 };
@@ -382,25 +383,25 @@ void Menu::loopTitle()
             counter_ = 0;
         lastUpdateTime_ = now;
     }
-    switch(counter_) {
-        case 0:
-            highlightTitle(0);
-            break;
-        case 1:
-            highlightTitle(1);
-            break;
-        case 2:
-            highlightTitle(2);
-            break;
-        case 3:
-            highlightTitle(3);
-            break;
-        case 4:
-            highlightTitle(4);
-            break;
-        case 5:
-            highlightTitle(5);
-            break;
+    switch (counter_) {
+    case 0:
+        highlightTitle(0);
+        break;
+    case 1:
+        highlightTitle(1);
+        break;
+    case 2:
+        highlightTitle(2);
+        break;
+    case 3:
+        highlightTitle(3);
+        break;
+    case 4:
+        highlightTitle(4);
+        break;
+    case 5:
+        highlightTitle(5);
+        break;
     }
 }
 

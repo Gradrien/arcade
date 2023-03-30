@@ -85,7 +85,7 @@ void NcursesGraphic::displayShape(const shape& shape)
 {
     int colorNb = (shape.m_color.r + shape.m_color.g + shape.m_color.b) / 3;
     init_color(colorNb, shape.m_color.r * 1000 / 256, shape.m_color.g * 1000 / 256, shape.m_color.b * 1000 / 256);
-    init_pair(colorNb, colorNb, COLOR_BLACK);
+    init_pair(colorNb, colorNb, colorNb);
     wattron(this->window_, COLOR_PAIR(colorNb));
     switch (shape.type) {
     case shapeType::RECTANGLE:

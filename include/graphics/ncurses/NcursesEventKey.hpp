@@ -27,7 +27,7 @@ std::unordered_map<char, eventKey> keyEvent = { { 'a', eventKey::A },
     { 'q', eventKey::Q }, { 'r', eventKey::R }, { 's', eventKey::S },
     { 't', eventKey::T }, { 'u', eventKey::U }, { 'v', eventKey::V },
     { 'w', eventKey::W }, { 'x', eventKey::X }, { 'y', eventKey::Y },
-    { 's', eventKey::Z }, { KEY_F0, eventKey::SPACE }, { KEY_ENTER, eventKey::ENTER },
+    { 'z', eventKey::Z }, { KEY_F0, eventKey::SPACE }, { '\n', eventKey::ENTER },
     { KEY_LEFT, eventKey::LARROW }, { KEY_RIGHT, eventKey::RARROW }, { KEY_DOWN, eventKey::BARROW },
     { KEY_UP, eventKey::UARROW }, { KEY_BACKSPACE, eventKey::DELETE }, { KEY_STAB, eventKey::TAB } };
 
