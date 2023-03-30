@@ -12,6 +12,7 @@ void Nibbler::initText()
     text score;
     text timer;
     text gameOver;
+    text youWon;
 
     score.fontSize = 30;
     score.fontPath = "assets/fonts/arial.ttf";
@@ -25,16 +26,22 @@ void Nibbler::initText()
     timer.pos = { 600, 0 };
     timer.text = "Timer: " + std::to_string(timer_);
     timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
-    gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
     gameOver.fontSize = 30;
     gameOver.fontPath = "assets/fonts/arial.ttf";
     gameOver.m_color = { 255, 0, 0, 255 };
     gameOver.pos = { 200, 350 };
     gameOver.text = "YOU LOST! Press R to restart";
     gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
+    youWon.fontSize = 30;
+    youWon.fontPath = "assets/fonts/arial.ttf";
+    youWon.m_color = { 0, 255, 0, 255 };
+    youWon.pos = { 200, 350 };
+    youWon.text = "YOU WON! Press R to restart";
+    youWon.size = { static_cast<int>(youWon.fontSize * 1.33 * 0.46 * youWon.text.length()), static_cast<int>(youWon.fontSize * 1.33) };
     this->texts_.push_back(score);
     this->texts_.push_back(timer);
     this->texts_.push_back(gameOver);
+    this->texts_.push_back(youWon);
 }
 
 void Nibbler::reset()
@@ -161,8 +168,15 @@ int Nibbler::init()
 void Nibbler::display(IGraphic& graphLib)
 {
     if (this->state == playerState::DEAD) {
-        for (std::size_t i = 0; i < texts_.size(); ++i) {
+        for (std::size_t i = 0; i < (texts_.size() - 1); ++i) {
             graphLib.displayText(texts_[i]);
+        }
+        return;
+    }
+    if (this->state == playerState::WON) {
+        for (std::size_t i = 0; i < texts_.size(); ++i) {
+            if (i != 2)
+                graphLib.displayText(texts_[i]);
         }
         return;
     }
@@ -227,7 +241,7 @@ void Nibbler::restartEvent(eventKey evtKey)
 
 void Nibbler::moveSnake(std::vector<shape>& tmp)
 {
-    if (this->state == playerState::DEAD)
+    if (this->state == playerState::DEAD || this->state == playerState::WON)
         return;
     for (std::size_t i = tmp.size() - 1; i >= 1; i--) {
         tmp[i].pos.x = tmp[i - 1].pos.x;
@@ -306,8 +320,9 @@ int Nibbler::updateGame(eventKey evtKey)
         return 0;
     if (timer_ == 0)
         this->state = playerState::DEAD;
-    this->updateDirection(evtKey);
-    if (this->state == playerState::DEAD) {
+    if (this->state != playerState::DEAD && this->state != playerState::WON)
+        this->updateDirection(evtKey);
+    if (this->state == playerState::DEAD || this->state == playerState::WON) {
         if (!this->nibbler_.empty()) {
             this->nibbler_.pop_back();
             return 0;
@@ -334,9 +349,10 @@ int Nibbler::updateGame(eventKey evtKey)
     }
     this->foodHandler();
     if (this->remainingFood_ <= 0) {
-        if (allMaps.size() == static_cast<std::size_t>(this->mapIndex_ + 1))
-            this->mapIndex_ = 0;
-        else
+        if (allMaps.size() == static_cast<std::size_t>(this->mapIndex_ + 1)) {
+            this->state = playerState::WON;
+            return 0;
+        } else
             this->mapIndex_++;
         this->resetLevel();
     }
