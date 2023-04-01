@@ -84,8 +84,10 @@ void Core::coreStateHandler()
 
 void Core::gameLoopHandler()
 {
-    if (!this->graphLib_->isOpenWindow())
-        this->graphLib_->createWindow("Arcade", 800, 800);
+    if (!this->graphLib_->isOpenWindow()) {
+        elemSize winSize = this->gameLib_->getDisplaySize();
+        this->graphLib_->createWindow("Arcade", winSize.width, winSize.height);
+    }
     this->graphLib_->clearWindow();
     this->gameLib_->display(*this->graphLib_);
     this->graphLib_->displayWindow();

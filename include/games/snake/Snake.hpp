@@ -15,8 +15,8 @@
 #ifndef SNAKE_HPP_
 #define SNAKE_HPP_
 #include "IGame.hpp"
-#include <vector>
 #include <chrono>
+#include <vector>
 
 /****************************************************************
  * @brief Direction enum
@@ -106,6 +106,12 @@ class Snake : public IGame {
      * @return int
      * ***************************************************************/
     int updateGame(eventKey evtKey) override;
+    /****************************************************************
+     * @brief Get the display size
+     * @details This function is used to return the size of the window for the game
+     * @return elemSize
+     * ************************************************/
+    elemSize getDisplaySize(void) override;
 
   private:
     void initSnake(int x, int y);
