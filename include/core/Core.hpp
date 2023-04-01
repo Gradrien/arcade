@@ -90,6 +90,13 @@ class Core {
      * *****************************************************/
     void getAllLib();
     /********************************************************
+     * @brief Check if the library is graphical
+     * This function is used to check if the library is graphical before loading it
+     * @param libName
+     * @return void
+     * *****************************************************/
+    void isLibGraphical(std::string libName);
+    /********************************************************
      * @brief Handle the event and user input
      * This function is used to handle the event
      * @return void

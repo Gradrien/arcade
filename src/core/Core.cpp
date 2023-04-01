@@ -13,6 +13,11 @@ Core::Core(const char* libName)
 {
     if (!libName)
         throw ArcadeError("Invalid number of argument");
+    try {
+        this->isLibGraphical(libName);
+    } catch (ArcadeError& e) {
+        throw e;
+    }
     this->graphLib_ = this->graphLoader_.getInstance(libName);
     if (!this->graphLib_)
         throw ArcadeError("Graphic lib cannot be loaded");
@@ -24,6 +29,21 @@ Core::Core(const char* libName)
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[0]);
     this->gameLib_->init();
     this->menu_ = std::make_unique<Menu>();
+}
+
+void Core::isLibGraphical(std::string libName)
+{
+    const std::filesystem::path libPath { "./lib" };
+    std::filesystem::path lib { libName };
+
+    for (auto const& dir_entry : std::filesystem::directory_iterator { libPath }) {
+        if (dir_entry.path().filename().c_str()[0] == '.')
+            continue;
+        if (validLibs.find(dir_entry.path().filename()) == validLibs.end())
+            continue;
+        if (validLibs.at(dir_entry.path().filename()) == libType::GAME && dir_entry.path().filename() == lib.filename())
+            throw ArcadeError("Invalid library, you must choose a graphical library. Check the README for more information");
+    }
 }
 
 void Core::getAllLib()
