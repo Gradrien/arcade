@@ -103,6 +103,12 @@ void NcursesGraphic::displayShape(const shape& shape)
 
 void NcursesGraphic::displaySprite(const sprite& sprite)
 {
-    (void)sprite;
+    shape spriteShape;
+    spriteShape.m_color = sprite.m_color;
+    spriteShape.pos = sprite.pos;
+    spriteShape.replacementChar = sprite.replacementChar;
+    spriteShape.size = sprite.size;
+    spriteShape.type = shapeType::RECTANGLE;
+    this->drawRectangle(spriteShape);
     return;
 }
