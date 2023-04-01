@@ -16,6 +16,7 @@
 #define SDLGRAPHIC_HPP_
 #include "IGraphic.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <memory>
 #include <unordered_map>
@@ -101,6 +102,9 @@ class SDLGraphic : public IGraphic {
      * **************************************************************/
     void drawCircle(const shape& shape);
     bool isOpen_ { false };
+    SDL_Surface* spriteSurface_ { NULL };
+    SDL_Texture* spriteTexture_ { NULL };
+    std::string textPath_;
 };
 
 #endif /* !SFMLGRAPHIC_HPP_ */

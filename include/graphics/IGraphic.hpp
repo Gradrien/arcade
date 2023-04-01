@@ -113,7 +113,7 @@ struct elemSize {
 struct texture {
     coord pos;
     elemSize size;
-    const std::string& path;
+    std::string path;
 };
 
 /****************************

@@ -8,6 +8,7 @@
 #include "SFMLGraphic.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 
 void SFMLGraphic::createWindow(std::string title, int width, int height)
@@ -113,8 +114,32 @@ void SFMLGraphic::displayShape(const shape& shape)
     return;
 }
 
-void SFMLGraphic::displaySprite(const sprite& sprite)
+void SFMLGraphic::displaySprite(const sprite& spriteInfos)
 {
-    (void)sprite;
+    if (!this->isLoadedTexture_)
+        return;
+    if (spriteInfos.m_texture.path != this->textPath_) {
+        sf::Texture texture;
+        if (texture.loadFromFile(spriteInfos.m_texture.path) == true) {
+            this->texture_ = texture;
+            this->textPath_ = spriteInfos.m_texture.path;
+        } else {
+            this->isLoadedTexture_ = false;
+        }
+    }
+    if (this->spriteList_.find(&spriteInfos) != this->spriteList_.end()) {
+        this->spriteList_[&spriteInfos].setTextureRect(sf::IntRect(spriteInfos.m_texture.pos.x, spriteInfos.m_texture.pos.y, spriteInfos.m_texture.size.width, spriteInfos.m_texture.size.height));
+        this->spriteList_[&spriteInfos].setPosition(spriteInfos.pos.x, spriteInfos.pos.y);
+        this->spriteList_[&spriteInfos].setScale(spriteInfos.size.width / spriteInfos.m_texture.size.width, spriteInfos.size.height / spriteInfos.m_texture.size.height);
+        this->window_.draw(this->spriteList_[&spriteInfos]);
+        return;
+    }
+    sf::Sprite sprite;
+    sprite.setTexture(this->texture_);
+    sprite.setTextureRect(sf::IntRect(spriteInfos.m_texture.pos.x, spriteInfos.m_texture.pos.y, spriteInfos.m_texture.size.width, spriteInfos.m_texture.size.height));
+    sprite.setPosition(spriteInfos.pos.x, spriteInfos.pos.y);
+    sprite.setScale(spriteInfos.size.width / spriteInfos.m_texture.size.width, spriteInfos.size.height / spriteInfos.m_texture.size.height);
+    this->spriteList_[&spriteInfos] = sprite;
+    this->window_.draw(sprite);
     return;
 }

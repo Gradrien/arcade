@@ -19,6 +19,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <memory>
 #include <unordered_map>
 
@@ -101,8 +102,12 @@ class SFMLGraphic : public IGraphic {
     std::unordered_map<const text*, sf::Text> textList;
     std::unordered_map<const shape*, sf::RectangleShape> rectList;
     std::unordered_map<const shape*, sf::CircleShape> circleList;
+    std::unordered_map<const sprite*, sf::Sprite> spriteList_;
     std::unordered_map<int, sf::Font> fonts_;
     sf::RenderWindow window_;
+    sf::Texture texture_;
+    std::string textPath_;
+    bool isLoadedTexture_ = true;
 };
 
 #endif /* !SFMLGRAPHIC_HPP_ */
