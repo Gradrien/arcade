@@ -5,7 +5,8 @@
 ** SDLGraphic
 */
 
-#include "SDLGraphic.hpp"
+#include <SDL2/SDL_image.h>
+#include <SDLGraphic.hpp>
 #include <memory>
 
 void SDLGraphic::createWindow(std::string title, int width, int height)
@@ -70,7 +71,7 @@ void SDLGraphic::displayText(const text& text)
     SDL_Color textColor = { r, g, b, a };
     SDL_Surface* surfaceText = TTF_RenderText_Solid(this->fonts_[text.fontSize], text.text.c_str(), textColor);
     SDL_Texture* SDLtext = SDL_CreateTextureFromSurface(this->renderer_, surfaceText);
-    SDL_Rect textRect = {.x = text.pos.x, .y = text.pos.y, .w = text.size.width, .h = text.size.height};
+    SDL_Rect textRect = { .x = text.pos.x, .y = text.pos.y, .w = text.size.width, .h = text.size.height };
     SDL_RenderCopy(this->renderer_, SDLtext, NULL, &textRect);
     SDL_FreeSurface(surfaceText);
     SDL_DestroyTexture(SDLtext);
@@ -125,6 +126,16 @@ void SDLGraphic::displayShape(const shape& shape)
 
 void SDLGraphic::displaySprite(const sprite& sprite)
 {
-    (void)sprite;
+    if (!this->spriteSurface_ || !this->spriteTexture_ || sprite.m_texture.path != this->textPath_) {
+        this->spriteSurface_ = IMG_Load(sprite.m_texture.path.c_str());
+        if (this->spriteSurface_)
+            this->spriteTexture_ = SDL_CreateTextureFromSurface(this->renderer_, this->spriteSurface_);
+        this->textPath_ = sprite.m_texture.path;
+    }
+    if (!this->spriteSurface_ || !this->spriteTexture_)
+        return;
+    SDL_Rect rect = { sprite.m_texture.pos.x, sprite.m_texture.pos.y, sprite.m_texture.size.width, sprite.m_texture.size.height };
+    SDL_Rect pos = { sprite.pos.x, sprite.pos.y, sprite.size.width, sprite.size.height };
+    SDL_RenderCopy(this->renderer_, this->spriteTexture_, &rect, &pos);
     return;
 }

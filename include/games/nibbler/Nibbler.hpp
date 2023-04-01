@@ -216,6 +216,12 @@ class Nibbler : public IGame {
      * @return int
      * ***************************************************************/
     int updateGame(eventKey evtKey) override;
+    /****************************************************************
+     * @brief Get the display size
+     * @details This function is used to return the size of the window for the game
+     * @return elemSize
+     * ************************************************/
+    elemSize getDisplaySize(void) override;
 
   private:
     void initNibbler(int x, int y);
