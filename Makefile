@@ -28,10 +28,14 @@ SRC_SDL		=	src/graphics/sdl/SDLGraphic.cpp	\
 				src/graphics/sdl/SDLEvent.cpp
 
 SRC_NIBBLER	=	src/games/nibbler/Nibbler.cpp	\
-				src/games/nibbler/NibblerLib.cpp
+				src/games/nibbler/NibblerLib.cpp	\
+				src/games/nibbler/Compute.cpp	\
+				src/games/nibbler/Display.cpp
 
 SRC_SNAKE	=	src/games/snake/Snake.cpp	\
-				src/games/snake/SnakeLib.cpp
+				src/games/snake/SnakeLib.cpp	\
+				src/games/snake/Compute.cpp	\
+				src/games/snake/Display.cpp
 
 SRC			=	$(SRC_CORE) $(SRC_ERROR)
 
