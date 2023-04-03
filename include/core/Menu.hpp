@@ -22,6 +22,9 @@
 #include <vector>
 #include <memory>
 #include <chrono>
+#include <random>
+#include <fstream>
+#include <algorithm>
 #include <unordered_map>
 
 class Core;
@@ -64,6 +67,28 @@ class Menu {
      * @details This function is used to set the game lib text
      * ************************************************/
     void setGameLibText();
+    /****************************************************************
+     * @brief Tell if the user is typing
+     * @details This function is used to tell if the user is typing and returns a boolean
+     * @return true if the user is typing else returns false
+     * @param name
+     * ************************************************/
+    bool isUserTyping() const;
+    /****************************************************************
+     * @brief Handle the user input
+     * @details This function is used to handle the user input
+     * @param evt
+     * @param core
+     * ************************************************/
+    void handleUserInput(eventKey evt, Core &core);
+    /****************************************************************
+     * @brief Get the User Name object
+     * @details This function is used to get the user name
+     * @return std::string
+     * ************************************************/
+    std::string getUserName() const;
+
+    private:
     /****************************************************************
      * @brief Set the Gui Text object
      * @details This function is used to set the gui text
@@ -120,29 +145,55 @@ class Menu {
      * ************************************************/
     void loopTitle();
     /****************************************************************
-     * @brief Handle the user input
-     * @details This function is used to handle the user input
-     * @param evt
-     * @param core
+     * @brief Set the welcome message
+     * @details This function is used to set the welcome message in the menu
      * ************************************************/
-    void handleUserInput(eventKey evt, Core &core);
-    /****************************************************************
-     * @brief Tell if the user is typing
-     * @details This function is used to tell if the user is typing and returns a boolean
-     * @return true if the user is typing else returns false
-     * @param name
-     * ************************************************/
-    bool isUserTyping() const;
-    /****************************************************************
-     * @brief Get the User Name object
-     * @details This function is used to get the user name
-     * @return std::string
-     * ************************************************/
-    std::string getUserName() const;
-
-    private:
-    void setLibNameMenu();
     void createNewUser();
+    /****************************************************************
+     * @brief Parse the available lib for the menu
+     * @details This function is used to parse lib available in the menu
+     * ************************************************/
+    void setLibNameMenu();
+    /****************************************************************
+     * @brief Set the cursors menu
+     * @details This function is used to set the cursors menu
+     * ************************************************/
+    void setCursorsMenu();
+    /****************************************************************
+     * @brief Set the available lib text
+     * @details This function is used to set the available lib text
+     * ************************************************/
+    void setAvailableLibText();
+    /****************************************************************
+     * @brief Set the username text
+     * @details This function is used to set the username text displayed in the menu
+     * ************************************************/
+    void setUserNameText();
+    /****************************************************************
+     * @brief Set the high score text
+     * @details This function is used to set the high score text displayed in the menu
+     * ************************************************/
+    void setHighScoreText();
+    /****************************************************************
+     * @brief Set the scoreboard title
+     * @details This function is used to set the scoreboard title
+     * ************************************************/
+    void setScoreboardTitle();
+    /****************************************************************
+     * @brief Save user name
+     * @details This function is used to save the user name
+     * ************************************************/
+    void saveUserName();
+    /****************************************************************
+     * @brief Get the Top 3 Scores object
+     * @details This function is used to get the top 3 scores
+     * @return std::vector<std::string>
+     * ************************************************/
+    std::vector<std::string> getTop3Scores();
+    /****************************************************************
+     * @brief Delete the last char of the user name
+     * @details This function is used to delete the last char of the user name while typing
+     * ************************************************/
     void deleteChar();
     std::vector<std::string> graphPaths_;
     std::vector<std::string> gamePaths_;
@@ -150,6 +201,7 @@ class Menu {
     std::vector<text> guiTextMenu_;
     std::vector<text> gameTextMenu_;
     std::vector<text> libTextMenu_;
+    std::vector<text> scoreText_;
     text userName_;
     int incrLib_ {0};
     int incrGame_ {0};

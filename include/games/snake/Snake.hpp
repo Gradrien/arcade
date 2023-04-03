@@ -17,6 +17,7 @@
 #include "IGame.hpp"
 #include <chrono>
 #include <vector>
+#include <fstream>
 
 /****************************************************************
  * @brief Direction enum
@@ -124,6 +125,7 @@ class Snake : public IGame {
     void addWall(int x, int y);
     void addFood(int x, int y);
     void resetLevel();
+    void saveUserScore();
     void gameOver();
     void restartEvent(eventKey evtKey);
     bool isSnakeInCell(int x, int y);

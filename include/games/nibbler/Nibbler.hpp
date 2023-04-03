@@ -17,6 +17,7 @@
 #include "IGame.hpp"
 #include <chrono>
 #include <vector>
+#include <fstream>
 
 /****************************************************************
  * @brief Direction enum
@@ -237,6 +238,7 @@ class Nibbler : public IGame {
     void restartEvent(eventKey evtKey);
     void chooseDirection();
     bool isNibblerInCell(int x, int y);
+    void saveUserScore();
     direction dir_ { direction::RIGHT };
     int nibblerSize_ { 4 };
     std::vector<shape> walls_;

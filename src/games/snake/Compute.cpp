@@ -95,9 +95,21 @@ bool Snake::isSnakeInCell(int x, int y)
     return false;
 }
 
+void Snake::saveUserScore()
+{
+    std::ofstream file("./score.txt", std::ios::app);
+
+    std::cout << "Score: " << this->score_ << std::endl;
+    if (file.is_open()) {
+        file << " " << score_ << std::endl;
+        file.close();
+    }
+}
+
 void Snake::gameOver()
 {
     this->state = playerState::DEAD;
+    saveUserScore();
 }
 
 int Snake::updateGame(eventKey evtKey)
@@ -135,7 +147,7 @@ int Snake::updateGame(eventKey evtKey)
     for (std::size_t i = 1; i < this->snake_.size(); i++) {
         if ((this->snake_[i].pos.x == this->snake_[0].pos.x)
             && (this->snake_[i].pos.y == this->snake_[0].pos.y)) {
-            this->state = playerState::DEAD;
+            this->gameOver();
             return 0;
         }
     }

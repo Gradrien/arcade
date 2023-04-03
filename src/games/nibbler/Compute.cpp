@@ -17,6 +17,16 @@ bool Nibbler::isCollided(shape s1, shape s2)
     return false;
 }
 
+void Nibbler::saveUserScore()
+{
+    std::ofstream file("./score.txt", std::ios::app);
+
+    if (file.is_open()) {
+        file << " " << score_ << std::endl;
+        file.close();
+    }
+}
+
 void Nibbler::updateDirection(eventKey evtKey)
 {
     switch (evtKey) {
@@ -120,6 +130,7 @@ int Nibbler::updateGame(eventKey evtKey)
         if ((this->nibbler_[i].pos.x == this->nibbler_[0].pos.x)
             && (this->nibbler_[i].pos.y == this->nibbler_[0].pos.y)) {
             this->state = playerState::DEAD;
+            saveUserScore();
             return 0;
         }
     }

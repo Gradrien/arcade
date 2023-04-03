@@ -6,7 +6,6 @@
 */
 
 #include "Menu.hpp"
-#include <random>
 
 Menu::Menu()
 {
@@ -18,300 +17,26 @@ Menu::Menu()
     lastUpdateTime_ = std::chrono::steady_clock::now();
 }
 
-int random(int low, int high)
+std::vector<std::string> Menu::getTop3Scores()
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(low, high);
+    std::ifstream infile("score.txt");
+    std::string line;
+    std::vector<std::pair<unsigned long long, std::string>> scores;
+    std::vector<std::string> top3;
 
-    return dist(gen);
-}
-
-void Menu::setLibNameMenu()
-{
-    const std::filesystem::path libPath { "./lib/" };
-
-    for (auto const& dir_entry : std::filesystem::directory_iterator { libPath }) {
-        if (dir_entry.path().filename().c_str()[0] == '.')
-            continue;
-        if (validLibs.find(dir_entry.path().filename()) == validLibs.end())
-            continue;
-        if (validLibs.at(dir_entry.path().filename()) == libType::GRAPHICAL)
-            graphPaths_.push_back(dir_entry.path().filename().c_str());
-        else if (validLibs.at(dir_entry.path().filename()) == libType::GAME)
-            gamePaths_.push_back(dir_entry.path().filename().c_str());
+    while (std::getline(infile, line)) {
+        std::string username;
+        unsigned long long score;
+        std::stringstream ss(line);
+        ss >> username >> score;
+        scores.push_back(std::make_pair(score, username));
     }
-}
-
-void Menu::setGameLibText()
-{
-    int pos_y = 240;
-
-    for (size_t i = 0; i < gamePaths_.size(); i++) {
-        text game;
-        game.fontSize = 20;
-        game.fontPath = "assets/fonts/arial.ttf";
-        game.m_color = { 255, 255, 255, 255 };
-        game.pos = { 500, pos_y };
-        game.text = gamePaths_[i];
-        game.text.erase((game.text.length() - 3), 3);
-        game.size = { static_cast<int>(game.fontSize * 1.33 * 0.46 * game.text.length()), static_cast<int>(game.fontSize * 1.33) };
-        this->gameTextMenu_.push_back(game);
-        pos_y += 50;
+    std::sort(scores.rbegin(), scores.rend());
+    for (std::size_t i = 0; i < std::min((size_t)3, scores.size()); i++) {
+        top3.push_back(scores[i].second + "  " + std::to_string(scores[i].first));
     }
+    return top3;
 }
-
-void Menu::setGraphLibText()
-{
-    int pos_y = 240;
-
-    for (size_t i = 0; i < graphPaths_.size(); i++) {
-        text lib;
-        lib.fontSize = 20;
-        lib.fontPath = "assets/fonts/arial.ttf";
-        lib.m_color = { 255, 255, 255, 255 };
-        lib.pos = { 140, pos_y };
-        lib.text = graphPaths_[i];
-        lib.text.erase((lib.text.length() - 3), 3);
-        lib.size = { static_cast<int>(lib.fontSize * 1.33 * 0.46 * lib.text.length()), static_cast<int>(lib.fontSize * 1.33) };
-        this->libTextMenu_.push_back(lib);
-        pos_y += 50;
-    }
-}
-
-void Menu::createTitleMenu()
-{
-    text titleA;
-    text titleR;
-    text titleC;
-    text titleA2;
-    text titleD;
-    text titleE;
-
-    titleA.fontSize = 50;
-    titleA.fontPath = "assets/fonts/arial.ttf";
-    titleA.m_color = { 255, 255, 255, 255 };
-    titleA.pos = { 280, 60 };
-    titleA.text = "A";
-    titleA.size = { 25, 40 };
-    titleR.fontSize = 50;
-    titleR.fontPath = "assets/fonts/arial.ttf";
-    titleR.m_color = { 255, 255, 255, 255 };
-    titleR.pos = { 320, 60 };
-    titleR.text = "R";
-    titleR.size = { 25, 40 };
-    titleC.fontSize = 50;
-    titleC.fontPath = "assets/fonts/arial.ttf";
-    titleC.m_color = { 255, 255, 255, 255 };
-    titleC.pos = { 360, 60 };
-    titleC.text = "C";
-    titleC.size = { 25, 40 };
-    titleA2.fontSize = 50;
-    titleA2.fontPath = "assets/fonts/arial.ttf";
-    titleA2.m_color = { 255, 255, 255, 255 };
-    titleA2.pos = { 400, 60 };
-    titleA2.text = "A";
-    titleA2.size = { 25, 40 };
-    titleD.fontSize = 50;
-    titleD.fontPath = "assets/fonts/arial.ttf";
-    titleD.m_color = { 255, 255, 255, 255 };
-    titleD.pos = { 440, 60 };
-    titleD.text = "D";
-    titleD.size = { 25, 40 };
-    titleE.fontSize = 50;
-    titleE.fontPath = "assets/fonts/arial.ttf";
-    titleE.m_color = { 255, 255, 255, 255 };
-    titleE.pos = { 480, 60 };
-    titleE.text = "E";
-    titleE.size = { 25, 40 };
-    titleMenu_.push_back(titleA);
-    titleMenu_.push_back(titleR);
-    titleMenu_.push_back(titleC);
-    titleMenu_.push_back(titleA2);
-    titleMenu_.push_back(titleD);
-    titleMenu_.push_back(titleE);
-}
-
-void Menu::createGuiTextMenu()
-{
-    text avLib;
-    text avGame;
-    text userEntry;
-    text selectLibCurs;
-    text selectGameCurs;
-    text welcomeMessage;
-
-    avLib.fontSize = 30;
-    avLib.fontPath = "assets/fonts/arial.ttf";
-    avLib.m_color = { 255, 255, 255, 255 };
-    avLib.pos = { 100, 170 };
-    avLib.text = "Available libraires";
-    avLib.size = { static_cast<int>(avLib.fontSize * 1.33 * 0.46 * avLib.text.length() - 80), static_cast<int>(avLib.fontSize * 1.33) };
-    avGame.fontSize = 30;
-    avGame.fontPath = "assets/fonts/arial.ttf";
-    avGame.m_color = { 255, 255, 255, 255 };
-    avGame.pos = { 460, 170 };
-    avGame.text = "Available games";
-    avGame.size = { static_cast<int>(avGame.fontSize * 1.33 * 0.46 * avGame.text.length() - 80), static_cast<int>(avGame.fontSize * 1.33) };
-    userEntry.fontSize = 40;
-    userEntry.fontPath = "assets/fonts/arial.ttf";
-    userEntry.m_color = { 255, 255, 255, 255 };
-    userEntry.pos = { 220, 200 };
-    userEntry.text = "Please type your name";
-    userEntry.size = { static_cast<int>(userEntry.fontSize * 1.33 * 0.46 * userEntry.text.length() - 60), static_cast<int>(userEntry.fontSize * 1.33) };
-    selectLibCurs.fontSize = 25;
-    selectLibCurs.fontPath = "assets/fonts/arial.ttf";
-    selectLibCurs.m_color = { 0, 255, 0, 255 };
-    selectLibCurs.pos = { 100, 240 };
-    selectLibCurs.text = ">";
-    selectLibCurs.size = { 20, 40 };
-    selectGameCurs.fontSize = 25;
-    selectGameCurs.fontPath = "assets/fonts/arial.ttf";
-    selectGameCurs.m_color = { 255, 255, 255, 0 };
-    selectGameCurs.pos = { 470, 240 };
-    selectGameCurs.text = ">";
-    selectGameCurs.size = { 20, 40 };
-    userName_.fontSize = 30;
-    userName_.fontPath = "assets/fonts/arial.ttf";
-    userName_.m_color = { 255, 255, 255, 255 };
-    userName_.pos = { 300, 300 };
-    userName_.text = "";
-    userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length() - 80), static_cast<int>(userName_.fontSize * 1.33) };
-    welcomeMessage.fontSize = 40;
-    welcomeMessage.fontPath = "assets/fonts/arial.ttf";
-    welcomeMessage.m_color = { 255, 255, 255, 255 };
-    welcomeMessage.pos = { 100, 500 };
-    welcomeMessage.text = "Welcome to the Arcade ";
-    welcomeMessage.size = { static_cast<int>(welcomeMessage.fontSize * 1.33 * 0.46 * welcomeMessage.text.length() - 60), static_cast<int>(welcomeMessage.fontSize * 1.33) };
-
-    guiTextMenu_.push_back(avLib);
-    guiTextMenu_.push_back(avGame);
-    guiTextMenu_.push_back(userEntry);
-    guiTextMenu_.push_back(selectLibCurs);
-    guiTextMenu_.push_back(selectGameCurs);
-    guiTextMenu_.push_back(welcomeMessage);
-}
-
-void Menu::applyChanges(Core& core)
-{
-    core.loadSpecificGraph("./lib/" + libTextMenu_[incrLib_].text + ".so");
-    core.loadSpecificGame("./lib/" + gameTextMenu_[incrGame_].text + ".so");
-    core.setCoreState(GState::PLAY);
-}
-void Menu::chooseGame()
-{
-    isGameSelected_ = true;
-    guiTextMenu_[3].m_color = { 255, 255, 255, 0 };
-    guiTextMenu_[4].m_color = { 0, 255, 0, 255 };
-}
-
-void Menu::chooseLib()
-{
-    isGameSelected_ = false;
-    guiTextMenu_[3].m_color = { 0, 255, 0, 255 };
-    guiTextMenu_[4].m_color = { 255, 255, 255, 0 };
-}
-
-void Menu::moveUp(Core& core)
-{
-    if (isGameSelected_ == false) {
-        if (guiTextMenu_[3].pos.y - 50 < 240) {
-            guiTextMenu_[3].pos.y = 240 + 50 * (static_cast<int>(libTextMenu_.size() - 1));
-        } else {
-            guiTextMenu_[3].pos.y -= 50;
-        }
-        if (incrLib_ <= 0)
-            incrLib_ = static_cast<int>(libTextMenu_.size()) - 1;
-        else
-            incrLib_--;
-        core.setCurrentGraph("./lib/" + libTextMenu_[incrLib_].text + ".so");
-        for (size_t i = 0; i < libTextMenu_.size(); i++)
-            libTextMenu_[i].m_color = { 255, 255, 255, 255 };
-        libTextMenu_[incrLib_].m_color = { 0, 255, 0, 255 };
-    } else {
-        if (guiTextMenu_[4].pos.y - 50 < 240) {
-            guiTextMenu_[4].pos.y = 240 + 50 * (static_cast<int>(gameTextMenu_.size() - 1));
-        } else
-            guiTextMenu_[4].pos.y -= 50;
-        if (incrGame_ <= 0)
-            incrGame_ = static_cast<int>(gameTextMenu_.size()) - 1;
-        else
-            incrGame_--;
-        core.setCurrentGame("./lib/" + gameTextMenu_[incrGame_].text + ".so");
-        for (size_t i = 0; i < gameTextMenu_.size(); i++)
-            gameTextMenu_[i].m_color = { 255, 255, 255, 255 };
-        gameTextMenu_[incrGame_].m_color = { 0, 255, 0, 255 };
-    }
-}
-
-void Menu::moveDown(Core& core)
-{
-    if (isGameSelected_ == false) {
-        if (guiTextMenu_[3].pos.y + 50 >= (240 + static_cast<int>(libTextMenu_.size()) * 50)) {
-            guiTextMenu_[3].pos.y = 240;
-        } else
-            guiTextMenu_[3].pos.y += 50;
-        if (incrLib_ >= static_cast<int>(libTextMenu_.size()) - 1)
-            incrLib_ = 0;
-        else
-            incrLib_++;
-        core.setCurrentGraph("./lib/" + libTextMenu_[incrLib_].text + ".so");
-        for (size_t i = 0; i < libTextMenu_.size(); i++)
-            libTextMenu_[i].m_color = { 255, 255, 255, 255 };
-        libTextMenu_[incrLib_].m_color = { 0, 255, 0, 255 };
-    } else {
-        if (guiTextMenu_[4].pos.y + 50 >= (240 + static_cast<int>(gameTextMenu_.size()) * 50)) {
-            guiTextMenu_[4].pos.y = 240;
-        } else
-            guiTextMenu_[4].pos.y += 50;
-        if (incrGame_ >= static_cast<int>(gameTextMenu_.size()) - 1)
-            incrGame_ = 0;
-        else
-            incrGame_++;
-        core.setCurrentGame("./lib/" + gameTextMenu_[incrGame_].text + ".so");
-        for (size_t i = 0; i < gameTextMenu_.size(); i++)
-            gameTextMenu_[i].m_color = { 255, 255, 255, 255 };
-        gameTextMenu_[incrGame_].m_color = { 0, 255, 0, 255 };
-    }
-}
-
-bool Menu::isUserTyping() const
-{
-    return isUserTyping_;
-}
-
-void Menu::createNewUser()
-{
-    if (userName_.text.size() == 0)
-        userName_.text = "Player" + std::to_string(random(100, 999));
-    isUserTyping_ = false;
-    guiTextMenu_[5].text = "Welcome to the Arcade ";
-    guiTextMenu_[5].text.append(userName_.text);
-}
-
-void Menu::deleteChar()
-{
-    if (userName_.text.size() > 0)
-        userName_.text.pop_back();
-}
-
-void Menu::handleUserInput(eventKey evt, Core &core)
-{
-    userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length()), static_cast<int>(userName_.fontSize * 1.33) };
-    if (isUserTyping_ == true) {
-        if (evt == eventKey::DELETE)
-            deleteChar();
-        else if (evt == eventKey::ENTER)
-            createNewUser();
-        else if (evt == eventKey::QUIT)
-            core.setCoreState(GState::QUIT);
-        else if (this->keyMap_.find(evt) != this->keyMap_.end()
-            && userName_.text.size() < 10)
-            userName_.text += keyMap_[evt];
-    }
-}
-
-std::string Menu::getUserName() const { return this->userName_.text; }
 
 void Menu::handleEvent(eventKey evt, Core& core)
 {
@@ -320,6 +45,7 @@ void Menu::handleEvent(eventKey evt, Core& core)
     switch (evt) {
     case eventKey::A:
         applyChanges(core);
+        saveUserName();
         break;
     case eventKey::RARROW:
         chooseGame();
@@ -417,6 +143,8 @@ void Menu::menuLoopHandler(IGraphic& graphLib, Core& core)
     highlightSelected(core);
     loopTitle();
     if (isUserTyping_ == false) {
+        for (auto& i : this->scoreText_)
+            graphLib.displayText(i);
         for (auto& i : this->libTextMenu_)
             graphLib.displayText(i);
         for (auto& i : this->gameTextMenu_)
