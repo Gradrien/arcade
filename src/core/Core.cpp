@@ -155,8 +155,7 @@ void Core::loadNextGame()
     index++;
     if (static_cast<std::size_t>(index) >= this->gamePaths_.size())
         index = 0;
-    this->gameLib_.reset(nullptr);
-    // this->gameLib_ = nullptr;
+    this->gameLib_.release();
     this->gameLib_ = this->gameLoader_.getInstance(this->gamePaths_[index]);
     this->gameLib_->init();
     this->currentGame_ = this->gamePaths_[index];
@@ -172,7 +171,7 @@ void Core::loadNextGraph()
     index++;
     if (static_cast<std::size_t>(index) >= this->graphPaths_.size())
         index = 0;
-    this->graphLib_.reset(nullptr);
+    this->graphLib_.release();
     this->graphLib_ = this->graphLoader_.getInstance(this->graphPaths_[index]);
     this->currentGraph_ = this->graphPaths_[index];
 }
@@ -195,7 +194,7 @@ void Core::loadSpecificGraph(std::string path)
         return;
     if (this->graphLib_->isOpenWindow())
         this->graphLib_->destroyWindow();
-    this->graphLib_.reset(nullptr);
+    this->graphLib_.release();
     this->graphLib_ = this->graphLoader_.getInstance(path);
     this->currentGraph_ = path;
 }
@@ -205,7 +204,7 @@ void Core::loadSpecificGame(std::string path)
     int index = this->findPathIndex(path, this->gamePaths_);
     if (index == -1)
         return;
-    this->gameLib_.reset(nullptr);
+    this->gameLib_.release();
     this->gameLib_ = this->gameLoader_.getInstance(path);
     this->gameLib_->init();
     this->currentGame_ = path;
