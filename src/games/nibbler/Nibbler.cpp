@@ -391,7 +391,7 @@ void Nibbler::foodHandler()
     }
 }
 
-elemSize Nibbler::getDisplaySize(void)
+elemSize Nibbler::getDisplaySize()
 {
     elemSize size = { .width = 800, .height = 800 };
     return size;

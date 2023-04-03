@@ -59,7 +59,7 @@ class IGame {
      * @details This function is used to return the size of the window for the game
      * @return elemSize
      * ************************************************/
-    virtual elemSize getDisplaySize(void) = 0;
+    virtual elemSize getDisplaySize() = 0;
 };
 
 #endif /* !IGAME_HPP_ */

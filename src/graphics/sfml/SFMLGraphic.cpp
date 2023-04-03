@@ -47,8 +47,7 @@ void SFMLGraphic::displayText(const text& m_text)
     if (this->fonts_.find(m_text.fontSize) != this->fonts_.end()) {
         my_font = this->fonts_[m_text.fontSize];
     } else if (!my_font.loadFromFile(m_text.fontPath)) {
-        std::cerr << "Error: font not found" << std::endl;
-        return;
+        throw std::runtime_error("Font not found");
     }
     this->fonts_[m_text.fontSize] = my_font;
     if (this->textList.find(&m_text) != this->textList.end()) {
@@ -124,7 +123,7 @@ void SFMLGraphic::displaySprite(const sprite& spriteInfos)
             this->texture_ = texture;
             this->textPath_ = spriteInfos.m_texture.path;
         } else {
-            this->isLoadedTexture_ = false;
+            throw std::runtime_error("Sprite file not found");
         }
     }
     if (this->spriteList_.find(&spriteInfos) != this->spriteList_.end()) {

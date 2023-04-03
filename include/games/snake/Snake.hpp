@@ -111,7 +111,7 @@ class Snake : public IGame {
      * @details This function is used to return the size of the window for the game
      * @return elemSize
      * ************************************************/
-    elemSize getDisplaySize(void) override;
+    elemSize getDisplaySize() override;
 
   private:
     void initSnake(int x, int y);

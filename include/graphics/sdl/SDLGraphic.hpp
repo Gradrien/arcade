@@ -87,7 +87,6 @@ class SDLGraphic : public IGraphic {
   private:
     SDL_Window* window_;
     SDL_Renderer* renderer_;
-    SDL_Surface* surface_;
     std::unordered_map<int, TTF_Font*> fonts_;
     /****************************************************************
      * @brief Draw a rectangle

@@ -351,7 +351,7 @@ void Snake::foodHandler()
     }
 }
 
-elemSize Snake::getDisplaySize(void)
+elemSize Snake::getDisplaySize()
 {
     elemSize size = { .width = 800, .height = 800 };
     return size;
