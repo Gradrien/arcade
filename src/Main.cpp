@@ -5,14 +5,19 @@
 ** Main
 */
 
-#include "Parser.hpp"
 #include "Core.hpp"
+#include "Parser.hpp"
 
-int main(int ac, char **av, char **env)
+int main(int ac, char** av, char** env)
 {
     if (checkArgs(ac, av) == 84 || checkEnv(env) == 84)
         return 84;
-    Core core{av[1]};
-    core.coreStateHandler();
+    try {
+        Core core { av[1] };
+        core.coreStateHandler();
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+        return 84;
+    }
     return 0;
 }

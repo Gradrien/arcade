@@ -13,11 +13,7 @@ Core::Core(const char* libName)
 {
     if (!libName)
         throw ArcadeError("Invalid number of argument");
-    try {
-        this->isLibGraphical(libName);
-    } catch (ArcadeError& e) {
-        throw e;
-    }
+    this->isLibGraphical(libName);
     this->graphLib_ = this->graphLoader_.getInstance(libName);
     if (!this->graphLib_)
         throw ArcadeError("Graphic lib cannot be loaded");
