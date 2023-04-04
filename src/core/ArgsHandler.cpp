@@ -41,7 +41,7 @@ int checkArgs(int ac, char **av)
     }
     if (strcmp(av[1], "--help") == 0 || strcmp(av[1], "-h") == 0) {
         displayUsage();
-        return 84;
+        return 1;
     }
     if (checkLibrary(av[1]) == 84)
         return 84;

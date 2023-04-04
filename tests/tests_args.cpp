@@ -83,7 +83,7 @@ Test(checkArgs, help) {
     char *av[2] = {const_cast<char*>(av1), const_cast<char*>(av2)};
     int ac = 2;
 
-    cr_assert_eq(checkArgs(ac, av), 0);
+    cr_assert_eq(checkArgs(ac, av), 1);
 }
 
 Test(checkEnv, no_env)
@@ -92,4 +92,3 @@ Test(checkEnv, no_env)
 
     cr_assert_eq(checkEnv(env), 84);
 }
-
