@@ -63,8 +63,9 @@ std::unordered_map<char, eventKey> keyEvent = { { 'a', eventKey::A },
     { 't', eventKey::T }, { 'u', eventKey::U }, { 'v', eventKey::V },
     { 'w', eventKey::W }, { 'x', eventKey::X }, { 'y', eventKey::Y },
     { 'z', eventKey::Z }, { KEY_F0, eventKey::SPACE }, { '\n', eventKey::ENTER },
-    { KEY_LEFT, eventKey::LARROW }, { KEY_RIGHT, eventKey::RARROW }, { KEY_DOWN, eventKey::BARROW },
-    { KEY_UP, eventKey::UARROW }, { KEY_BACKSPACE, eventKey::DELETE }, { KEY_STAB, eventKey::TAB } };
+    { KEY_LEFT, eventKey::LARROW }, { KEY_RIGHT, eventKey::RARROW },
+    { KEY_DOWN, eventKey::BARROW }, { KEY_UP, eventKey::UARROW },
+    { KEY_BACKSPACE, eventKey::DELETE }, { KEY_STAB, eventKey::TAB } };
 
 #endif /* !NCURSESEVENTKEY_HPP_ */
 

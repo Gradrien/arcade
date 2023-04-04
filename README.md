@@ -1,5 +1,5 @@
 
-![Logo](https://studyadv.s3.amazonaws.com/production/schools/covers/000/005/919/original/Enseigne_Epitech_2.png)
+![EPITECH](https://studyadv.s3.amazonaws.com/production/schools/covers/000/005/919/original/Enseigne_Epitech_2.png)
 
 - [General Documentation](README.md)
 - [Core implementation](./doc/Core.md)
@@ -17,7 +17,7 @@ This project is an EPITECH Project. If you are an EPITECH student, move out the 
 
 Nothing to see here... I don't want to be involved to your -42.
 
-![Alt Text](https://media.tenor.com/ketvWma51gYAAAAd/john-cena-im-watching-you.gif)
+![I'm watching you](https://media.tenor.com/ketvWma51gYAAAAd/john-cena-im-watching-you.gif)
 
 If you're not, no worries! You're welcome here!
 
