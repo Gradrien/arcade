@@ -95,7 +95,7 @@ class Core {
      * @param libName
      * @return void
      * *****************************************************/
-    void isLibGraphical(std::string libName);
+    void isLibGraphical(const std::string& libName);
     /********************************************************
      * @brief Handle the event and user input
      * This function is used to handle the event
@@ -182,7 +182,7 @@ class Core {
      * @param container
      * @return void
      * *****************************************************/
-    void pushLib(std::string path, std::vector<std::string>& container);
+    void pushLib(const std::string& path, std::vector<std::string>& container);
     /********************************************************
      * @brief Get the graphical paths
      * This function is used to get the graphical paths

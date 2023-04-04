@@ -49,7 +49,7 @@ void SDLGraphic::destroyWindow()
         SDL_DestroyRenderer(this->renderer_);
     if (this->window_)
         SDL_DestroyWindow(this->window_);
-    this->window_ = NULL;
+    this->window_ = nullptr;
 }
 
 bool SDLGraphic::isOpenWindow()
@@ -66,10 +66,10 @@ void SDLGraphic::displayText(const text& text)
         if (!this->fonts_[text.fontSize])
             throw std::runtime_error("Failed load font");
     }
-    Uint8 r = text.m_color.r;
-    Uint8 g = text.m_color.g;
-    Uint8 b = text.m_color.b;
-    Uint8 a = text.m_color.a;
+    const Uint8 r = text.m_color.r;
+    const Uint8 g = text.m_color.g;
+    const Uint8 b = text.m_color.b;
+    const Uint8 a = text.m_color.a;
     SDL_Color textColor = { r, g, b, a };
     SDL_Surface* surfaceText = TTF_RenderText_Solid(this->fonts_[text.fontSize], text.text.c_str(), textColor);
     if (!surfaceText)
@@ -77,8 +77,8 @@ void SDLGraphic::displayText(const text& text)
     SDL_Texture* SDLtext = SDL_CreateTextureFromSurface(this->renderer_, surfaceText);
     if (!SDLtext)
         return;
-    SDL_Rect textRect = { .x = text.pos.x, .y = text.pos.y, .w = text.size.width, .h = text.size.height };
-    SDL_RenderCopy(this->renderer_, SDLtext, NULL, &textRect);
+    const SDL_Rect textRect = { .x = text.pos.x, .y = text.pos.y, .w = surfaceText->w, .h = surfaceText->h };
+    SDL_RenderCopy(this->renderer_, SDLtext, nullptr, &textRect);
     SDL_FreeSurface(surfaceText);
     SDL_DestroyTexture(SDLtext);
     return;
@@ -104,11 +104,11 @@ void SDLGraphic::drawCircle(const shape& shape)
     if (!this->renderer_)
         throw std::runtime_error("Failed to get renderer");
     SDL_SetRenderDrawColor(this->renderer_, shape.m_color.r, shape.m_color.g, shape.m_color.b, shape.m_color.a);
-    int radius = shape.size.width / 2;
+    const int radius = shape.size.width / 2;
     for (int width = 0; width < radius * 2; width++) {
         for (int height = 0; height < radius * 2; height++) {
-            int distX = radius - width;
-            int distY = radius - height;
+            const int distX = radius - width;
+            const int distY = radius - height;
             if ((distX * distX + distY * distY) <= (radius * radius)) {
                 SDL_RenderDrawPoint(this->renderer_, shape.pos.x + distX + radius, shape.pos.y + distY + radius);
             }
@@ -143,8 +143,8 @@ void SDLGraphic::displaySprite(const sprite& sprite)
     }
     if (!this->spriteSurface_ || !this->spriteTexture_)
         throw std::runtime_error("Failed to create sprite");
-    SDL_Rect rect = { sprite.m_texture.pos.x, sprite.m_texture.pos.y, sprite.m_texture.size.width, sprite.m_texture.size.height };
-    SDL_Rect pos = { sprite.pos.x, sprite.pos.y, sprite.size.width, sprite.size.height };
+    const SDL_Rect rect = { sprite.m_texture.pos.x, sprite.m_texture.pos.y, sprite.m_texture.size.width, sprite.m_texture.size.height };
+    const SDL_Rect pos = { sprite.pos.x, sprite.pos.y, sprite.size.width, sprite.size.height };
     SDL_RenderCopy(this->renderer_, this->spriteTexture_, &rect, &pos);
     return;
 }

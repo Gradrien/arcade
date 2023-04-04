@@ -42,7 +42,7 @@ bool SFMLGraphic::isOpenWindow()
 
 void SFMLGraphic::displayText(const text& m_text)
 {
-    sf::Color color(m_text.m_color.r, m_text.m_color.g, m_text.m_color.b, m_text.m_color.a);
+    const sf::Color color(m_text.m_color.r, m_text.m_color.g, m_text.m_color.b, m_text.m_color.a);
     sf::Font my_font;
     if (this->fonts_.find(m_text.fontSize) != this->fonts_.end()) {
         my_font = this->fonts_[m_text.fontSize];

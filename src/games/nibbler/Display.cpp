@@ -25,25 +25,21 @@ void Nibbler::initText()
     score.m_color = { 255, 255, 255, 255 };
     score.pos = { 50, 0 };
     score.text = "Score: " + std::to_string(score_);
-    score.size = { static_cast<int>(score.fontSize * 1.33 * 0.46 * score.text.length()), static_cast<int>(score.fontSize * 1.33) };
     timer.fontSize = 30;
     timer.fontPath = "assets/fonts/arial.ttf";
     timer.m_color = { 255, 255, 255, 255 };
     timer.pos = { 600, 0 };
     timer.text = "Timer: " + std::to_string(timer_);
-    timer.size = { static_cast<int>(timer.fontSize * 1.33 * 0.46 * timer.text.length()), static_cast<int>(timer.fontSize * 1.33) };
     gameOver.fontSize = 30;
     gameOver.fontPath = "assets/fonts/arial.ttf";
     gameOver.m_color = { 255, 0, 0, 255 };
     gameOver.pos = { 200, 350 };
     gameOver.text = "YOU LOST! Press R to restart";
-    gameOver.size = { static_cast<int>(gameOver.fontSize * 1.33 * 0.46 * gameOver.text.length()), static_cast<int>(gameOver.fontSize * 1.33) };
     youWon.fontSize = 30;
     youWon.fontPath = "assets/fonts/arial.ttf";
     youWon.m_color = { 0, 255, 0, 255 };
     youWon.pos = { 200, 350 };
     youWon.text = "YOU WON! Press R to restart";
-    youWon.size = { static_cast<int>(youWon.fontSize * 1.33 * 0.46 * youWon.text.length()), static_cast<int>(youWon.fontSize * 1.33) };
     this->texts_.push_back(score);
     this->texts_.push_back(timer);
     this->texts_.push_back(gameOver);
@@ -106,7 +102,7 @@ void Nibbler::display(IGraphic& graphLib)
 
 void Nibbler::addWall(int x, int y)
 {
-    shape wall = { .pos { x * this->cellWidth_, y * this->cellHeight_ },
+    const shape wall = { .pos { x * this->cellWidth_, y * this->cellHeight_ },
         .size { this->cellWidth_, this->cellHeight_ },
         .m_color { 7, 71, 166, 255 },
         .replacementChar = '#',
@@ -117,7 +113,7 @@ void Nibbler::addWall(int x, int y)
 
 void Nibbler::addFood(int x, int y)
 {
-    shape food = { .pos { x * this->cellWidth_, y * this->cellHeight_ },
+    const shape food = { .pos { x * this->cellWidth_, y * this->cellHeight_ },
         .size { this->cellWidth_, this->cellHeight_ },
         .m_color { 153, 35, 29, 255 },
         .replacementChar = '#',

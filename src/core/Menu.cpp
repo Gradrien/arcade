@@ -5,6 +5,9 @@
 ** Menu
 */
 
+#include <iostream>
+#include <sstream>
+#include<string>
 #include "Menu.hpp"
 
 Menu::Menu()
@@ -26,10 +29,10 @@ std::vector<std::string> Menu::getTop3Scores()
 
     while (std::getline(infile, line)) {
         std::string username;
-        unsigned long long score;
+        unsigned long long score = 0;
         std::stringstream ss(line);
         ss >> username >> score;
-        scores.push_back(std::make_pair(score, username));
+        scores.emplace_back(score, username);
     }
     std::sort(scores.rbegin(), scores.rend());
     for (std::size_t i = 0; i < std::min((size_t)3, scores.size()); i++) {

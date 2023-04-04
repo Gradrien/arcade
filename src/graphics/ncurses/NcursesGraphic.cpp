@@ -70,7 +70,7 @@ void NcursesGraphic::displayText(const text& text)
 {
     if (!this->window_)
         throw std::runtime_error("Failed to get window");
-    int colorNb = (text.m_color.r + text.m_color.g + text.m_color.b) / 3;
+    const int colorNb = (text.m_color.r + text.m_color.g + text.m_color.b) / 3;
     init_color(colorNb, (text.m_color.r * 1000 / 255), (text.m_color.g * 1000 / 255), (text.m_color.b * 1000 / 255));
     init_pair(colorNb, colorNb, COLOR_BLACK);
     wattron(this->window_, COLOR_PAIR(colorNb));
@@ -94,14 +94,12 @@ void NcursesGraphic::displayShape(const shape& shape)
 {
     if (!this->window_)
         throw std::runtime_error("Failed to get window");
-    int colorNb = (shape.m_color.r + shape.m_color.g + shape.m_color.b) / 3;
+    const int colorNb = (shape.m_color.r + shape.m_color.g + shape.m_color.b) / 3;
     init_color(colorNb, shape.m_color.r * 1000 / 256, shape.m_color.g * 1000 / 256, shape.m_color.b * 1000 / 256);
     init_pair(colorNb, colorNb, colorNb);
     wattron(this->window_, COLOR_PAIR(colorNb));
     switch (shape.type) {
     case shapeType::RECTANGLE:
-        this->drawRectangle(shape);
-        break;
     case shapeType::CIRCLE:
         this->drawRectangle(shape);
         break;

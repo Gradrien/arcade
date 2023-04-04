@@ -18,7 +18,7 @@ Core::Core(const char* libName)
     if (!this->graphLib_)
         throw ArcadeError("Graphic lib cannot be loaded");
     this->graphLib_->createWindow("Arcade", 800, 800);
-    this->graphPaths_.push_back(libName);
+    this->graphPaths_.emplace_back(libName);
     this->currentGraph_ = libName;
     this->getAllLib();
     this->gameState_ = GState::MENU;
@@ -27,7 +27,7 @@ Core::Core(const char* libName)
     this->menu_ = std::make_unique<Menu>();
 }
 
-void Core::isLibGraphical(std::string libName)
+void Core::isLibGraphical(const std::string& libName)
 {
     const std::filesystem::path libPath { "./lib" };
     std::filesystem::path lib { libName };
@@ -57,9 +57,9 @@ void Core::getAllLib()
     }
 }
 
-void Core::pushLib(std::string path, std::vector<std::string>& container)
+void Core::pushLib(const std::string& path, std::vector<std::string>& container)
 {
-    for (std::string savedPath : container) {
+    for (const std::string& savedPath : container) {
         if (savedPath == path)
             return;
     }
@@ -74,7 +74,7 @@ void Core::coreStateHandler()
 {
     std::clock_t start = std::clock();
     while (this->gameState_ != GState::QUIT) {
-        std::clock_t end = std::clock();
+        const std::clock_t end = std::clock();
         if ((end - start) <= 65000) {
             continue;
         }
@@ -101,7 +101,7 @@ void Core::coreStateHandler()
 void Core::gameLoopHandler()
 {
     if (!this->graphLib_->isOpenWindow()) {
-        elemSize winSize = this->gameLib_->getDisplaySize();
+        const elemSize winSize = this->gameLib_->getDisplaySize();
         this->graphLib_->createWindow("Arcade", winSize.width, winSize.height);
     }
     this->graphLib_->clearWindow();
@@ -111,14 +111,12 @@ void Core::gameLoopHandler()
 
 void Core::handleEvent()
 {
-    eventKey evt = this->graphLib_->getEvent();
+    const eventKey evt = this->graphLib_->getEvent();
 
     if (this->menu_->isUserTyping() && this->gameState_ == GState::MENU)
         return this->menu_->handleEvent(evt, *this);
     switch (evt) {
     case eventKey::QUIT:
-        this->gameState_ = GState::QUIT;
-        break;
     case eventKey::Q:
         this->gameState_ = GState::QUIT;
         break;
@@ -185,7 +183,7 @@ int Core::findPathIndex(const std::string& path, const std::vector<std::string>&
 
 void Core::loadSpecificGraph(std::string path)
 {
-    int index = this->findPathIndex(path, this->graphPaths_);
+    const int index = this->findPathIndex(path, this->graphPaths_);
     if (index == -1)
         return;
     if (this->graphLib_->isOpenWindow())
@@ -197,7 +195,7 @@ void Core::loadSpecificGraph(std::string path)
 
 void Core::loadSpecificGame(std::string path)
 {
-    int index = this->findPathIndex(path, this->gamePaths_);
+    const int index = this->findPathIndex(path, this->gamePaths_);
     if (index == -1)
         return;
     this->gameLib_.release();

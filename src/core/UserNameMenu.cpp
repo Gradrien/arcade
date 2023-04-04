@@ -38,7 +38,6 @@ void Menu::deleteChar()
 
 void Menu::handleUserInput(eventKey evt, Core &core)
 {
-    userName_.size = { static_cast<int>(userName_.fontSize * 1.33 * 0.46 * userName_.text.length()), static_cast<int>(userName_.fontSize * 1.33) };
     if (isUserTyping_ == true) {
         if (evt == eventKey::DELETE)
             deleteChar();

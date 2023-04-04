@@ -5,7 +5,7 @@
 ** foo_lib
 */
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <memory>
 #include "IGraphic.hpp"

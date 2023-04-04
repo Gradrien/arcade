@@ -7,7 +7,7 @@
 
 #include "Nibbler.hpp"
 
-bool Nibbler::isCollided(shape s1, shape s2)
+bool Nibbler::isCollided(const shape& s1, const shape& s2)
 {
     if (((s1.pos.x + s1.size.width) > s2.pos.x) && (s1.pos.x < (s2.pos.x + s2.size.width))) {
         if (((s1.pos.y + s1.size.height) > s2.pos.y) && (s1.pos.y < (s2.pos.y + s2.size.height))) {
@@ -119,7 +119,7 @@ int Nibbler::updateGame(eventKey evtKey)
 
     if (this->state == playerState::ALIVE)
         this->moveSnake(tmp);
-    for (shape wall : this->walls_) {
+    for (const shape& wall : this->walls_) {
         if (this->isCollided(tmp[0], wall)) {
             this->chooseDirection();
             return 0;
@@ -148,7 +148,7 @@ int Nibbler::updateGame(eventKey evtKey)
 
 void Nibbler::chooseDirection()
 {
-    coord pos = { .x = this->nibbler_[0].pos.x / this->cellWidth_, .y = this->nibbler_[0].pos.y / this->cellHeight_ };
+    const coord pos = { .x = this->nibbler_[0].pos.x / this->cellWidth_, .y = this->nibbler_[0].pos.y / this->cellHeight_ };
     const bool up = (allMaps[this->mapIndex_][pos.y - 1][pos.x] != '1') && !isNibblerInCell(pos.x, pos.y - 1);
     const bool down = (allMaps[this->mapIndex_][pos.y + 1][pos.x] != '1') && !isNibblerInCell(pos.x, pos.y + 1);
     const bool left = (allMaps[this->mapIndex_][pos.y][pos.x - 1] != '1') && !isNibblerInCell(pos.x - 1, pos.y);
@@ -180,7 +180,7 @@ void Nibbler::foodHandler()
 {
     for (std::size_t i = 0; i < this->food_.size(); i++) {
         if (isCollided(this->food_[i], this->nibbler_[0])) {
-            shape obj = { .pos { this->nibbler_[this->nibbler_.size() - 1].pos.x - this->cellWidth_,
+            const shape obj = { .pos { this->nibbler_[this->nibbler_.size() - 1].pos.x - this->cellWidth_,
                               this->nibbler_[this->nibbler_.size() - 1].pos.y },
                 .size { this->cellWidth_, this->cellHeight_ },
                 .m_color = { 2, 130, 108, 255 },
@@ -191,7 +191,7 @@ void Nibbler::foodHandler()
             if (i + 1 == this->food_.size())
                 this->food_.pop_back();
             else {
-                std::vector<shape>::iterator it = this->food_.begin() + i;
+                const std::vector<shape>::iterator it = this->food_.begin() + i;
                 this->food_.erase(it);
             }
             this->remainingFood_--;
@@ -202,7 +202,7 @@ void Nibbler::foodHandler()
 
 bool Nibbler::isNibblerInCell(int x, int y)
 {
-    for (shape part : this->nibbler_) {
+    for (const shape& part : this->nibbler_) {
         if (part.pos.x == (x * this->cellWidth_) && part.pos.y == (y * this->cellHeight_)) {
             return true;
         }

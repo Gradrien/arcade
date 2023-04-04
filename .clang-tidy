@@ -1,0 +1,26 @@
+---
+Checks: "*,
+        -abseil-*,
+        -altera-*,
+        -android-*,
+        -fuchsia-*,
+        -google-*,
+        -llvm*,
+        -modernize-use-trailing-return-type,
+        -zircon-*,
+        -cppcoreguidelines-non-private-member-variables-in-classes,
+        -misc-non-private-member-variables-in-classes,
+        -hicpp-braces-around-statements,
+        -cppcoreguidelines-avoid-magic-numbers,
+        -bugprone-narrowing-conversions,
+        -cppcoreguidelines-narrowing-conversions,
+        -readability-*,
+        -bugprone-misplaced-widening-cast,
+        -clang-diagnostic-return-type-c-linkage,
+        -cppcoreguidelines-pro-type-vararg,
+        -modernize-loop-convert,
+        -bugprone-integer-division
+"
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+FormatStyle:     none

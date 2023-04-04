@@ -16,8 +16,8 @@
 #define NIBBLER_HPP_
 #include "IGame.hpp"
 #include <chrono>
-#include <vector>
 #include <fstream>
+#include <vector>
 
 /****************************************************************
  * @brief Direction enum
@@ -229,7 +229,7 @@ class Nibbler : public IGame {
     void initText();
     void loadMap(int index);
     void moveSnake(std::vector<shape>& tmp);
-    bool isCollided(shape s1, shape s2);
+    bool isCollided(const shape& s1,const shape& s2);
     void updateDirection(eventKey evtKey);
     void foodHandler();
     void addWall(int x, int y);
