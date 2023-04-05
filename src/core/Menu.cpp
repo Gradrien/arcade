@@ -145,6 +145,7 @@ void Menu::menuLoopHandler(IGraphic& graphLib, Core& core)
     graphLib.clearWindow();
     highlightSelected(core);
     loopTitle();
+    setHighScoreText();
     if (isUserTyping_ == false) {
         for (auto& i : this->scoreText_)
             graphLib.displayText(i);

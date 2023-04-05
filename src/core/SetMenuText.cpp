@@ -118,6 +118,7 @@ void Menu::setHighScoreText()
     std::fstream scorefile;
     std::vector<std::string> top3 = getTop3Scores();
 
+    this->scoreText_.clear();
     setScoreboardTitle();
     scorefile.open("./score.txt", std::ios::in);
     if (scorefile.is_open()) {

@@ -87,6 +87,11 @@ class Menu {
      * @return std::string
      * ************************************************/
     std::string getUserName() const;
+    /****************************************************************
+     * @brief Save user name
+     * @details This function is used to save the user name
+     * ************************************************/
+    void saveUserName();
 
     private:
     /****************************************************************
@@ -179,11 +184,6 @@ class Menu {
      * @details This function is used to set the scoreboard title
      * ************************************************/
     void setScoreboardTitle();
-    /****************************************************************
-     * @brief Save user name
-     * @details This function is used to save the user name
-     * ************************************************/
-    void saveUserName();
     /****************************************************************
      * @brief Get the Top 3 Scores object
      * @details This function is used to get the top 3 scores
